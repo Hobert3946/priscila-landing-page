@@ -1,0 +1,1560 @@
+/* 
+   ---------------------------------
+   Design System & Tokens (High-End)
+   ---------------------------------
+*/
+:root {
+  /* Colors */
+  --bg-color: #1E2023;
+  --surface-color: #26282C;
+  --surface-color-light: #313338;
+  --text-primary: #ffffff;
+  --text-secondary: #ACAFB8;
+  
+  /* Brand Accents */
+  --accent-color: #C9F227; /* verde-amarelado neon */
+  --accent-ink: #1E2023;   /* texto sobre o neon */
+  --brand-glow: rgba(201, 242, 39, 0.06);
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Syne', sans-serif;
+
+  /* Spacing */
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+  --space-2xl: 8rem;
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Cards "vidro" (glassmorphism): --surface-color em rgba, para o backdrop-filter ter o que borrar */
+  --glass-bg: rgba(38, 40, 44, 0.6);
+  --glass-bg-strong: rgba(49, 51, 56, 0.7); /* cards "featured" */
+  --glass-border-a: rgba(201, 242, 39, 0.5);
+  --glass-border-b: rgba(255, 255, 255, 0.06);
+}
+
+/* Ângulo animável da borda em gradiente dos cards de vidro (ver "Cards de Vidro" abaixo).
+   Sem suporte a @property (Houdini), o navegador ignora isto — a borda fica só estática. */
+@property --glass-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/*
+   ---------------------------------
+   Reset & Base
+   ---------------------------------
+*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/*
+   ---------------------------------
+   Cards de Vidro (glassmorphism)
+   ---------------------------------
+   Substitui o padrão "fundo sólido + borda 1px reta" nos cards de projetos, serviços,
+   depoimentos e planos: fundo translúcido borrado (backdrop-filter) + borda em gradiente
+   girando lentamente + brilho interno sutil. Cada seletor mantém seu próprio border-radius
+   e padding (definidos nos blocos originais, em styles.css/sections.css/cases.css) — aqui
+   só o tratamento de fundo/borda/hover é compartilhado.
+   A borda é um ::after com padding+mask (a técnica padrão de "borda em gradiente"):
+   um z-index:-1 NÃO funciona aqui — por especificação, um descendente de z-index
+   negativo pinta ACIMA do próprio background do elemento que cria o contexto, não
+   atrás dele (foi o que vazou o gradiente por cima do card inteiro na 1ª tentativa).
+   A máscara recorta só o anel de 1px do gradiente, então o ::after pode ficar por
+   cima em DOM/z-index normal sem cobrir o conteúdo. ::before segue livre em todos
+   (o testimonial-card usa ::before para as aspas).
+*/
+.service-card,
+.testimonial-card,
+.plan-card,
+.case-card,
+.case-featured {
+  position: relative;
+  background-color: var(--glass-bg);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), inset 0 0 46px rgba(201,242,39,0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s ease;
+}
+
+.service-card::after,
+.testimonial-card::after,
+.plan-card::after,
+.case-card::after,
+.case-featured::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px; /* espessura da borda */
+  border-radius: inherit;
+  background: conic-gradient(from var(--glass-angle, 0deg),
+    var(--glass-border-a), var(--glass-border-b) 30%,
+    var(--glass-border-a) 55%, var(--glass-border-b) 85%,
+    var(--glass-border-a));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: glass-rotate 10s linear infinite;
+  pointer-events: none;
+}
+
+.service-card.featured,
+.plan-card.featured {
+  background-color: var(--glass-bg-strong);
+}
+.service-card.featured::after,
+.plan-card.featured::after {
+  /* mesma rotação, mas sem o trecho neutro — a borda "acesa" o tempo todo marca o destaque */
+  background: conic-gradient(from var(--glass-angle, 0deg),
+    var(--glass-border-a), rgba(201,242,39,0.85) 25%,
+    var(--glass-border-a) 55%, rgba(201,242,39,0.85) 80%,
+    var(--glass-border-a));
+}
+
+.service-card:hover,
+.testimonial-card:hover,
+.plan-card:hover,
+.case-card:hover,
+.case-featured:hover {
+  transform: translateY(-4px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), inset 0 0 60px rgba(201,242,39,0.09), 0 20px 40px rgba(0,0,0,0.25);
+}
+
+@keyframes glass-rotate {
+  to { --glass-angle: 360deg; }
+}
+
+/* Lenis Recommended CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+/* 
+   ---------------------------------
+   Ambient Glows (Background)
+   ---------------------------------
+*/
+.glow-sphere {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--brand-glow) 0%, transparent 70%);
+  filter: blur(80px);
+  z-index: -1;
+  pointer-events: none;
+}
+.glow-1 { top: -200px; left: -200px; }
+.glow-2 { bottom: -200px; right: -200px; }
+
+/* 
+   ---------------------------------
+   Header & Navigation
+   ---------------------------------
+*/
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 0;
+  z-index: 100;
+  mix-blend-mode: difference; /* Adds a premium touch over light elements */
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.logo-badge {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  background: var(--accent-color);
+  color: var(--bg-color);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.logo-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.logo-name .dot {
+  color: var(--accent-color);
+}
+
+.nav-menu {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background-color: var(--accent-color);
+  transition: width 0.3s var(--ease-out-expo);
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Pill Button */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--surface-color-light);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}
+
+.btn-pill:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
+
+/* 
+   ---------------------------------
+   Hero Section
+   ---------------------------------
+*/
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 10vh;
+  position: relative;
+}
+
+.hero-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.hero-tag-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  /* estado inicial movido para o bloco .js (ver "Fallback sem JS") */
+}
+
+.pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.availability-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 50px;
+  background: var(--accent-color);
+  color: var(--accent-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.availability-badge .status-indicator {
+  background-color: var(--accent-ink);
+  box-shadow: none;
+}
+
+/* Typography Reveal using SplitType requires specific line-heights and hidden overflow */
+.hero-title {
+  font-family: var(--font-display);
+  /* "Comunicação," mede ~11.6em em Syne 800: o tamanho precisa caber em (largura útil / 11.6),
+     senão o SplitType (palavras inline-block) quebra a palavra no meio. Ver tests/layout.test.mjs */
+  font-size: clamp(1.4rem, 7.4vw, 5.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+  /* The .line elements generated by split-type will get overflow:hidden via JS */
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  /* estado inicial movido para o bloco .js (ver "Fallback sem JS") */
+}
+
+/* NESH Style Buttons */
+.btn-primary-nesh {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--accent-color);
+  color: var(--bg-color);
+  padding: 1.25rem 2.5rem;
+  border-radius: 50px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.btn-primary-nesh:hover {
+  transform: scale(1.05);
+}
+.btn-arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+.btn-primary-nesh:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+.btn-ghost-nesh {
+  display: inline-flex;
+  align-items: center;
+  padding: 1.25rem 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  transition: border-color 0.3s ease;
+}
+.btn-ghost-nesh:hover {
+  border-color: var(--text-primary);
+}
+
+/*
+   ---------------------------------
+   Infinite Strip
+   ---------------------------------
+*/
+.infinite-strip {
+  width: 100%;
+  background: var(--accent-color);
+  padding: 1.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.strip-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: scroll-strip 30s linear infinite;
+}
+.strip-item {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-ink);
+  margin-right: 3rem;
+}
+@keyframes scroll-strip {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Requires duplicated content in HTML */
+}
+
+/* 
+   ---------------------------------
+   Sections Base
+   ---------------------------------
+*/
+.section {
+  padding: var(--space-2xl) 0;
+}
+
+.section-header {
+  margin-bottom: var(--space-xl);
+  max-width: 800px;
+}
+
+.section-subtitle {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 7.6vw, 4rem); /* "Selecionados" ~10.8em: cabe em (largura útil / 10.8) */
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.section-lead {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+/*
+   ---------------------------------
+   Trajetória (lista compacta, revelação vertical)
+   ---------------------------------
+   Era um track pinado com scroll horizontal (fazia a seção consumir uma tela inteira
+   de rolagem). Virou uma lista de linhas com uma régua de progresso — mesma animação
+   GSAP/ScrollTrigger, mas sem pin: nada disputa o controle do scroll com o Lenis.
+*/
+.timeline-section {
+  background-color: var(--surface-color);
+  padding: var(--space-md) 0; /* Reduced to make section shorter */
+}
+
+.timeline-list {
+  position: relative;
+  margin-top: 2rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+
+.timeline-progress-fill {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 2px;
+  height: 100%;
+  background: var(--accent-color);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.timeline-card {
+  display: grid;
+  /* 240px cabe "2024 — 2025" sem quebrar linha */
+  grid-template-columns: 240px 1fr;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.timeline-card:last-child {
+  border-bottom: none;
+}
+
+.timeline-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.timeline-year {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-color);
+  line-height: 1;
+  white-space: nowrap;
+}
+.timeline-tag {
+  font-size: 0.8rem;
+  color: #7b7e85;
+  font-family: monospace;
+}
+
+.timeline-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.timeline-content p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* 
+   ---------------------------------
+   Selected Work Grid
+   ---------------------------------
+*/
+.work-section {
+  background-color: var(--bg-color);
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+/*
+   Fallback sem JS / CDN fora do ar:
+   os estados iniciais só se aplicam quando o script inline do <head> marcou html.js.
+   O main.js remove a classe `js-pending` assim que a animação assume (ou após timeout),
+   garantindo que nada fique invisível se GSAP não carregar.
+*/
+.js.js-pending .gsap-reveal,
+.js.js-pending .hero-tag-wrap,
+.js.js-pending .hero-actions {
+  opacity: 0;
+}
+.js.js-pending .gsap-reveal {
+  transform: translateY(50px);
+}
+
+.work-card {
+  background-color: var(--surface-color);
+  border-radius: 16px;
+  padding: 3rem;
+  border: 1px solid rgba(255,255,255,0.03);
+  transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 380px;
+}
+
+.work-card:hover {
+  background-color: var(--surface-color-light);
+}
+
+.work-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4rem;
+}
+
+.work-number {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3rem;
+  color: rgba(255,255,255,0.1);
+  line-height: 1;
+}
+
+.work-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.tag-badge {
+  background: rgba(255,255,255,0.05);
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.work-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.work-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* 
+   ---------------------------------
+   Services Section
+   ---------------------------------
+*/
+.services-section {
+  background-color: var(--surface-color);
+  position: relative;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.service-card {
+  padding: 3rem 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.featured-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--accent-color);
+  color: var(--bg-color);
+  padding: 0.4rem 1.5rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom-left-radius: 16px;
+}
+
+.service-badge {
+  font-family: monospace;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.service-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.service-desc {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.service-list {
+  list-style: none;
+}
+.service-list li {
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+.service-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--text-secondary);
+}
+
+/* 
+   ---------------------------------
+   Contact CTA
+   ---------------------------------
+*/
+.contact-section {
+  padding: 8rem 0;
+}
+
+.contact-box {
+  background-color: var(--surface-color);
+  border-radius: 24px;
+  padding: 5rem;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.contact-header {
+  margin-bottom: 4rem;
+}
+
+.contact-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 6.2vw, 4.5rem); /* "comunicação" ~11.15em dentro do padding do .contact-box */
+  font-weight: 800;
+  line-height: 1.1;
+  margin-top: 2rem;
+}
+
+.contact-channels {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.contact-card {
+  background-color: var(--bg-color);
+  padding: 2rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+  min-width: 300px;
+  text-align: left;
+}
+
+.contact-card:hover {
+  background-color: var(--surface-color-light);
+  border-color: rgba(255,255,255,0.2);
+  /* o "levantar" no hover agora é o tilt 3D magnético (js/text-effects.js initTiltCards),
+     que escreve o próprio transform via GSAP — por isso não é definido aqui */
+}
+
+.channel-icon {
+  font-size: 2rem;
+}
+
+.channel-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0; /* flex item: sem isto o e-mail longo força a largura mínima e estoura a tela */
+}
+
+.channel-type {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.channel-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+
+.channel-arrow {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+}
+
+.contact-card:hover .channel-arrow {
+  transform: translateX(5px);
+  color: var(--accent-color);
+}
+
+/* 
+   ---------------------------------
+   Footer
+   ---------------------------------
+*/
+.footer {
+  padding: 2rem 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.footer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.footer-brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+.footer-copy {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* 
+   ---------------------------------
+   Responsive Adjustments
+   ---------------------------------
+*/
+@media (max-width: 1024px) {
+  .work-grid {
+    grid-template-columns: 1fr;
+  }
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+  .contact-channels {
+    flex-direction: column;
+  }
+  .contact-box {
+    padding: 3rem 1.5rem;
+  }
+}
+
+/*
+   ---------------------------------
+   Mobile Navigation (Toggle + Drawer)
+   ---------------------------------
+*/
+.nav-action {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background-color: var(--accent-color);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:first-child {
+  transform: translateY(3.75px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:last-child {
+  transform: translateY(-3.75px) rotate(-45deg);
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background-color: var(--bg-color);
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-expo);
+}
+.mobile-menu.is-open {
+  opacity: 1;
+}
+/* `display: flex` acima anula o atributo hidden; sem isto o drawer invisível cobre a página e bloqueia cliques */
+.mobile-menu[hidden] {
+  display: none;
+}
+
+.mobile-menu-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0 8%;
+}
+
+.mobile-link {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 5.6vw, 2.4rem); /* "DEPOIMENTOS" ~12.7em */
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.mobile-link-idx {
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.mobile-menu-footer {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+.mobile-menu-footer a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 2px;
+}
+
+/* Trava o scroll enquanto o drawer está aberto */
+body.menu-open {
+  overflow: hidden;
+}
+
+/*
+   ---------------------------------
+   Timeline Intro + Retrato
+   ---------------------------------
+*/
+.timeline-intro {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 4rem;
+  align-items: end;
+}
+
+.timeline-intro .section-header {
+  margin-bottom: 0;
+}
+
+.portrait-media {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.01) 60%),
+    var(--bg-color);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+.portrait-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.portrait-label {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/*
+   ---------------------------------
+   Work Card Media Slot
+   ---------------------------------
+*/
+.work-media {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 12px, transparent 12px 24px),
+    var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.work-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.work-media-label {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+/* O slot de mídia já cria respiro: reduz o gap exagerado do topo do card */
+.work-card .work-card-top {
+  margin-bottom: 2rem;
+}
+
+/*
+   ---------------------------------
+   Testimonials
+   ---------------------------------
+*/
+.testimonials-section {
+  background-color: var(--bg-color);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.testimonial-card {
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.testimonial-card::before {
+  content: "\201C";
+  position: absolute;
+  top: 0.5rem;
+  right: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 5rem;
+  line-height: 1;
+  color: rgba(255,255,255,0.06);
+}
+
+.testimonial-quote {
+  font-size: 1.05rem;
+  color: #d4d4d8;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--surface-color-light);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+}
+.author-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+}
+.author-role {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/*
+   ---------------------------------
+   FAQ (accordion nativo com <details>)
+   ---------------------------------
+*/
+.faq-section {
+  background-color: var(--surface-color);
+}
+
+.faq-list {
+  max-width: 900px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.75rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+  transition: color 0.3s ease;
+}
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+.faq-question:hover {
+  color: var(--text-secondary);
+}
+
+.faq-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.faq-icon::before,
+.faq-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 1.5px;
+  background-color: var(--accent-color);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.faq-icon::after {
+  transform: rotate(90deg);
+}
+.faq-item[open] .faq-icon::after {
+  transform: rotate(0deg);
+}
+
+.faq-answer {
+  padding-bottom: 1.75rem;
+  max-width: 680px;
+}
+.faq-answer p {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  font-weight: 300;
+}
+
+/*
+   ---------------------------------
+   Contact Form
+   ---------------------------------
+*/
+.form-divider {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 3.5rem 0 2.5rem;
+  color: #666;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.form-divider::before,
+.form-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255,255,255,0.08);
+}
+
+.contact-form {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-form-compact {
+  max-width: 580px;
+  gap: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  background-color: var(--bg-color);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.form-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.contact-form-compact .form-field textarea {
+  min-height: 90px;
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #555;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.4);
+  background-color: var(--surface-color-light);
+}
+.form-field input[aria-invalid="true"],
+.form-field textarea[aria-invalid="true"] {
+  border-color: #f87171;
+}
+
+.field-hint {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  color: #555;
+  font-family: monospace;
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: #f87171;
+  min-height: 1rem;
+}
+
+.form-submit {
+  align-self: flex-start;
+  border: none;
+  cursor: pointer;
+}
+
+.form-status {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  min-height: 1.4rem;
+}
+.form-status.is-success {
+  color: var(--accent-color);
+}
+
+/* Foco visível consistente para navegação por teclado */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
+/*
+   ---------------------------------
+   Footer Social
+   ---------------------------------
+*/
+.footer-container {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+.footer-social {
+  display: flex;
+  gap: 1.5rem;
+}
+.footer-social a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+.footer-social a:hover {
+  color: var(--text-primary);
+}
+
+/*
+   ---------------------------------
+   Responsivo — ajustes adicionais
+   ---------------------------------
+*/
+@media (max-width: 1100px) {
+  .timeline-intro {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .portrait-media {
+    max-width: 280px;
+    aspect-ratio: 1 / 1;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .header {
+    mix-blend-mode: normal; /* evita inversão do logo sobre a faixa clara */
+    background: linear-gradient(180deg, rgba(30,32,35,0.94) 0%, transparent 100%);
+  }
+  .nav-toggle {
+    display: flex;
+  }
+  .nav-action .btn-pill {
+    display: none;
+  }
+  .section {
+    padding: 5rem 0;
+  }
+  .contact-section {
+    padding: 5rem 0;
+  }
+  .work-card,
+  .service-card {
+    padding: 2rem 1.5rem;
+  }
+  .contact-box {
+    padding: 3.5rem 2rem;
+  }
+  .work-card {
+    min-height: 0;
+  }
+  .work-card-top {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo-name {
+    display: none;
+  }
+  .hero-section {
+    min-height: auto;
+    padding-top: 22vh;
+    padding-bottom: 4rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .btn-primary-nesh {
+    justify-content: center;
+    padding: 1.1rem 1.75rem;
+  }
+  .btn-ghost-nesh {
+    justify-content: center;
+    text-align: center;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .form-submit {
+    align-self: stretch;
+  }
+  .contact-card {
+    min-width: 0;
+  }
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Linha vira 1 coluna: meta (ano/tag) empilhada acima do texto */
+  .timeline-card {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .container,
+  .nav-container {
+    padding: 0 1.25rem;
+  }
+  .timeline-list {
+    padding-left: 1.25rem;
+  }
+  .section-lead {
+    font-size: 1.05rem;
+  }
+  .work-desc {
+    font-size: 1rem;
+  }
+  .contact-box {
+    padding: 2.5rem 1.25rem;
+    border-radius: 16px;
+  }
+  .mobile-menu-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/*
+   ---------------------------------
+   Acessibilidade — movimento reduzido
+   ---------------------------------
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .strip-track {
+    animation: none;
+  }
+  .timeline-progress-fill {
+    transform: scaleY(1); /* sem scrub: mostra a régua cheia de uma vez, sem depender de JS */
+  }
+}
+
+/* Ícones de marca (WhatsApp / Instagram) */
+.channel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.channel-icon--whatsapp { color: #25D366; }
+.social-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.footer-social a,
+.mobile-menu-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.footer-social a:hover .icon-whatsapp,
+.mobile-menu-footer a:hover .icon-whatsapp { color: #25D366; }
+.footer-social a:hover .icon-instagram,
+.mobile-menu-footer a:hover .icon-instagram { color: #E4405F; }
+
+::selection {
+  background: var(--accent-color);
+  color: var(--accent-ink);
+}

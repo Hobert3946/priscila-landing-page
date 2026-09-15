@@ -1,0 +1,483 @@
+/*
+  sections.css — seções novas: visão geral (texto que acende), planos, logos de clientes,
+  carrossel de depoimentos e zoom nas imagens dos cases.
+*/
+
+/* ---------- Zoom na imagem dos cases ---------- */
+.work-media {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+.work-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 12px, transparent 12px 24px),
+    var(--bg-color);
+  transition: transform 0.9s var(--ease-out-expo);
+}
+.work-media img {
+  transition: transform 0.9s var(--ease-out-expo);
+}
+.work-card:hover .work-media::before,
+.work-card:hover .work-media img {
+  transform: scale(1.07);
+}
+
+/* ---------- Visão geral: parágrafo que acende no scroll ---------- */
+.overview-section {
+  background-color: var(--bg-color);
+}
+.overview-text {
+  max-width: 1100px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 3.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.overview-idx {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--accent-color);
+}
+.overview-item h3 {
+  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+.overview-item p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ---------- Planos ---------- */
+.plans-section {
+  background-color: var(--bg-color);
+}
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.plan-card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+}
+.plan-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+.plan-price {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  line-height: 1;
+  color: var(--accent-color);
+}
+.plan-price small {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+.plan-desc {
+  color: var(--text-secondary);
+}
+.plan-list {
+  flex: 1;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.plan-list li {
+  position: relative;
+  padding-left: 1.75rem;
+  font-size: 0.95rem;
+  color: #d4d4d8;
+}
+.plan-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4em;
+  width: 0.8rem;
+  height: 0.42rem;
+  border-left: 2px solid var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
+  transform: rotate(-45deg);
+}
+.plan-fit {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #7b7e85;
+}
+.plan-card .btn-primary-nesh {
+  justify-content: center;
+}
+
+/* ---------- Logos de clientes ---------- */
+.clients-row {
+  --cols: 6;
+  container-type: inline-size; /* 100cqi = largura da faixa, usada no font-size dos logos */
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 1px;
+  margin-bottom: 4rem;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.06);
+}
+.client-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 110px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  /* "SUBSTANCIAL" mede ~12.5em nesta fonte: o tamanho acompanha a largura útil de cada coluna
+     (faixa ÷ colunas − padding). Antes, overflow-wrap:anywhere escondia o estouro partindo a palavra. */
+  font-size: min(0.85rem, calc((100cqi / var(--cols) - 2rem) / 12.6));
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5b5e64;
+  background: var(--bg-color);
+  transition: color 0.4s ease, background-color 0.4s ease;
+}
+.client-logo img {
+  max-width: 100%;
+  max-height: 40px;
+  filter: grayscale(1) brightness(0.7);
+  transition: filter 0.4s ease;
+}
+.client-logo:hover {
+  color: var(--accent-color);
+  background: var(--surface-color);
+}
+.client-logo:hover img {
+  filter: none;
+}
+
+/* ---------- Carrossel de depoimentos ---------- */
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 0.5rem;
+  cursor: grab;
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.carousel-track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.carousel-track > * {
+  flex: 0 0 min(420px, 85%);
+  scroll-snap-align: start;
+}
+.carousel-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.carousel-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+}
+.carousel-btn:hover:not(:disabled) {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--accent-ink);
+}
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ---------- Responsivo ---------- */
+/* Logos: só --cols muda; o font-size recalcula sozinho a partir dele */
+@media (max-width: 1280px) {
+  .clients-row { --cols: 3; }
+}
+@media (max-width: 768px) {
+  .clients-row { --cols: 2; }
+}
+@media (max-width: 1024px) {
+  .plans-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .overview-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .clients-row { grid-template-columns: repeat(2, 1fr); }
+  .client-logo { min-height: 84px; }
+  .plan-card { padding: 2rem 1.5rem; }
+}
+
+/* ---------- Faixa Compacta de Credenciais & Endossos (High-End) ---------- */
+.credentials-badge-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.credential-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.credential-pill:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(201, 242, 39, 0.18);
+}
+
+.credential-pill .cred-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.credential-pill .cred-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.credential-pill .cred-text strong {
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.credential-pill .cred-text span {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .credentials-badge-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+  .credential-pill {
+    width: 100%;
+    border-radius: 12px;
+  }
+}
+
+/* ---------- Tech Services Section (What You Get) ---------- */
+.tech-services-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .tech-services-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.tech-tabs-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tech-tab-btn {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 1.25rem 1.5rem;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.4s var(--ease-out-expo);
+  overflow: hidden;
+}
+
+.tech-tab-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-color);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.tech-tab-btn:hover {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-color);
+}
+
+.tech-tab-btn.active {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.tech-tab-btn.active::before {
+  transform: scaleY(1);
+}
+
+.tech-tab-num {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--accent-color);
+  opacity: 0.6;
+}
+
+.tech-tab-btn.active .tech-tab-num {
+  opacity: 1;
+}
+
+.tech-display-panel {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2.5rem;
+  min-height: 380px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.tech-panel-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s var(--ease-out-expo);
+  position: absolute;
+  inset: 2.5rem;
+  pointer-events: none;
+}
+
+.tech-panel-content.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  position: relative;
+  inset: auto;
+}
+
+.tech-panel-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(201, 242, 39, 0.08) 0%, transparent 50%);
+  opacity: 0;
+  transform: rotate(0deg);
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.tech-panel-content.active .tech-panel-glow {
+  opacity: 1;
+  animation: techRotate 20s linear infinite;
+}
+
+@keyframes techRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.tech-panel-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.tech-panel-desc {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
+
+.tech-panel-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tech-panel-list li {
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
