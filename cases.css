@@ -10,7 +10,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  image-rendering: -webkit-optimize-contrast;
   transition: transform 0.9s var(--ease-out-expo);
 }
 
@@ -339,15 +338,16 @@
 }
 
 .clients-track {
-  /* sem snap: a rolagem no mouse precisa ser contínua, não pular de card em card */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   scroll-snap-type: none;
+  overflow: visible; /* evita cortar sombras no grid */
+  padding: 0;
 }
 .clients-track > * {
-  flex: 0 0 min(300px, 78%);
+  flex: none;
   scroll-snap-align: none;
-}
-.clients-track > .is-featured {
-  flex-basis: min(340px, 84%);
 }
 
 .client-project-card {
@@ -367,6 +367,26 @@
 .client-project-card.is-featured {
   border-color: var(--accent-color);
   background: rgba(254,99,61,0.06);
+}
+
+.client-project-cover {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+  background: rgba(0,0,0,0.2);
+}
+
+.client-project-cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.client-project-card:hover .client-project-cover img {
+  transform: scale(1.03);
 }
 
 .client-project-top {
@@ -468,37 +488,86 @@
   transform: rotate(45deg);
 }
 
-/* ---------- Modal do teaser: revela a imagem, a descrição e o link do Instagram ---------- */
+/* ---------- Modal do teaser: compacto, tema coral, foto em selo quadrado (sem esticar) ---------- */
+dialog.client-dialog {
+  width: min(380px, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  background: linear-gradient(135deg, #e65127, #c13410); /* coral red mais profundo e encorpado */
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  box-shadow: 0 25px 70px rgba(193,52,16,0.4), 0 10px 30px rgba(0,0,0,0.6);
+}
+dialog.client-dialog::backdrop {
+  background: rgba(8,8,10,0.85);
+  backdrop-filter: blur(12px);
+}
+
+/* Animação original ao abrir o modal */
+dialog.client-dialog[open] {
+  animation: modal-pop-spin 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes modal-pop-spin {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(40px) rotate(-6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0);
+  }
+}
+
 .client-dialog-inner {
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+}
+.client-dialog-inner .story-title {
+  margin-bottom: 1.5rem;
+  padding-right: 0;
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+.client-dialog-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .client-dialog-body img {
   display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
+  width: 160px;
+  height: 160px;
   object-fit: cover;
-  border-radius: 14px;
-  margin-bottom: 1.25rem;
+  object-position: center 20%;
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 0 8px rgba(255,255,255,0.15);
+  margin-bottom: 1.75rem;
 }
 .client-dialog-body p {
-  margin-bottom: 1.25rem;
-  color: var(--text-secondary);
+  margin-bottom: 1.75rem;
+  font-size: 0.95rem;
   line-height: 1.6;
+  color: rgba(255,255,255,0.9);
 }
 .client-dialog-body a {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.7rem 1.1rem;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1.1rem;
   border-radius: 50px;
-  background: var(--accent-color);
-  color: var(--accent-ink);
-  font-weight: 700;
+  background: #fff;
+  color: var(--accent-color);
+  font-weight: 800;
   font-size: 0.9rem;
   text-decoration: none;
-  transition: filter 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .client-dialog-body a:hover {
-  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 

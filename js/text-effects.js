@@ -97,6 +97,20 @@
     reveals.forEach(sel => tl.to(sel, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6'));
     tl.to('.hero-shortcut', { x: 0, opacity: 1, duration: 0.7, stagger: 0.07, ease: 'back.out(1.6)' }, '-=0.5');
     tl.add(initWordRotator);
+
+    // Efeito sutil de parallax: O "PS" se move mais devagar que a rolagem
+    if (document.querySelector('.hero-giant-type') && !PS.env.reducedMotion) {
+      gsap.to('.hero-giant-type', {
+        yPercent: 25,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero-section',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    }
   }
 
   /*

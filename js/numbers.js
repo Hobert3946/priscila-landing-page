@@ -7,9 +7,15 @@
 
       const prefix = el.dataset.prefix || '';
       const suffix = el.dataset.suffix || '';
+      const hasDecimals = target % 1 !== 0;
       const state = { value: 0 };
-      // pt-BR: 2531 vira "2.531"
-      const render = () => { el.textContent = prefix + Math.round(state.value).toLocaleString('pt-BR') + suffix; };
+      
+      const render = () => { 
+        el.textContent = prefix + state.value.toLocaleString('pt-BR', {
+          minimumFractionDigits: hasDecimals ? 1 : 0,
+          maximumFractionDigits: hasDecimals ? 1 : 0
+        }) + suffix; 
+      };
 
       render();
       gsap.to(state, {
@@ -75,7 +81,8 @@
       });
     });
 
-    ScrollTrigger.create({ trigger: '.timeline-section', start: 'top 70%', once: true, onEnter: () => tl.play() });
+    // a faixa da trajetória vem depois da apresentação: os anos giram quando ela chega na tela
+    ScrollTrigger.create({ trigger: '.trajectory', start: 'top 60%', once: true, onEnter: () => tl.play() });
   }
 
   PS.initNumbers = function () {

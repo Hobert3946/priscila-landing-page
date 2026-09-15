@@ -140,22 +140,23 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test('modal "Ler mais" mostra a história do card, fecha com Esc e devolve o foco', async () => {
-  const page = await openPage({ width: 390, height: 844 });
-  const dialog = page.locator('#story-dialog');
+test('convite "role para conhecer" aparece no canto do hero e some ao rolar', async () => {
+  const page = await openPage({ width: 1440, height: 900 });
+  const cue = page.locator('#scroll-cue');
+  await page.waitForTimeout(3600); // a entrada do convite espera a abertura do hero
 
-  await page.locator('.timeline-more').first().click();
-  await dialog.waitFor({ state: 'visible', timeout: 2000 });
-  assert.equal(
-    await page.locator('.story-title').textContent(),
-    await page.locator('.timeline-card h3').first().textContent()
-  );
-  assert.ok(await page.locator('.story-body p').count() > 0);
+  assert.equal(await cue.getAttribute('href'), '#about');
+  const shown = await cue.evaluate(el => parseFloat(getComputedStyle(el).opacity) * parseFloat(getComputedStyle(el.firstElementChild).opacity));
+  const box = await cue.boundingBox();
 
-  await page.keyboard.press('Escape');
-  await dialog.waitFor({ state: 'hidden', timeout: 2000 });
-  assert.equal(await page.evaluate(() => document.activeElement.classList.contains('timeline-more')), true);
+  await page.mouse.wheel(0, 600);
+  await page.waitForTimeout(1200);
+  const hidden = await cue.evaluate(el => parseFloat(getComputedStyle(el).opacity));
   await page.close();
+
+  assert.ok(shown > 0.9, `convite com opacidade ${shown} depois da entrada`);
+  assert.ok(box.y + box.height > 900 - 120 && box.x > 1440 / 2, 'convite fora do canto inferior direito');
+  assert.ok(hidden < 0.1, 'convite continua visível depois de rolar');
 });
 
 test('carrossel de depoimentos avança pelo botão', async () => {
@@ -201,20 +202,70 @@ test('reels da Limpurb rolam pelo botão', async () => {
   await page.close();
 });
 
-// Regressão: a trajetória era um track pinado com scroll horizontal, consumindo uma tela
-// inteira de rolagem. Virou uma lista compacta — sem pin e com altura previsível.
-test('trajetória é compacta e não usa mais pin com scroll horizontal', async () => {
-  const page = await openPage({ width: 1440, height: 900 });
-  const info = await page.evaluate(() => ({
-    pinSpacers: document.querySelectorAll('.pin-spacer').length,
-    listHeight: document.querySelector('.timeline-list').getBoundingClientRect().height,
-    rows: document.querySelectorAll('.timeline-card').length
-  }));
+// Rola até uma fração do percurso da faixa da trajetória (0 = acabou de prender, 1 = fim).
+async function scrollTrajectory(page, ratio) {
+  await page.evaluate((ratio) => {
+    const wrap = document.querySelector('.trajectory');
+    const y = wrap.getBoundingClientRect().top + window.scrollY + (wrap.offsetHeight - window.innerHeight) * ratio;
+    if (PS.lenis) PS.lenis.scrollTo(y, { immediate: true });
+    else window.scrollTo(0, y);
+  }, ratio);
+  await page.waitForTimeout(1200); // scrub suaviza o deslocamento
+}
+
+// A trajetória é uma faixa horizontal que avança com a rolagem. Fica presa por position: sticky,
+// não por ScrollTrigger.pin: sem .pin-spacer, nada disputa o controle do scroll com o Lenis.
+for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+  test(`trajetória em ${viewport.width}px: presa na tela, anda para o lado e mostra a seta`, async () => {
+    const page = await openPage(viewport);
+    await scrollTrajectory(page, 0.6);
+    const r = await page.evaluate(() => {
+      const card = document.querySelector('.timeline-card.is-active').getBoundingClientRect();
+      return {
+        pinSpacers: document.querySelectorAll('.pin-spacer').length,
+        rows: document.querySelectorAll('.timeline-card').length,
+        stickyTop: Math.round(document.querySelector('.trajectory-sticky').getBoundingClientRect().top),
+        trackX: new DOMMatrix(getComputedStyle(document.querySelector('.timeline-list')).transform).m41,
+        cue: parseFloat(getComputedStyle(document.querySelector('.trajectory-cue')).opacity),
+        counter: document.querySelector('.trajectory-count-current').textContent,
+        // O card "ativo" é definido pelo foco em 40% da faixa (js/timeline.js): durante o scrub
+        // ele pode estar saindo pela esquerda enquanto o próximo ainda não entrou por completo —
+        // isso é o próprio movimento, não um bug. O que precisa valer sempre: cabe na vertical
+        // (nunca corta o rodapé do card) e ainda cruza a viewport na horizontal (não sumiu de vez).
+        activeFitsVertically: card.height > 0 && card.bottom <= window.innerHeight + 1,
+        activeCrossesViewport: card.right > 0 && card.left < window.innerWidth
+      };
+    });
+    await page.close();
+    assert.equal(r.pinSpacers, 0);
+    assert.equal(r.rows, 4);
+    assert.equal(r.stickyTop, 0, 'a faixa não ficou presa no topo da tela');
+    assert.ok(r.trackX < -300, `a faixa andou só ${Math.round(r.trackX)}px`);
+    assert.ok(r.cue > 0.9, 'a seta "role para avançar" não apareceu');
+    assert.notEqual(r.counter, '01', 'o contador não acompanhou a faixa');
+    assert.ok(r.activeFitsVertically, 'o cartão ativo estoura a altura da tela');
+    assert.ok(r.activeCrossesViewport, 'o cartão ativo saiu inteiro da tela');
+  });
+}
+
+// Com "reduzir movimento" a faixa não é guiada pela rolagem: vira carrossel nativo de arrastar.
+test('trajetória com "reduzir movimento" vira carrossel de arrastar, sem prender a tela', async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  await page.goto(PAGE_URL, { waitUntil: 'load' });
+  await page.waitForTimeout(500);
+  const r = await page.evaluate(() => {
+    const wrap = document.querySelector('.trajectory');
+    const track = document.querySelector('.timeline-list');
+    return {
+      scrubbed: wrap.classList.contains('is-scrubbed'),
+      scrollable: track.scrollWidth > track.clientWidth,
+      overflow: document.documentElement.scrollWidth - window.innerWidth
+    };
+  });
   await page.close();
-  assert.equal(info.pinSpacers, 0);
-  assert.equal(info.rows, 4);
-  // 4 linhas compactas cabem bem abaixo da antiga altura do pin (~1500px+)
-  assert.ok(info.listHeight < 700, `lista da trajetória com ${Math.round(info.listHeight)}px — não está compacta`);
+  assert.equal(r.scrubbed, false);
+  assert.ok(r.scrollable, 'a faixa não rola na horizontal');
+  assert.ok(r.overflow <= 0, `documento ${r.overflow}px mais largo que a viewport`);
 });
 
 // Regressão: "2024 — 2025" e "2020 — Hoje" quebravam em duas linhas dentro da coluna fixa de 200px do ano.
@@ -233,8 +284,7 @@ test('anos com intervalo não quebram linha na coluna da trajetória', async () 
 test('régua de progresso da trajetória preenche ao rolar', async () => {
   const page = await openPage({ width: 1440, height: 900 });
   const before = await page.evaluate(() => getComputedStyle(document.querySelector('.timeline-progress-fill')).transform);
-  await page.locator('.timeline-list').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(400);
+  await scrollTrajectory(page, 0.5);
   const after = await page.evaluate(() => getComputedStyle(document.querySelector('.timeline-progress-fill')).transform);
   await page.close();
   assert.notEqual(before, after);
@@ -404,6 +454,21 @@ test('palavra girando sai subindo e fica visível na maior parte do ciclo', asyn
   const exitsUpward = samples.some(s => s.dy < -5 && s.opacity > 0.05);
   assert.ok(exitsUpward, 'a saída da palavra não é visível (some de uma vez)');
   assert.ok(visible >= 0.65, `palavra visível só ${Math.round(visible * 100)}% do tempo`);
+});
+
+// O "PS" gigante do fundo do hero se move mais devagar que o resto ao rolar (profundidade sutil).
+test('"PS" do hero tem parallax: se move mais devagar que a rolagem', async () => {
+  const page = await openPage({ width: 1440, height: 900 });
+  await page.waitForTimeout(3500); // preloader + entrada do hero
+
+  const before = await page.evaluate(() => document.querySelector('.hero-giant-type').getBoundingClientRect().top);
+  await page.evaluate(() => window.scrollTo(0, 300));
+  await page.waitForTimeout(500);
+  const after = await page.evaluate(() => document.querySelector('.hero-giant-type').getBoundingClientRect().top);
+
+  await page.close();
+  const moved = before - after; // sem parallax seria exatamente 300 (acompanha 1:1)
+  assert.ok(moved > 150 && moved < 290, `"PS" andou ${Math.round(moved)}px em 300px de scroll — devia ficar visivelmente para trás, mas sem parar`);
 });
 
 // Regressão: o badge do contador aparece na primeira dobra e ficava em "+0" até a pessoa rolar.

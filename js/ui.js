@@ -53,25 +53,20 @@
     });
   }
 
-  /* Header Inteligente: Esconde o menu principal e mostra o botão lateral ao rolar a página */
-  function initSmartHeader() {
-    const header = document.querySelector('.header');
-    if (!header) return;
-    
-    window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > 100) {
-        header.classList.add('is-scrolled');
-      } else {
-        header.classList.remove('is-scrolled');
-      }
-    }, { passive: true });
+  /* Convite "role para conhecer" no canto do hero: some assim que a pessoa começa a rolar */
+  function initScrollCue() {
+    const cue = document.getElementById('scroll-cue');
+    if (!cue) return;
+
+    const update = () => cue.classList.toggle('is-hidden', window.scrollY > 80);
+    window.addEventListener('scroll', update, { passive: true });
+    update();
   }
 
   PS.initUI = function () {
     initMobileMenu();
     initAnchorLinks();
     initFaq();
-    initSmartHeader();
+    initScrollCue();
   };
 })();

@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
   PS.initUI();
   PS.initContactForm();
   PS.initRollHover();
-  PS.initStoryDialog();
   PS.initCarousels();
   PS.initClientsCarousel();
 

@@ -451,100 +451,6 @@
   .plan-card { padding: 2rem 1.5rem; }
 }
 
-/* ---------- Faixa Compacta de Credenciais & Endossos (High-End) ---------- */
-.credentials-badge-strip {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
-  max-width: 460px;
-}
-
-.credential-card {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.credential-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
-
-.credential-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4);
-}
-
-.credential-card:hover::before {
-  transform: translateX(100%);
-}
-
-.cred-icon-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: rgba(201, 242, 39, 0.1);
-  border: 1px solid rgba(201, 242, 39, 0.2);
-  flex-shrink: 0;
-  transition: all 0.4s ease;
-}
-
-.credential-card:hover .cred-icon-wrap {
-  background: rgba(201, 242, 39, 0.2);
-  border-color: rgba(201, 242, 39, 0.4);
-  transform: scale(1.05);
-}
-
-.cred-icon {
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.credential-card .cred-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.35;
-}
-
-.credential-card .cred-text strong {
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  margin-bottom: 0.2rem;
-}
-
-.credential-card .cred-text span {
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-}
-
-@media (max-width: 768px) {
-  .credentials-badge-strip {
-    max-width: 100%;
-  }
-}
-
 /* ---------- Tech Services Section (What You Get) ---------- */
 .tech-services-container {
   display: grid;
@@ -600,12 +506,12 @@
 
 .tech-tab-btn:hover {
   background: rgba(255,255,255,0.03);
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 
 .tech-tab-btn.active {
   background: rgba(255,255,255,0.05);
-  color: var(--text-color);
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -663,6 +569,14 @@
   transform: translate(-50%, 1px);
 }
 
+/* Abaixo de 900px o grid vira 1 coluna: as abas empilham logo acima do painel, e essa mão
+   (que flutua "bottom: 100%" do painel) passava a cobrir o texto das últimas abas. */
+@media (max-width: 900px) {
+  .tech-pointing-hand {
+    display: none;
+  }
+}
+
 .tech-panel-content.active {
   opacity: 1;
   transform: translateY(0);
@@ -695,6 +609,23 @@
   to { transform: rotate(360deg); }
 }
 
+.tech-panel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(201, 242, 39, 0.1);
+  color: var(--accent-color);
+  margin-bottom: 1.2rem;
+}
+
+.tech-panel-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
 .tech-panel-title {
   font-family: var(--font-display);
   font-size: 1.8rem;
@@ -705,7 +636,7 @@
 .tech-panel-desc {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin-bottom: 2rem;
 }
 

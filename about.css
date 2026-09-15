@@ -1,0 +1,574 @@
+/*
+  about.css — "Quem é Priscila Santos" (#about).
+  1) Apresentação: manifesto em linhas, colagem de fotos com selo girando e credenciais.
+  2) Linha do tempo horizontal: a faixa fica presa na tela (position: sticky) e anda para o
+     lado conforme a página rola (js/timeline.js). Sem GSAP, ou com "reduzir movimento",
+     vira um carrossel nativo de arrastar (scroll-snap).
+  Substitui os blocos de trajetória/credenciais que ficavam em styles.css e sections.css.
+*/
+
+.timeline-section {
+  position: relative;
+  background-color: var(--surface-color);
+  padding-bottom: 0;
+}
+
+/* ---------- 1. Apresentação ---------- */
+.about-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: center;
+}
+
+.about-copy .section-title {
+  margin-bottom: 2.25rem;
+}
+
+.about-manifesto {
+  list-style: none;
+  margin-bottom: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.about-manifesto li {
+  overflow: hidden; /* máscara da entrada: a linha sobe "de dentro" (timeline.js) */
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.about-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: 1rem;
+  padding: 1rem 0 0.9rem;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.about-line strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.3vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: var(--text-primary);
+  transition: color 0.4s ease, translate 0.5s var(--ease-out-expo);
+}
+.about-manifesto li:hover strong {
+  color: var(--accent-color);
+  translate: 0.4rem 0;
+}
+
+.about-lead {
+  max-width: 520px;
+}
+
+/* Colagem: foto principal + foto menor inclinada saindo pelo canto + selo girando */
+.about-collage {
+  position: relative;
+  padding: 0 0 14% 16%;
+}
+.about-photo {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.about-photo img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+.about-photo--main {
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 40px 80px -30px rgba(0,0,0,0.6);
+}
+/* 116% de altura: sobra para o parallax interno (timeline.js) sem mostrar a borda da imagem */
+.about-photo--main img {
+  height: 116%;
+  object-position: center 30%;
+}
+.about-photo--float {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 44%;
+  aspect-ratio: 3 / 4;
+  border: 6px solid var(--surface-color);
+  rotate: -5deg; /* `rotate`, não transform: a entrada do GSAP escreve transform inline */
+  box-shadow: 0 25px 50px -15px rgba(0,0,0,0.55);
+}
+/* Altura maior que o quadro dá folga de recorte vertical (mesma técnica da foto principal)
+   — sem isso a "foto.jpeg" (retrato de corpo inteiro, com muita parede acima) mostraria
+   mais parede do que rosto num recorte quase quadrado como este. */
+.about-photo--float img {
+  height: 150%;
+  object-position: center 18%;
+}
+
+.about-badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem 0.55rem 0.8rem;
+  border-radius: 50px;
+  background: var(--accent-color);
+  color: var(--accent-ink);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 12px 30px -8px rgba(254,99,61,0.55);
+}
+.about-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.about-stamp {
+  position: absolute;
+  right: 0;
+  bottom: 4%;
+  width: clamp(96px, 9vw, 124px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg-color);
+  box-shadow: 0 15px 40px -10px rgba(0,0,0,0.6);
+}
+.about-stamp svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: about-stamp-spin 18s linear infinite;
+}
+.about-stamp text {
+  fill: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+}
+.about-stamp-core {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+@keyframes about-stamp-spin {
+  to { rotate: 360deg; }
+}
+
+/* Credenciais: faixa de 3 colunas abaixo da apresentação */
+.about-credentials {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+}
+.credential-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: background-color 0.4s ease, border-color 0.4s ease, translate 0.5s var(--ease-out-expo);
+}
+/* translate (não transform): a entrada do GSAP escreve transform inline e travaria o hover */
+.credential-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(254,99,61,0.35);
+  translate: 0 -3px;
+}
+.cred-icon-wrap {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(254,99,61,0.12);
+  border: 1px solid rgba(254,99,61,0.25);
+  color: var(--accent-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+.cred-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+}
+.credential-card:hover .cred-icon-wrap {
+  background: var(--accent-color);
+  color: var(--accent-ink);
+}
+.cred-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  line-height: 1.35;
+}
+.cred-text strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.cred-text span {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* ---------- 2. Linha do tempo horizontal ---------- */
+.trajectory {
+  position: relative;
+  margin-top: clamp(4.5rem, 9vw, 8rem);
+}
+
+.trajectory-sticky {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vh, 2.5rem);
+  padding-bottom: var(--space-2xl);
+}
+/* Modo "rolar para avançar" (JS): presa na tela enquanto a faixa anda para o lado.
+   clip, não hidden: um overflow rolável deixaria o foco do teclado deslocar a faixa por dentro. */
+.trajectory.is-scrubbed .trajectory-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  justify-content: center;
+  padding: 5.5rem 0 2rem; /* topo: altura do header fixo */
+  overflow: hidden;
+  overflow: clip;
+}
+
+.trajectory-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+}
+.trajectory-kicker {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-color);
+}
+.trajectory-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.trajectory-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.trajectory-dots {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.trajectory-dots .dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: background 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+.trajectory-dots .dot::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+.trajectory-dots .dot.is-active {
+  background: var(--accent-color);
+  transform: scale(1.3);
+}
+
+.trajectory-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  transition: opacity 0.5s ease, translate 0.7s var(--ease-out-expo);
+}
+.trajectory-cue-arrow {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: var(--accent-ink);
+  animation: trajectory-cue-ping 2.2s ease-out infinite;
+}
+.trajectory-cue-arrow svg {
+  width: 20px;
+  height: 20px;
+  animation: trajectory-cue-nudge 1.4s ease-in-out infinite;
+}
+@keyframes trajectory-cue-nudge {
+  0%, 100% { translate: -3px 0; }
+  50% { translate: 4px 0; }
+}
+@keyframes trajectory-cue-ping {
+  0% { box-shadow: 0 0 0 0 rgba(254,99,61,0.45); }
+  80%, 100% { box-shadow: 0 0 0 14px rgba(254,99,61,0); }
+}
+
+/* A seta só surge quando a faixa prende na tela (.is-engaged) e sai ao chegar no fim (.is-done) */
+.trajectory.is-ready .trajectory-cue {
+  opacity: 0;
+  translate: -16px 0;
+}
+.trajectory.is-engaged .trajectory-cue {
+  opacity: 1;
+  translate: 0 0;
+}
+.trajectory.is-engaged.is-done .trajectory-cue {
+  opacity: 0;
+  translate: 16px 0;
+}
+
+/* Faixa: alinhada à margem do .container (5%, até 1400px de largura útil) */
+.timeline-list {
+  position: relative; /* referência do offsetLeft dos cartões (timeline.js) */
+  list-style: none;
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  padding: 0.25rem max(5%, calc((100% - 1400px) / 2 + 70px)) 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: max(5%, calc((100% - 1400px) / 2 + 70px));
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) transparent;
+}
+.trajectory.is-scrubbed .timeline-list {
+  overflow: visible;
+  padding-bottom: 0.25rem;
+  will-change: transform;
+}
+
+.timeline-card {
+  flex: 0 0 auto;
+  width: min(700px, 84vw); /* largura restaurada */
+  min-height: clamp(240px, 40vh, 320px); /* altura (comprimento vertical) reduzida */
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--bg-color);
+  border: 1px solid rgba(255,255,255,0.06);
+  scroll-snap-align: start;
+  transition: opacity 0.6s ease, scale 0.8s var(--ease-out-expo), border-color 0.6s ease, box-shadow 0.6s ease;
+}
+.trajectory.is-ready .timeline-card:not(.is-active) {
+  opacity: 0.4;
+  scale: 0.95;
+}
+.timeline-card.is-active {
+  border-color: rgba(254,99,61,0.4);
+  box-shadow: 0 30px 70px -30px rgba(0,0,0,0.6);
+}
+
+.timeline-media {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: var(--surface-color-light);
+}
+/* 116% de largura: folga para o parallax horizontal da foto enquanto a faixa anda */
+.timeline-media img {
+  position: absolute;
+  top: 0;
+  left: -8%;
+  width: 116%;
+  height: 100%;
+  object-fit: cover;
+}
+.timeline-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 55%, rgba(28,35,57,0.55));
+  pointer-events: none;
+}
+
+.timeline-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+}
+.timeline-index {
+  position: absolute;
+  top: 0.75rem;
+  right: 1.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.14);
+  pointer-events: none;
+  user-select: none;
+  transition: -webkit-text-stroke-color 0.6s ease;
+}
+.timeline-card.is-active .timeline-index {
+  -webkit-text-stroke-color: rgba(254,99,61,0.55);
+}
+
+.timeline-meta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.timeline-year {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent-color);
+  white-space: nowrap;
+}
+.timeline-tag {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #8A93A8;
+}
+
+.timeline-content {
+  position: relative;
+}
+.timeline-content h4 {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+.timeline-content p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+
+/* Régua de progresso: só com JS (sem ele não haveria o que acompanhar) */
+.trajectory-bar {
+  display: none;
+  position: relative;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.trajectory.is-ready .trajectory-bar {
+  display: block;
+}
+.timeline-progress-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 900px) {
+  .about-intro {
+    grid-template-columns: 1fr;
+  }
+  .about-collage {
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+  }
+  .about-credentials {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .trajectory.is-scrubbed .trajectory-sticky {
+    padding: 5rem 0 1.5rem;
+  }
+  .trajectory-head {
+    align-items: center;
+  }
+  .trajectory-cue-label {
+    display: none;
+  }
+  .trajectory-cue-arrow {
+    width: 46px;
+    height: 46px;
+  }
+  .timeline-card {
+    width: min(520px, 84vw);
+    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .timeline-media {
+    height: clamp(140px, 25svh, 230px);
+  }
+  .timeline-media::after {
+    background: linear-gradient(180deg, transparent 50%, rgba(28,35,57,0.6));
+  }
+  .timeline-body {
+    gap: 1.25rem;
+    padding: 1.35rem;
+  }
+  .timeline-index {
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 3rem;
+  }
+  .timeline-content p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-line {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+  }
+  .timeline-list {
+    padding-inline: 1.25rem;
+    scroll-padding-inline: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-stamp svg,
+  .trajectory-cue-arrow,
+  .trajectory-cue-arrow svg {
+    animation: none;
+  }
+}

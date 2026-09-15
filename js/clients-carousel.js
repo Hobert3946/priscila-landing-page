@@ -47,10 +47,6 @@
       bodyEl.replaceChildren(story.content.cloneNode(true));
       dialog.showModal();
       PS.lockScroll(true);
-
-      if (PS.env.animate) {
-        gsap.fromTo(dialog.querySelector('.story-dialog-inner'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' });
-      }
     }
 
     document.querySelectorAll('.client-project-reveal').forEach(button => {
