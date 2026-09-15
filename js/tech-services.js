@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (tabBtns.length === 0 || tabPanels.length === 0) return;
 
   tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    const activateTab = () => {
       // Remover active de todos os botões e painéis
       tabBtns.forEach(b => {
         b.classList.remove('active');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         p.setAttribute('hidden', 'true');
       });
 
-      // Ativar o botão clicado
+      // Ativar o botão focado
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
 
@@ -31,6 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
           targetPanel.classList.add('active');
         }, 10);
       }
-    });
+    };
+
+    btn.addEventListener('click', activateTab);
+    btn.addEventListener('mouseenter', activateTab);
   });
+
+  // Vídeo da Priscila apontando pras abas: só baixa/toca quando a seção entra na tela
+  // (preload="none" no HTML) e pausa ao sair, pra não gastar bateria/dados à toa.
+  const pointerVideo = document.getElementById('pointing-hands');
+  if (pointerVideo) {
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        pointerVideo.play().catch(() => {});
+      } else {
+        pointerVideo.pause();
+      }
+    }, { threshold: 0.25 }).observe(pointerVideo);
+  }
 });

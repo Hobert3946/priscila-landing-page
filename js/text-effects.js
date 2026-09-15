@@ -41,15 +41,26 @@
     // pausa quando o hero sai da tela ou a aba fica oculta
     new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(rotator);
 
+    // Troca de palavra: desliza (padrão) ou só cross-fade quando o SO pede "reduzir movimento" —
+    // continua trocando o texto (é conteúdo, não só decoração), só sem o slide vertical.
+    const reduced = PS.env.reducedMotion;
+
     gsap.delayedCall(ROTATE_EVERY, function swap() {
       if (visible && !document.hidden) {
         index = (index + 1) % words.length;
-        gsap.timeline()
-          .to(item, { yPercent: -110, opacity: 0, duration: 0.45, ease: 'power3.in' })
-          .add(() => { item.textContent = words[index]; })
-          // immediateRender:false — sem isso o fromTo aplica o estado inicial (escondido) na hora em que
-          // a timeline é criada, a palavra some de uma vez e a saída anima algo já invisível
-          .fromTo(item, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out', immediateRender: false });
+        if (reduced) {
+          gsap.timeline()
+            .to(item, { opacity: 0, duration: 0.3, ease: 'power2.in' })
+            .add(() => { item.textContent = words[index]; })
+            .to(item, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+        } else {
+          gsap.timeline()
+            .to(item, { yPercent: -110, opacity: 0, duration: 0.45, ease: 'power3.in' })
+            .add(() => { item.textContent = words[index]; })
+            // immediateRender:false — sem isso o fromTo aplica o estado inicial (escondido) na hora em que
+            // a timeline é criada, a palavra some de uma vez e a saída anima algo já invisível
+            .fromTo(item, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out', immediateRender: false });
+        }
       }
       gsap.delayedCall(ROTATE_EVERY, swap);
     });
@@ -58,8 +69,9 @@
   /*
     Entrada do hero (chars subindo, tag/ações/galeria, atalhos): é conteúdo aparecendo,
     igual às outras seções, não um efeito à parte -- por isso roda sempre (chamada fora
-    do bloco de "reduzir movimento" em main.js). Só o giro contínuo das palavras depois
-    (initWordRotator) respeita a preferência: é decorativo e não para nunca sozinho.
+    do bloco de "reduzir movimento" em main.js). O giro contínuo das palavras (initWordRotator)
+    também roda sempre agora: é a frase do hero mudando, não um efeito à parte — só a
+    animação de entrada/saída fica mais simples (cross-fade) quando o SO pede menos movimento.
   */
   function animateHero(delay) {
     const split = new SplitType('#hero-heading .hero-split', { types: 'words, chars' });
@@ -84,7 +96,7 @@
       .to('.word-rotator-item', { yPercent: 0, opacity: 1, duration: 0.8 }, '-=0.8');
     reveals.forEach(sel => tl.to(sel, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6'));
     tl.to('.hero-shortcut', { x: 0, opacity: 1, duration: 0.7, stagger: 0.07, ease: 'back.out(1.6)' }, '-=0.5');
-    if (PS.env.animate) tl.add(initWordRotator);
+    tl.add(initWordRotator);
   }
 
   /*

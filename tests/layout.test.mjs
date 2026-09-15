@@ -424,27 +424,26 @@ test('contador abaixo da dobra termina ao entrar na tela', async () => {
   await page.close();
 });
 
-// Regressão: a foto de destaque virou pano de fundo desfocado; título, ações e a faixa de
-// fotos precisam continuar na 1ª dobra e o botão principal não pode ficar coberto pelo fundo.
+// Regressão: o retrato da Priscila entrou no hero (foto real, blur-to-focus); título, ações e a
+// faixa de fotos precisam continuar na 1ª dobra e o botão principal não pode ficar coberto pelo retrato.
 for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
-  test(`hero em ${viewport.width}px: fundo cobre o palco, título na 1ª dobra e botão clicável`, async () => {
+  test(`hero em ${viewport.width}px: retrato visível, título na 1ª dobra e botão clicável`, async () => {
     const page = await openPage(viewport);
     await page.waitForTimeout(3000); // preloader + entrada do hero
     const r = await page.evaluate(() => {
-      const stage = document.querySelector('.hero-stage').getBoundingClientRect();
-      const bg = document.querySelector('.hero-bg').getBoundingClientRect();
       const title = document.querySelector('#hero-heading').getBoundingClientRect();
+      const portrait = document.querySelector('.hero-portrait img').getBoundingClientRect();
       const btn = document.querySelector('.hero-actions .btn-primary-nesh').getBoundingClientRect();
       const hit = document.elementFromPoint(btn.left + btn.width / 2, btn.top + btn.height / 2);
       return {
-        bgCoversWidth: bg.width >= stage.width - 1,
+        portraitVisible: portrait.width > 0 && portrait.height > 0,
         titleBottom: title.bottom,
         btnOnTop: !!hit && !!hit.closest('.btn-primary-nesh'),
         ufbaPill: [...document.querySelectorAll('#hero .pill-tag')].length
       };
     });
     await page.close();
-    assert.ok(r.bgCoversWidth, 'fundo desfocado não cobre a largura do palco do hero');
+    assert.ok(r.portraitVisible, 'o retrato da Priscila não está visível no hero');
     assert.ok(r.titleBottom <= viewport.height, `título termina em ${Math.round(r.titleBottom)}px, fora da 1ª dobra`);
     assert.ok(r.btnOnTop, 'o botão principal está coberto por outro elemento');
     assert.equal(r.ufbaPill, 0);
@@ -454,7 +453,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
 // Regressão: as fotos da faixa (trabalho/uniforme) precisam carregar de verdade, não só existir no DOM.
 test('faixa de fotos do hero carrega todas as imagens', async () => {
   const page = await openPage({ width: 1440, height: 900 });
-  await page.waitForFunction(() => document.querySelectorAll('.hero-gallery-item img').length === 4);
+  await page.waitForFunction(() => document.querySelectorAll('.hero-gallery-item img').length === 3);
   await page.evaluate(() => document.querySelectorAll('.hero-gallery-item img').forEach(img => { img.loading = 'eager'; }));
   await page.waitForFunction(() => [...document.querySelectorAll('.hero-gallery-item img')].every(img => img.complete), null, { timeout: 10000 });
   const broken = await page.$$eval('.hero-gallery-item img', imgs => imgs.filter(i => i.naturalWidth === 0).map(i => i.getAttribute('src')));

@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   PS.initRollHover();
   PS.initStoryDialog();
   PS.initCarousels();
+  PS.initClientsCarousel();
 
   if (PS.env.hasLibs) {
     gsap.registerPlugin(ScrollTrigger);

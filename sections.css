@@ -251,6 +251,201 @@
   .overview-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+.overview-item p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ---------- Planos ---------- */
+.plans-section {
+  background-color: var(--bg-color);
+}
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.plan-card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+}
+.plan-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+.plan-price {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  line-height: 1;
+  color: var(--accent-color);
+}
+.plan-price small {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+.plan-desc {
+  color: var(--text-secondary);
+}
+.plan-list {
+  flex: 1;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.plan-list li {
+  position: relative;
+  padding-left: 1.75rem;
+  font-size: 0.95rem;
+  color: #d4d4d8;
+}
+.plan-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4em;
+  width: 0.8rem;
+  height: 0.42rem;
+  border-left: 2px solid var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
+  transform: rotate(-45deg);
+}
+.plan-fit {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #7b7e85;
+}
+.plan-card .btn-primary-nesh {
+  justify-content: center;
+}
+
+/* ---------- Logos de clientes ---------- */
+.clients-row {
+  --cols: 6;
+  container-type: inline-size; /* 100cqi = largura da faixa, usada no font-size dos logos */
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 1px;
+  margin-bottom: 4rem;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.06);
+}
+.client-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 110px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  /* "SUBSTANCIAL" mede ~12.5em nesta fonte: o tamanho acompanha a largura útil de cada coluna
+     (faixa ÷ colunas − padding). Antes, overflow-wrap:anywhere escondia o estouro partindo a palavra. */
+  font-size: min(0.85rem, calc((100cqi / var(--cols) - 2rem) / 12.6));
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5b5e64;
+  background: var(--bg-color);
+  transition: color 0.4s ease, background-color 0.4s ease;
+}
+.client-logo img {
+  max-width: 100%;
+  max-height: 40px;
+  filter: grayscale(1) brightness(0.7);
+  transition: filter 0.4s ease;
+}
+.client-logo:hover {
+  color: var(--accent-color);
+  background: var(--surface-color);
+}
+.client-logo:hover img {
+  filter: none;
+}
+
+/* ---------- Carrossel de depoimentos ---------- */
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 0.5rem;
+  cursor: grab;
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.carousel-track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.carousel-track > * {
+  flex: 0 0 min(420px, 85%);
+  scroll-snap-align: start;
+}
+.carousel-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.carousel-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+}
+.carousel-btn:hover:not(:disabled) {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--accent-ink);
+}
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ---------- Responsivo ---------- */
+/* Logos: só --cols muda; o font-size recalcula sozinho a partir dele */
+@media (max-width: 1280px) {
+  .clients-row { --cols: 3; }
+}
+@media (max-width: 768px) {
+  .clients-row { --cols: 2; }
+}
+@media (max-width: 1024px) {
+  .plans-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .overview-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
   .clients-row { grid-template-columns: repeat(2, 1fr); }
   .client-logo { min-height: 84px; }
   .plan-card { padding: 2rem 1.5rem; }
@@ -259,63 +454,94 @@
 /* ---------- Faixa Compacta de Credenciais & Endossos (High-End) ---------- */
 .credentials-badge-strip {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  max-width: 460px;
 }
 
-.credential-pill {
-  display: inline-flex;
+.credential-card {
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 1rem;
-  background: var(--glass-bg);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9999px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 4px 16px rgba(0, 0, 0, 0.2);
-  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  gap: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.credential-pill:hover {
-  border-color: var(--accent-color);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px -4px rgba(201, 242, 39, 0.18);
+.credential-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
 }
 
-.credential-pill .cred-icon {
-  font-size: 1.15rem;
+.credential-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4);
+}
+
+.credential-card:hover::before {
+  transform: translateX(100%);
+}
+
+.cred-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(201, 242, 39, 0.1);
+  border: 1px solid rgba(201, 242, 39, 0.2);
+  flex-shrink: 0;
+  transition: all 0.4s ease;
+}
+
+.credential-card:hover .cred-icon-wrap {
+  background: rgba(201, 242, 39, 0.2);
+  border-color: rgba(201, 242, 39, 0.4);
+  transform: scale(1.05);
+}
+
+.cred-icon {
+  font-size: 1.5rem;
   line-height: 1;
 }
 
-.credential-pill .cred-text {
+.credential-card .cred-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.25;
+  line-height: 1.35;
 }
 
-.credential-pill .cred-text strong {
-  font-size: 0.82rem;
+.credential-card .cred-text strong {
+  font-size: 0.95rem;
   color: var(--text-primary);
   font-weight: 700;
   letter-spacing: -0.01em;
+  margin-bottom: 0.2rem;
 }
 
-.credential-pill .cred-text span {
-  font-size: 0.72rem;
+.credential-card .cred-text span {
+  font-size: 0.82rem;
   color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
   .credentials-badge-strip {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.6rem;
-  }
-  .credential-pill {
-    width: 100%;
-    border-radius: 12px;
+    max-width: 100%;
   }
 }
 
@@ -418,6 +644,23 @@
   position: absolute;
   inset: 2.5rem;
   pointer-events: none;
+}
+
+.tech-display-wrapper {
+  position: relative;
+}
+
+.tech-pointing-hand {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 220px;
+  height: auto;
+  pointer-events: none;
+  z-index: 10;
+  /* Sempre visível e já na posição final */
+  opacity: 1;
+  transform: translate(-50%, 1px);
 }
 
 .tech-panel-content.active {

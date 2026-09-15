@@ -326,3 +326,179 @@
   color: #e4e4e7;
 }
 
+/* ---------- Outros clientes: carrossel horizontal (estilo "obras selecionadas") ---------- */
+.clients-more {
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.clients-more-lead {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.clients-track {
+  /* sem snap: a rolagem no mouse precisa ser contínua, não pular de card em card */
+  scroll-snap-type: none;
+}
+.clients-track > * {
+  flex: 0 0 min(300px, 78%);
+  scroll-snap-align: none;
+}
+.clients-track > .is-featured {
+  flex-basis: min(340px, 84%);
+}
+
+.client-project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.03);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.client-project-card:hover {
+  border-color: rgba(255,255,255,0.22);
+}
+/* O card em destaque (Kasa dos Cachos) fica sempre em evidência */
+.client-project-card.is-featured {
+  border-color: var(--accent-color);
+  background: rgba(254,99,61,0.06);
+}
+
+.client-project-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.client-project-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* Teaser: só o essencial (logo + nome + nicho) — as imagens ficam escondidas até o clique */
+.client-project-teaser {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+.client-project-avatar {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.client-project-teaser-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.client-project-teaser-info h5 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.client-project-teaser-info span {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.client-project-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.65rem 0.95rem;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 50px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.client-project-card.is-featured .client-project-reveal {
+  border-color: rgba(254,99,61,0.4);
+}
+.client-project-reveal:hover,
+.client-project-reveal:focus-visible {
+  border-color: var(--accent-color);
+  background: rgba(254,99,61,0.08);
+}
+
+.client-project-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: var(--accent-ink);
+  font-size: 0.85rem;
+  transition: transform 0.3s ease;
+}
+.client-project-reveal:hover .client-project-arrow {
+  transform: rotate(45deg);
+}
+
+/* ---------- Modal do teaser: revela a imagem, a descrição e o link do Instagram ---------- */
+.client-dialog-inner {
+  padding: 2.5rem 2rem;
+}
+.client-dialog-body img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 1.25rem;
+}
+.client-dialog-body p {
+  margin-bottom: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.client-dialog-body a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 50px;
+  background: var(--accent-color);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: filter 0.2s ease;
+}
+.client-dialog-body a:hover {
+  filter: brightness(1.08);
+}
+

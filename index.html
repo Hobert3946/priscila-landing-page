@@ -166,16 +166,6 @@
     <!-- Hero Section -->
     <section class="hero-section" id="hero">
 
-      <!-- Atalhos verticais (estilo NESH) — só no desktop; no celular a navegação já é o menu hamburger -->
-      <nav class="hero-shortcuts" aria-label="Atalhos de navegação">
-        <a href="#hero" class="hero-shortcut"><span class="hero-shortcut-idx">01</span><span class="hero-shortcut-label">Início</span></a>
-        <a href="#about" class="hero-shortcut"><span class="hero-shortcut-idx">02</span><span class="hero-shortcut-label">Trajetória</span></a>
-        <a href="#work" class="hero-shortcut"><span class="hero-shortcut-idx">03</span><span class="hero-shortcut-label">Projetos</span></a>
-        <a href="#overview" class="hero-shortcut"><span class="hero-shortcut-idx">04</span><span class="hero-shortcut-label">Visão Geral</span></a>
-        <a href="#services" class="hero-shortcut"><span class="hero-shortcut-idx">05</span><span class="hero-shortcut-label">Soluções</span></a>
-        <a href="#testimonials" class="hero-shortcut"><span class="hero-shortcut-idx">06</span><span class="hero-shortcut-label">Depoimentos</span></a>
-        <a href="#faq" class="hero-shortcut"><span class="hero-shortcut-idx">07</span><span class="hero-shortcut-label">Dúvidas</span></a>
-      </nav>
 
       <div class="container hero-container">
 
@@ -183,7 +173,7 @@
           <span class="hero-giant-type" aria-hidden="true">PS</span>
 
           <div class="hero-portrait" id="hero-portrait">
-            <img src="assets/priscila/priscila-hero.webp" alt="Priscila Santos sorrindo, de camisa polo azul da Prefeitura de Salvador" width="1116" height="1895" fetchpriority="high">
+            <img src="assets/priscila/priscila-hero.webp" alt="Priscila Santos sorrindo, retrato de estúdio" width="640" height="978" fetchpriority="high">
           </div>
 
           <div class="hero-copy">
@@ -196,10 +186,10 @@
 
             <h1 class="hero-title" id="hero-heading">
               <span class="hero-split">Comunicação</span>
-              <span class="word-rotator" data-words="Estratégica,|Que Conecta,|Que Engaja,|Com Rigor,">
+              <span class="word-rotator" data-words="Estratégica,|Que Converte,|Sem Ruído,|Que Transforma,|Que Engaja,|Com Propósito,">
                 <span class="word-rotator-item">Estratégica,</span>
               </span>
-              <span class="hero-split">Além do Post.</span>
+              <span class="hero-split">Pra Sua Marca.</span>
             </h1>
 
             <div class="hero-actions" id="hero-actions">
@@ -207,9 +197,7 @@
                 <span>Conversar sobre projeto</span>
                 <span class="btn-arrow">→</span>
               </a>
-              <a href="#work" class="btn-ghost-nesh">
-                <span>Explorar Casos Selecionados</span>
-              </a>
+
             </div>
 
             <div class="hero-gallery" id="hero-gallery">
@@ -225,6 +213,9 @@
               </figure>
               <figure class="hero-gallery-item">
                 <img src="assets/priscila/priscilafototrabalhoescrita.jpeg" alt="Priscila escrevendo pauta na redação" width="300" height="300" loading="lazy" decoding="async">
+              </figure>
+              <figure class="hero-gallery-item">
+                <img src="assets/rodrigofaro2meninas.jpeg" alt="Priscila com Rodrigo Faro e meninas" width="300" height="300" loading="lazy" decoding="async">
               </figure>
             </div>
           </div>
@@ -244,22 +235,22 @@
             
             <!-- Faixa Compacta de Endossos & Formação -->
             <div class="credentials-badge-strip">
-              <div class="credential-pill">
-                <span class="cred-icon">🎓</span>
+              <div class="credential-card">
+                <div class="cred-icon-wrap"><span class="cred-icon">🎓</span></div>
                 <div class="cred-text">
                   <strong>Graduação em Jornalismo</strong>
                   <span>Faculdade de Comunicação · UFBA</span>
                 </div>
               </div>
-              <div class="credential-pill">
-                <span class="cred-icon">🏛️</span>
+              <div class="credential-card">
+                <div class="cred-icon-wrap"><span class="cred-icon">🏛️</span></div>
                 <div class="cred-text">
                   <strong>Atuação Institucional</strong>
                   <span>Assessora de Comunicação &amp; Redes · Limpurb</span>
                 </div>
               </div>
-              <div class="credential-pill">
-                <span class="cred-icon">⚡</span>
+              <div class="credential-card">
+                <div class="cred-icon-wrap"><span class="cred-icon">⚡</span></div>
                 <div class="cred-text">
                   <strong>Comunicação 360°</strong>
                   <span>Audiovisual, Imprensa &amp; Gestão Digital</span>
@@ -268,9 +259,12 @@
             </div>
           </div>
 
-          <!-- Slot de retrato: troque a div por <img src="assets/priscila.jpg" alt="Priscila Santos" loading="lazy" width="640" height="800"> -->
+          <!-- Slot de retrato -->
           <div class="portrait-media" role="img" aria-label="Retrato de Priscila Santos">
-            <span class="portrait-label">Priscila Santos</span>
+            <img src="assets/priscila/priscilafototrabalho.jpeg" alt="Priscila fotografando garis nas ruas" width="640" height="800" loading="lazy" fetchpriority="low">
+            <div class="portrait-overlay">
+              <span class="portrait-label">Priscila Santos</span>
+            </div>
           </div>
         </div>
       </div>
@@ -477,6 +471,104 @@
           </div>
         </article>
 
+        <!-- Outros clientes: só um teaser (logo, nome, nicho) — clicar revela o trabalho e o link do Instagram -->
+        <div class="clients-more">
+          <h4 class="case-subtitle">Outras marcas que já impulsionei</h4>
+          <p class="clients-more-lead">Clique em uma marca para ver o trabalho e o perfil no Instagram.</p>
+
+          <div class="carousel clients-carousel" data-carousel role="region" aria-roledescription="carrossel" aria-label="Outros clientes">
+            <div class="carousel-track clients-track" tabindex="0" data-cursor="Arraste">
+
+              <div class="client-project-card is-featured">
+                <div class="client-project-top">
+                  <span class="client-project-number">01</span>
+                  <div class="work-tags">
+                    <span class="tag-badge">Antes &amp; Depois</span>
+                    <span class="tag-badge">Bastidores</span>
+                  </div>
+                </div>
+                <div class="client-project-teaser">
+                  <img class="client-project-avatar" src="assets/clients/kasa-avatar.webp" alt="" width="64" height="64" loading="lazy" decoding="async">
+                  <div class="client-project-teaser-info">
+                    <h5>Kasa dos Cachos</h5>
+                    <span>Salão especialista em cachos e crespos</span>
+                  </div>
+                </div>
+                <button class="client-project-reveal" type="button" aria-haspopup="dialog">
+                  Ver o trabalho <span class="client-project-arrow" aria-hidden="true">↗</span>
+                </button>
+                <template class="client-story">
+                  <img src="assets/clients/kasa-cover.webp" alt="Grade de publicações do Instagram @kasadoscachos" width="640" height="800" loading="lazy" decoding="async">
+                  <p>Salão especialista em cachos e crespos em Salvador. Conteúdo de transformação, bastidores e educativo — o trabalho que mais me orgulha entre os projetos menores.</p>
+                  <a href="https://www.instagram.com/kasadoscachos/" target="_blank" rel="noopener noreferrer">Ver perfil no Instagram →</a>
+                </template>
+              </div>
+
+              <div class="client-project-card">
+                <div class="client-project-top">
+                  <span class="client-project-number">02</span>
+                  <div class="work-tags">
+                    <span class="tag-badge">Campanhas</span>
+                  </div>
+                </div>
+                <div class="client-project-teaser">
+                  <img class="client-project-avatar" src="assets/clients/calazans-avatar.webp" alt="" width="64" height="64" loading="lazy" decoding="async">
+                  <div class="client-project-teaser-info">
+                    <h5>Óticas Calazans</h5>
+                    <span>Rede de óticas em Salvador</span>
+                  </div>
+                </div>
+                <button class="client-project-reveal" type="button" aria-haspopup="dialog">
+                  Ver o trabalho <span class="client-project-arrow" aria-hidden="true">↗</span>
+                </button>
+                <template class="client-story">
+                  <img src="assets/clients/calazans-cover.webp" alt="Foto de campanha do Instagram @oticascalazans" width="640" height="800" loading="lazy" decoding="async">
+                  <p>Rede de óticas com duas filiais em Salvador. Conteúdo de campanha, produto e promoções recorrentes.</p>
+                  <a href="https://www.instagram.com/oticascalazans/" target="_blank" rel="noopener noreferrer">Ver perfil no Instagram →</a>
+                </template>
+              </div>
+
+              <div class="client-project-card">
+                <div class="client-project-top">
+                  <span class="client-project-number">03</span>
+                  <div class="work-tags">
+                    <span class="tag-badge">Conteúdo educativo</span>
+                  </div>
+                </div>
+                <div class="client-project-teaser">
+                  <img class="client-project-avatar" src="assets/clients/andressa-avatar.webp" alt="" width="64" height="64" loading="lazy" decoding="async">
+                  <div class="client-project-teaser-info">
+                    <h5>Andressa Fagundes</h5>
+                    <span>Nutricionista do idoso</span>
+                  </div>
+                </div>
+                <button class="client-project-reveal" type="button" aria-haspopup="dialog">
+                  Ver o trabalho <span class="client-project-arrow" aria-hidden="true">↗</span>
+                </button>
+                <template class="client-story">
+                  <img src="assets/clients/andressa-cover.webp" alt="Foto do Instagram @nutriandressafagundes" width="640" height="800" loading="lazy" decoding="async">
+                  <p>Nutricionista especialista em saúde do idoso. Planejamento e produção de conteúdo de autoridade no Instagram.</p>
+                  <a href="https://www.instagram.com/nutriandressafagundes/" target="_blank" rel="noopener noreferrer">Ver perfil no Instagram →</a>
+                </template>
+              </div>
+
+            </div>
+            <div class="carousel-controls">
+              <button class="carousel-btn" type="button" data-carousel-prev aria-label="Projeto anterior">←</button>
+              <button class="carousel-btn" type="button" data-carousel-next aria-label="Próximo projeto">→</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal do teaser: conteúdo vem do <template class="client-story"> do card clicado -->
+        <dialog class="story-dialog client-dialog" id="client-dialog" aria-labelledby="client-dialog-title" data-lenis-prevent>
+          <div class="story-dialog-inner client-dialog-inner">
+            <button class="story-close" type="button" aria-label="Fechar">×</button>
+            <h3 class="story-title" id="client-dialog-title"></h3>
+            <div class="client-dialog-body"></div>
+          </div>
+        </dialog>
+
       </div>
     </section>
 
@@ -520,11 +612,13 @@
           </div>
 
           <!-- Display Direito (Conteúdo dinâmico) -->
-          <div class="tech-display-panel">
-            <!-- Painel 1 -->
-            <div class="tech-panel-content active" id="tab-estrategia" role="tabpanel">
-              <div class="tech-panel-glow"></div>
-              <h3 class="tech-panel-title">Estratégia de Conteúdo</h3>
+          <div class="tech-display-wrapper">
+            <video src="assets/priscila/pointing-hands.webm" class="tech-pointing-hand" autoplay loop muted playsinline></video>
+            <div class="tech-display-panel">
+              <!-- Painel 1 -->
+              <div class="tech-panel-content active" id="tab-estrategia" role="tabpanel">
+                <div class="tech-panel-glow"></div>
+                <h3 class="tech-panel-title">Estratégia de Conteúdo</h3>
               <p class="tech-panel-desc">Você recebe um direcionamento claro. Planejo temas, formatos e a linguagem ideal para atingir os objetivos da sua marca.</p>
               <ul class="tech-panel-list">
                 <li>Cronograma editorial estruturado e previsível</li>
@@ -586,6 +680,7 @@
                 <li>Acervo audiovisual completo para material de pós-venda</li>
               </ul>
             </div>
+          </div>
           </div>
         </div>
 
@@ -741,65 +836,77 @@
     <section id="contact" class="section contact-section">
       <div class="container">
         
-        <div class="contact-box">
-          <div class="contact-header gsap-reveal">
-            <span class="pill-tag">Vamos Conversar</span>
-            <h2 class="contact-title">
-              Seu próximo conteúdo começa com uma boa ideia.
-            </h2>
-            <p class="section-lead" style="margin-top: 1.25rem; color: var(--text-secondary); font-size: clamp(1rem, 2.5vw, 1.2rem);">
-              Se você precisa de alguém para pensar, planejar, criar e executar a comunicação da sua marca, vamos conversar.
-            </p>
+        <div class="contact-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem; align-items: start; text-align: left;">
+          
+          <!-- Coluna 1: Informações e Canais -->
+          <div class="contact-info-col">
+            <div class="contact-header gsap-reveal" style="margin-bottom: 2rem;">
+              <span class="pill-tag">Vamos Conversar</span>
+              <h2 class="contact-title" style="margin-top: 1rem; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2;">
+                Seu próximo conteúdo começa com uma boa ideia.
+              </h2>
+              <p class="section-lead" style="margin-top: 1.25rem; color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6;">
+                Se você precisa de alguém para pensar, planejar, criar e executar a comunicação da sua marca, estou à disposição.
+              </p>
+            </div>
+
+            <div class="contact-channels" style="display: flex; flex-direction: column; gap: 1rem; align-items: stretch; justify-content: flex-start;">
+              <a href="https://wa.me/5571988350272" target="_blank" rel="noopener noreferrer" class="contact-card" style="padding: 1.5rem; min-width: auto;">
+                <div class="channel-icon channel-icon--whatsapp">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </div>
+                <div class="channel-info">
+                  <span class="channel-type">WhatsApp Direto</span>
+                  <span class="channel-value">(71) 98835-0272</span>
+                </div>
+                <span class="channel-arrow">→</span>
+              </a>
+              <a href="mailto:prisantospinheiro.ssa@gmail.com" class="contact-card" style="padding: 1.5rem; min-width: auto;">
+                <div class="channel-icon">✉️</div>
+                <div class="channel-info">
+                  <span class="channel-type">E-mail Profissional</span>
+                  <span class="channel-value">prisantospinheiro.ssa@gmail.com</span>
+                </div>
+                <span class="channel-arrow">→</span>
+              </a>
+              <a href="#" class="contact-card meet-card" style="padding: 1.5rem; min-width: auto; border-color: var(--accent-color);">
+                <div class="channel-icon">🎥</div>
+                <div class="channel-info">
+                  <span class="channel-type">Agende uma Reunião</span>
+                  <span class="channel-value" style="color: var(--accent-color);">Bate-papo via Google Meet</span>
+                </div>
+                <span class="channel-arrow">→</span>
+              </a>
+            </div>
           </div>
 
-          <div class="contact-channels">
-            <a href="https://wa.me/5571988350272" target="_blank" rel="noopener noreferrer" class="contact-card">
-              <div class="channel-icon channel-icon--whatsapp">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              </div>
-              <div class="channel-info">
-                <span class="channel-type">WhatsApp Direto</span>
-                <span class="channel-value">(71) 98835-0272</span>
-              </div>
-              <span class="channel-arrow">→</span>
-            </a>
-            <a href="mailto:prisantospinheiro.ssa@gmail.com" class="contact-card">
-              <div class="channel-icon">✉️</div>
-              <div class="channel-info">
-                <span class="channel-type">E-mail Profissional</span>
-                <span class="channel-value">prisantospinheiro.ssa@gmail.com</span>
-              </div>
-              <span class="channel-arrow">→</span>
-            </a>
-          </div>
-
-          <div class="form-divider"><span>ou envie um briefing rápido</span></div>
-
-          <!-- Sem backend: o envio monta uma mensagem e abre o WhatsApp -->
-          <!-- Formulário simplificado -->
-          <form class="contact-form contact-form-compact" id="contact-form" novalidate>
-            <div class="form-row">
-              <div class="form-field">
+          <!-- Coluna 2: Formulário -->
+          <div class="contact-form-col" style="background: rgba(255,255,255,0.02); padding: 2.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+            <h3 style="margin-bottom: 1rem; font-size: 1.4rem; color: var(--text-primary); font-family: var(--font-display);">Ou envie um briefing rápido</h3>
+            <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">Preencha os dados abaixo e entrarei em contato para conversarmos sobre a comunicação da sua marca.</p>
+            
+            <form class="contact-form contact-form-compact" id="contact-form" novalidate style="margin-top: 0; display: flex; flex-direction: column; gap: 1rem;">
+              <div class="form-field" style="margin-bottom: 0;">
                 <input type="text" id="field-name" name="name" maxlength="80" autocomplete="name"
                        required placeholder="Seu nome ou marca">
               </div>
-              <div class="form-field">
+              <div class="form-field" style="margin-bottom: 0;">
                 <input type="text" id="field-contact" name="contact" maxlength="120" autocomplete="email"
                        required placeholder="WhatsApp ou E-mail">
               </div>
-            </div>
+              <div class="form-field" style="margin-bottom: 0;">
+                <textarea id="field-message" name="message" rows="4" maxlength="800"
+                          required placeholder="Conte brevemente o que você precisa..."></textarea>
+              </div>
 
-            <div class="form-field">
-              <textarea id="field-message" name="message" rows="3" maxlength="800"
-                        required placeholder="Conte brevemente o que você precisa..."></textarea>
-            </div>
-
-            <button type="submit" class="btn-primary-nesh form-submit">
-              <span>Enviar briefing</span>
-              <span class="btn-arrow">→</span>
-            </button>
-            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-          </form>
+              <button type="submit" class="btn-primary-nesh form-submit" style="width: 100%; margin-top: 1rem;">
+                <span>Enviar briefing</span>
+                <span class="btn-arrow">→</span>
+              </button>
+              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+          
         </div>
 
       </div>
@@ -833,6 +940,7 @@
   <script src="js/text-effects.js"></script>
   <script src="js/numbers.js"></script>
   <script src="js/timeline.js"></script>
+  <script src="js/clients-carousel.js"></script>
   <script src="js/carousel.js"></script>
   <script src="js/cursor.js"></script>
   <script src="js/preloader.js"></script>

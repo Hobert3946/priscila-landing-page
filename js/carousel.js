@@ -11,6 +11,9 @@
 
     track.addEventListener('pointerdown', (e) => {
       if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      // clique em botão/link não deve virar arraste: setPointerCapture abaixo redireciona
+      // até o "click" final pro track, e o clique nunca chega no elemento de verdade.
+      if (e.target.closest('a, button, [role="button"]')) return;
       dragging = true;
       moved = false;
       startX = e.clientX;
