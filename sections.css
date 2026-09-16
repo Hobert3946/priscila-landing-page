@@ -570,11 +570,22 @@
 }
 
 /* Abaixo de 900px o grid vira 1 coluna: as abas empilham logo acima do painel, e essa mão
-   (que flutua "bottom: 100%" do painel) passava a cobrir o texto das últimas abas. */
+   (que flutua "bottom: 100%" do painel) passava a cobrir o texto das últimas abas. A cópia
+   do fechamento (--contact) não tem esse problema: fica de fora dessa regra. */
 @media (max-width: 900px) {
-  .tech-pointing-hand {
+  .tech-pointing-hand:not(.tech-pointing-hand--contact) {
     display: none;
   }
+}
+
+/* Segunda aparição da mão, guiando o olhar até a frase final antes do formulário —
+   em fluxo normal (não presa a um painel), sem a posição/tamanho da primeira. */
+.tech-pointing-hand--contact {
+  position: static;
+  display: block;
+  width: 110px;
+  margin: 0 0 -0.5rem 0.5rem;
+  transform: none;
 }
 
 .tech-panel-content.active {

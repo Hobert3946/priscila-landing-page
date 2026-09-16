@@ -51,20 +51,37 @@
     const dots = wrap.querySelectorAll('.trajectory-dots .dot');
     if (!track) return;
 
-    // Permitir rolagem horizontal (mouse wheel) sem rolar a página verticalmente, similar ao carousel
-    wrap.addEventListener('mouseenter', () => { if (PS.lenis) PS.lenis.stop(); });
-    wrap.addEventListener('mouseleave', () => { if (PS.lenis) PS.lenis.start(); });
+    // Rolagem suave (lerp) ao invés de mover o scrollLeft de forma abrupta
+    let wheelTarget = track.scrollLeft;
+    let wheelRaf = null;
+    const animateWheelScroll = () => {
+      const current = track.scrollLeft;
+      const diff = wheelTarget - current;
+      if (Math.abs(diff) < 0.5) {
+        track.scrollLeft = wheelTarget;
+        wheelRaf = null;
+        return;
+      }
+      track.scrollLeft = current + diff * 0.15;
+      wheelRaf = requestAnimationFrame(animateWheelScroll);
+    };
 
     track.addEventListener('wheel', (e) => {
       if (track.scrollWidth <= track.clientWidth) return;
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      // Só intercepta gesto horizontal real (trackpad ou shift+wheel). Wheel vertical comum
+      // (deltaY) precisa sempre rolar a página — nunca "prender" o scroll dentro do carrossel.
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
 
       const atStart = track.scrollLeft <= 0;
       const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
-      if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return;
+      if ((e.deltaX < 0 && atStart) || (e.deltaX > 0 && atEnd)) return;
 
       e.preventDefault();
-      track.scrollLeft += e.deltaY;
+      e.stopPropagation();
+      if (!wheelRaf) wheelTarget = track.scrollLeft;
+      const max = track.scrollWidth - track.clientWidth;
+      wheelTarget = Math.max(0, Math.min(max, wheelTarget + e.deltaX));
+      if (!wheelRaf) wheelRaf = requestAnimationFrame(animateWheelScroll);
     }, { passive: false });
 
     // Atualiza o bullet ativo ao rolar
@@ -86,14 +103,34 @@
     track.addEventListener('scroll', updateActive, { passive: true });
     updateActive();
 
+    function cardTarget(card) {
+      const paddingOffset = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+      return card.offsetLeft - paddingOffset - 20;
+    }
+
+    // Sem scroll-snap nativo (ele forçava o scrollLeft de volta a 0 sempre que o wheel/hover
+    // suave mexiam a faixa via JS). Em troca, alinha no cartão mais próximo sozinho quando o
+    // movimento para — wheel, hover ou arraste no touch, tanto faz a origem do scroll.
+    let snapTimer = null;
+    function scheduleSnap() {
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => {
+        let nearest = cards[0];
+        let nearestDist = Infinity;
+        cards.forEach((card) => {
+          const dist = Math.abs(cardTarget(card) - track.scrollLeft);
+          if (dist < nearestDist) { nearestDist = dist; nearest = card; }
+        });
+        if (nearestDist > 4) track.scrollTo({ left: cardTarget(nearest), behavior: 'smooth' });
+      }, 140);
+    }
+    track.addEventListener('scroll', scheduleSnap, { passive: true });
+
     // Permite clicar ou passar o mouse nas bolinhas para navegar
     dots.forEach((dot, index) => {
       const navigateToCard = () => {
         const card = cards[index];
-        if (card) {
-          const paddingOffset = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-          track.scrollTo({ left: card.offsetLeft - paddingOffset - 20, behavior: 'smooth' });
-        }
+        if (card) track.scrollTo({ left: cardTarget(card), behavior: 'smooth' });
       };
       dot.addEventListener('click', navigateToCard);
     });
@@ -111,43 +148,34 @@
 
     // Panning (rolagem) ultra-suave ao passar o mouse pelas bordas dos cards
     let trackScrollReq = null;
-    let trackScrollDir = 0;
+    let trackScrollSpeed = 0;
 
     const performTrackScroll = () => {
-      if (trackScrollDir !== 0) {
-        // Velocidade base muito lenta (1.2px por frame = ~72px/segundo)
-        track.scrollLeft += trackScrollDir * 1.2;
-        trackScrollReq = requestAnimationFrame(performTrackScroll);
-      }
+      if (trackScrollSpeed === 0) { trackScrollReq = null; return; }
+      track.scrollLeft += trackScrollSpeed;
+      trackScrollReq = requestAnimationFrame(performTrackScroll);
     };
 
     track.addEventListener('mousemove', (e) => {
       const rect = track.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      
-      const threshold = 200; // pixels de distância da borda
-      if (x < threshold) {
-        trackScrollDir = -1;
-      } else if (x > rect.width - threshold) {
-        trackScrollDir = 1;
+      const center = rect.width / 2;
+      const offset = (e.clientX - rect.left) - center;
+      const deadZone = rect.width * 0.15; // parado perto do centro; desliza ao se aproximar das bordas
+
+      if (Math.abs(offset) < deadZone) {
+        trackScrollSpeed = 0;
       } else {
-        trackScrollDir = 0;
+        const strength = (Math.abs(offset) - deadZone) / (center - deadZone); // 0 a 1
+        trackScrollSpeed = Math.sign(offset) * strength * 3.5; // até ~210px/s na borda
       }
 
-      if (trackScrollDir !== 0 && !trackScrollReq) {
+      if (trackScrollSpeed !== 0 && !trackScrollReq) {
         trackScrollReq = requestAnimationFrame(performTrackScroll);
-      } else if (trackScrollDir === 0 && trackScrollReq) {
-        cancelAnimationFrame(trackScrollReq);
-        trackScrollReq = null;
       }
     });
 
     track.addEventListener('mouseleave', () => {
-      if (trackScrollReq) {
-        cancelAnimationFrame(trackScrollReq);
-        trackScrollReq = null;
-      }
-      trackScrollDir = 0;
+      trackScrollSpeed = 0;
     });
     // Fade-in inicial dos cartões
     wrap.classList.add('is-ready');

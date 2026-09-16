@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
   PS.initCarousels();
   PS.initClientsCarousel();
 
+  // "Reduzir movimento": a mão apontando é decorativa e contínua, não conteúdo — pausa,
+  // igual ao giro do hero e ao tilt 3D.
+  if (PS.env.reducedMotion) {
+    document.querySelectorAll('.tech-pointing-hand').forEach((video) => video.pause());
+  }
+
   if (PS.env.hasLibs) {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -39,9 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
       PS.initSmoothScroll();
       PS.initMagnetic('.hero-shortcut', 0.25);
       PS.initMagnetic('.btn-primary-nesh, .btn-ghost-nesh', 0.15);
+      PS.initMagnetic('.btn-pill, .carousel-btn, .nav-link, .form-submit', 0.1);
+      PS.initMagnetic('.form-chip', 0.12);
       PS.initTiltCards('.contact-card');
       PS.initMarquee();
-      PS.initCursor();
+      PS.initPageTransitions();
     }
 
     // fontes carregadas mudam a altura dos textos: recalcula os triggers

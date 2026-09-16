@@ -22,7 +22,8 @@
   <meta name="twitter:title" content="Priscila Santos — Jornalista &amp; Estrategista de Comunicação Digital">
   <meta name="twitter:description" content="Comunicação que vai além do post. Estratégia, conteúdo e criatividade para transformar ideias em comunicação que conecta.">
   <meta name="twitter:image" content="https://priscilasantos.com.br/assets/og-image.jpg">
-  <meta name="theme-color" content="#1E2023">
+  <meta name="theme-color" content="#1C2339">
+
 
   <!-- Favicon (SVG inline, sem requisição extra) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%23C9F227'/%3E%3Ctext x='50' y='68' font-family='Syne,sans-serif' font-size='46' font-weight='800' text-anchor='middle' fill='%231E2023'%3EPS%3C/text%3E%3C/svg%3E">
@@ -108,15 +109,42 @@
     <span class="preloader-count">0</span>
   </div>
 
-  <!-- Cursor personalizado (desktop) -->
-  <div class="cursor" id="cursor" aria-hidden="true" hidden><span class="cursor-label"></span></div>
-
   <!-- Background Ambient Glows -->
   <div class="glow-sphere glow-1"></div>
   <div class="glow-sphere glow-2"></div>
+  <div class="page-transition-overlay" id="page-transition"></div>
+
+
+  <!-- 1. Viewfinder Cinematográfico (Cantoneiras e Specs de Câmera de Cinema nas bordas) -->
+  <div class="cinema-viewfinder" aria-hidden="true">
+    <div class="viewfinder-corner top-left"></div>
+    <div class="viewfinder-corner top-right"></div>
+    <div class="viewfinder-corner bottom-left"></div>
+    <div class="viewfinder-corner bottom-right"></div>
+    <div class="viewfinder-spec-badge">
+      <span class="rec-dot"></span>
+      <span class="rec-text">REC</span>
+      <span class="rec-info">4K · 60FPS · SALVADOR</span>
+    </div>
+  </div>
+
+  <!-- 2. Micro-Widget de Status & Equalizador de Reels (Canto Inferior Esquerdo) -->
+  <a href="#contact" class="corner-status-widget" aria-label="Disponível para novos projetos — Envie uma mensagem">
+    <div class="status-widget-inner">
+      <span class="status-pulse-dot"></span>
+      <span class="status-text">Disponível para projetos</span>
+      <span class="status-divider"></span>
+      <div class="audio-visualizer" title="Áudio dinâmico">
+        <span class="audio-bar"></span>
+        <span class="audio-bar"></span>
+        <span class="audio-bar"></span>
+        <span class="audio-bar"></span>
+      </div>
+    </div>
+  </a>
 
   <!-- Navbar -->
-  <header class="header">
+  <header class="header glass">
     <nav class="nav-container">
       <a href="#" class="brand-logo">
         <span class="logo-badge">PS</span>
@@ -124,10 +152,10 @@
       </a>
 
       <div class="nav-menu">
-        <a href="#about" class="nav-link">Trajetória</a>
+        <a href="#about" class="nav-link">Minha Jornada</a>
         <a href="#work" class="nav-link">Projetos</a>
-        <a href="#services" class="nav-link">Soluções</a>
-        <a href="#faq" class="nav-link">Dúvidas</a>
+        <a href="#testimonials" class="nav-link">Depoimentos</a>
+        <a href="#faq" class="nav-link">FAQ</a>
         <a href="#contact" class="nav-link">Contato</a>
       </div>
 
@@ -149,12 +177,11 @@
   <!-- Mobile Drawer -->
   <div class="mobile-menu" id="mobile-menu" hidden>
     <nav class="mobile-menu-inner" aria-label="Navegação principal (celular)">
-      <a href="#about" class="mobile-link"><span class="mobile-link-idx">01</span> Trajetória</a>
+      <a href="#about" class="mobile-link"><span class="mobile-link-idx">01</span> Minha Jornada</a>
       <a href="#work" class="mobile-link"><span class="mobile-link-idx">02</span> Projetos</a>
-      <a href="#services" class="mobile-link"><span class="mobile-link-idx">03</span> Soluções</a>
-      <a href="#testimonials" class="mobile-link"><span class="mobile-link-idx">04</span> Depoimentos</a>
-      <a href="#faq" class="mobile-link"><span class="mobile-link-idx">05</span> Dúvidas</a>
-      <a href="#contact" class="mobile-link"><span class="mobile-link-idx">06</span> Contato</a>
+      <a href="#testimonials" class="mobile-link"><span class="mobile-link-idx">03</span> Depoimentos</a>
+      <a href="#faq" class="mobile-link"><span class="mobile-link-idx">04</span> FAQ</a>
+      <a href="#contact" class="mobile-link"><span class="mobile-link-idx">05</span> Contato</a>
       <div class="mobile-menu-footer">
         <a href="https://wa.me/5571988350272" target="_blank" rel="noopener noreferrer"><svg class="social-icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</a>
         <a href="https://www.instagram.com/prisantos2021/" target="_blank" rel="noopener noreferrer"><svg class="social-icon icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg> Instagram</a>
@@ -432,15 +459,15 @@
             <h4 class="case-subtitle">Insights & Resultados</h4>
             <div class="insights-data-grid">
               <div class="insight-data-card">
-                <span class="insight-number">+150%</span>
+                <span class="insight-number" data-count="150" data-prefix="+" data-suffix="%">+150%</span>
                 <span class="insight-text">Contas alcançadas no primeiro trimestre após a aplicação da nova estratégia.</span>
               </div>
               <div class="insight-data-card">
-                <span class="insight-number">10k+</span>
+                <span class="insight-number" data-count="10" data-suffix="K+">10K+</span>
                 <span class="insight-text">Interações com o conteúdo, mantendo a comunidade engajada e ativa organicamente.</span>
               </div>
               <div class="insight-data-card">
-                <span class="insight-number">58k+</span>
+                <span class="insight-number" data-count="158" data-suffix="K+">158K+</span>
                 <span class="insight-text">Visualizações em um único Reel, trazendo autoridade e visibilidade massiva para a marca.</span>
               </div>
             </div>
@@ -452,35 +479,83 @@
               <div class="carousel-track reels-track" tabindex="0" data-cursor="Arraste">
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_0_0.jpg" alt="Reel com 2.4 mi visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 2,4 mi</span><span class="reel-title">O mais viral</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="2.4" data-suffix=" mi">2,4 mi</span>
+                    </span>
+                    <span class="reel-title">O mais viral</span>
+                  </figcaption>
                 </figure>
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_0_1.jpg" alt="Reel com 1 mi visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 1 mi</span><span class="reel-title">Sucesso absurdo</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="1" data-suffix=" mi">1 mi</span>
+                    </span>
+                    <span class="reel-title">Sucesso absurdo</span>
+                  </figcaption>
                 </figure>
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_0_2.jpg" alt="Reel com 923 mil visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 923 mil</span><span class="reel-title">Limp Dance</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="923" data-suffix=" mil">923 mil</span>
+                    </span>
+                    <span class="reel-title">Limp Dance</span>
+                  </figcaption>
                 </figure>
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_1_0.jpg" alt="Reel com 917 mil visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 917 mil</span><span class="reel-title">Eles são o momento</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="917" data-suffix=" mil">917 mil</span>
+                    </span>
+                    <span class="reel-title">Eles são o momento</span>
+                  </figcaption>
                 </figure>
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_1_1.jpg" alt="Reel com 861 mil visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 861 mil</span><span class="reel-title">Bastidores na rua</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="861" data-suffix=" mil">861 mil</span>
+                    </span>
+                    <span class="reel-title">Bastidores na rua</span>
+                  </figcaption>
                 </figure>
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_1_2.jpg" alt="Reel com 854 mil visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 854 mil</span><span class="reel-title">Limp Dance 2</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="854" data-suffix=" mil">854 mil</span>
+                    </span>
+                    <span class="reel-title">Limp Dance 2</span>
+                  </figcaption>
                 </figure>
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_2_0.jpg" alt="Reel com 694 mil visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 694 mil</span><span class="reel-title">Vacinação</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="694" data-suffix=" mil">694 mil</span>
+                    </span>
+                    <span class="reel-title">Vacinação</span>
+                  </figcaption>
                 </figure>
                 <figure class="reel-card">
                   <img src="assets/cases/reel_crop_2_1.jpg" alt="Reel com 672 mil visualizações" width="246" height="422" loading="lazy" decoding="async">
-                  <figcaption><span class="reel-views">▶ 672 mil</span><span class="reel-title">Limp Dance 3</span></figcaption>
+                  <figcaption>
+                    <span class="reel-views">
+                      <span class="reel-views-icon" aria-hidden="true">▶</span>
+                      <span class="reel-views-count" data-count="672" data-suffix=" mil">672 mil</span>
+                    </span>
+                    <span class="reel-title">Limp Dance 3</span>
+                  </figcaption>
                 </figure>
               </div>
               <div class="carousel-controls">
@@ -496,7 +571,7 @@
         <div class="clients-more" style="text-align: center; margin-top: 4rem;">
           <span class="pill-tag" style="margin: 0 auto 1rem;">O Portfólio Continua</span>
           <h4 class="case-subtitle" style="font-size: clamp(1.8rem, 3vw, 2.5rem); margin-bottom: 0.5rem; color: var(--text-primary);">Outras marcas que ajudo a impulsionar</h4>
-          <p class="clients-more-lead" style="max-width: 500px; margin: 0 auto 2.5rem;">Clique em uma marca para ver o trabalho e o perfil no Instagram.</p>
+          <p class="clients-more-lead" style="max-width: 500px; margin: 0 auto 2.5rem;">Passe o mouse em uma marca para ver o trabalho e ir direto pro Instagram.</p>
 
           <div class="carousel clients-carousel" data-carousel role="region" aria-roledescription="carrossel" aria-label="Outros clientes">
             <div class="carousel-track clients-track" tabindex="0" data-cursor="Arraste">
@@ -516,14 +591,13 @@
                     <span>Salão especialista em cachos e crespos</span>
                   </div>
                 </div>
-                <button class="client-project-reveal" type="button" aria-haspopup="dialog">
-                  Ver o trabalho <span class="client-project-arrow" aria-hidden="true">↗</span>
-                </button>
-                <template class="client-story">
-                  <img src="assets/clients/kasa-cover.webp" alt="Grade de publicações do Instagram @kasadoscachos" width="640" height="800" loading="lazy" decoding="async">
-                  <p>Salão especialista em cachos e crespos em Salvador. Conteúdo de transformação, bastidores e educativo — o trabalho que mais me orgulha entre os projetos menores.</p>
-                  <a href="https://www.instagram.com/kasadoscachos/" target="_blank" rel="noopener noreferrer">Ver perfil no Instagram →</a>
-                </template>
+                <a class="client-project-reveal" href="https://www.instagram.com/kasadoscachos/" target="_blank" rel="noopener noreferrer" aria-label="Ver o trabalho e o perfil no Instagram de Kasa dos Cachos (abre em nova aba)">
+                  <img class="client-project-reveal-thumb" src="assets/clients/kasa-cover.webp" alt="" width="96" height="96" loading="lazy" decoding="async">
+                  <span class="client-project-reveal-body">
+                    <span class="client-project-reveal-text">Transformações que viram prova social — cada antes/depois vira novo cliente.</span>
+                    <span class="client-project-reveal-cta">Ver perfil no Instagram <span class="client-project-arrow" aria-hidden="true">↗</span></span>
+                  </span>
+                </a>
               </div>
 
               <div class="client-project-card">
@@ -540,14 +614,13 @@
                     <span>Rede de óticas em Salvador</span>
                   </div>
                 </div>
-                <button class="client-project-reveal" type="button" aria-haspopup="dialog">
-                  Ver o trabalho <span class="client-project-arrow" aria-hidden="true">↗</span>
-                </button>
-                <template class="client-story">
-                  <img src="assets/clients/calazans-cover.webp" alt="Foto de campanha do Instagram @oticascalazans" width="640" height="800" loading="lazy" decoding="async">
-                  <p>Rede de óticas com duas filiais em Salvador. Conteúdo de campanha, produto e promoções recorrentes.</p>
-                  <a href="https://www.instagram.com/oticascalazans/" target="_blank" rel="noopener noreferrer">Ver perfil no Instagram →</a>
-                </template>
+                <a class="client-project-reveal" href="https://www.instagram.com/oticascalazans/" target="_blank" rel="noopener noreferrer" aria-label="Ver o trabalho e o perfil no Instagram de Óticas Calazans (abre em nova aba)">
+                  <img class="client-project-reveal-thumb" src="assets/clients/calazans-cover.webp" alt="" width="96" height="96" loading="lazy" decoding="async">
+                  <span class="client-project-reveal-body">
+                    <span class="client-project-reveal-text">Campanhas que tiram a marca da prateleira e colocam no feed (e nas duas lojas).</span>
+                    <span class="client-project-reveal-cta">Ver perfil no Instagram <span class="client-project-arrow" aria-hidden="true">↗</span></span>
+                  </span>
+                </a>
               </div>
 
               <div class="client-project-card">
@@ -564,14 +637,13 @@
                     <span>Nutricionista do idoso</span>
                   </div>
                 </div>
-                <button class="client-project-reveal" type="button" aria-haspopup="dialog">
-                  Ver o trabalho <span class="client-project-arrow" aria-hidden="true">↗</span>
-                </button>
-                <template class="client-story">
-                  <img src="assets/clients/andressa-cover.webp" alt="Foto do Instagram @nutriandressafagundes" width="640" height="800" loading="lazy" decoding="async">
-                  <p>Nutricionista especialista em saúde do idoso. Planejamento e produção de conteúdo de autoridade no Instagram.</p>
-                  <a href="https://www.instagram.com/nutriandressafagundes/" target="_blank" rel="noopener noreferrer">Ver perfil no Instagram →</a>
-                </template>
+                <a class="client-project-reveal" href="https://www.instagram.com/nutriandressafagundes/" target="_blank" rel="noopener noreferrer" aria-label="Ver o trabalho e o perfil no Instagram de Andressa Fagundes (abre em nova aba)">
+                  <img class="client-project-reveal-thumb" src="assets/clients/andressa-cover.webp" alt="" width="96" height="96" loading="lazy" decoding="async">
+                  <span class="client-project-reveal-body">
+                    <span class="client-project-reveal-text">Conteúdo que constrói autoridade: virou referência em nutrição do idoso.</span>
+                    <span class="client-project-reveal-cta">Ver perfil no Instagram <span class="client-project-arrow" aria-hidden="true">↗</span></span>
+                  </span>
+                </a>
               </div>
 
             </div>
@@ -581,15 +653,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Modal do teaser: conteúdo vem do <template class="client-story"> do card clicado -->
-        <dialog class="story-dialog client-dialog" id="client-dialog" aria-labelledby="client-dialog-title" data-lenis-prevent>
-          <div class="story-dialog-inner client-dialog-inner">
-            <button class="story-close" type="button" aria-label="Fechar">×</button>
-            <h3 class="story-title" id="client-dialog-title"></h3>
-            <div class="client-dialog-body"></div>
-          </div>
-        </dialog>
 
       </div>
     </section>
@@ -870,6 +933,7 @@
           <div class="contact-info-col">
             <div class="contact-header gsap-reveal" style="margin-bottom: 2rem;">
               <span class="pill-tag">Vamos Conversar</span>
+              <video src="assets/priscila/pointing-hands.webm" class="tech-pointing-hand tech-pointing-hand--contact" autoplay loop muted playsinline aria-hidden="true"></video>
               <h2 class="contact-title" style="margin-top: 1rem; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2;">
                 Seu próximo conteúdo começa com uma boa ideia.
               </h2>
@@ -913,7 +977,7 @@
           </div>
 
           <!-- Coluna 2: Formulário -->
-          <div class="contact-form-col" style="background: rgba(255,255,255,0.02); padding: 2.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+          <div class="contact-form-col glass" style="padding: 2.5rem; border-radius: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
               <h3 style="font-size: 1.4rem; color: var(--text-primary); font-family: var(--font-display); margin: 0;">Ou envie um briefing rápido</h3>
               <span style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: var(--accent-color); background: rgba(201,242,39,0.1); padding: 0.3rem 0.6rem; border-radius: 50px; border: 1px solid rgba(201,242,39,0.2);">
@@ -931,9 +995,32 @@
                 <input type="text" id="field-contact" name="contact" maxlength="120" autocomplete="email"
                        required placeholder="WhatsApp ou E-mail">
               </div>
+              <!-- Interactive Chips Section -->
+              <div class="form-chips-section">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">O que você precisa?</label>
+                <div class="form-chips-container" id="services-chips" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;">
+                  <button type="button" class="form-chip" data-value="Identidade Visual">Identidade Visual</button>
+                  <button type="button" class="form-chip" data-value="Gestão de Redes Sociais">Gestão de Redes Sociais</button>
+                  <button type="button" class="form-chip" data-value="Consultoria Estratégica">Consultoria Estratégica</button>
+                  <button type="button" class="form-chip" data-value="Criação de Conteúdo">Criação de Conteúdo</button>
+                  <button type="button" class="form-chip" data-value="Outro">Outro</button>
+                </div>
+                <input type="hidden" name="services" id="hidden-services" value="">
+              </div>
+
+              <div class="form-chips-section">
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Qual o seu principal objetivo?</label>
+                <div class="form-chips-container" id="goals-chips" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;">
+                  <button type="button" class="form-chip" data-value="Lançar um novo negócio">Lançar um novo negócio</button>
+                  <button type="button" class="form-chip" data-value="Reposicionar minha marca">Reposicionar minha marca</button>
+                  <button type="button" class="form-chip" data-value="Aumentar vendas/engajamento">Aumentar vendas/engajamento</button>
+                </div>
+                <input type="hidden" name="goals" id="hidden-goals" value="">
+              </div>
+
               <div class="form-field" style="margin-bottom: 0;">
-                <textarea id="field-message" name="message" rows="4" maxlength="800"
-                          required placeholder="Conte brevemente o que você precisa..."></textarea>
+                <textarea id="field-message" name="message" rows="3" maxlength="800"
+                          placeholder="Quer detalhar um pouco mais? (Opcional)"></textarea>
               </div>
 
               <button type="submit" class="btn-primary-nesh form-submit" style="width: 100%; margin-top: 1rem;">
@@ -950,49 +1037,20 @@
     </section>
   </main>
 
-  <footer class="footer" style="padding: 5rem 0 2rem; border-top: 1px solid rgba(255,255,255,0.05); background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.2));">
-    <div class="container">
-      <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 4rem; margin-bottom: 4rem;">
-        
-        <div class="footer-col brand-col">
-          <a href="#" class="brand-logo" style="margin-bottom: 1.25rem; display: inline-flex;">
-            <span class="logo-badge">PS</span>
-            <span class="logo-name">Priscila Santos<span class="dot">.</span></span>
-          </a>
-          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 300px;">
-            Estratégia, conteúdo e criatividade para transformar ideias em narrativas que conectam marcas e pessoas de verdade.
-          </p>
-        </div>
-
-        <div class="footer-col nav-col">
-          <h4 style="font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 1.5rem; color: var(--text-primary);">Mapa do Site</h4>
-          <nav style="display: flex; flex-direction: column; gap: 1rem;">
-            <a href="#about" style="color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s;">Trajetória</a>
-            <a href="#work" style="color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s;">Projetos em Destaque</a>
-            <a href="#services" style="color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s;">Soluções & Serviços</a>
-            <a href="#testimonials" style="color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s;">O Que Dizem</a>
-          </nav>
-        </div>
-
-        <div class="footer-col contact-col">
-          <h4 style="font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 1.5rem; color: var(--text-primary);">Vamos criar sua próxima campanha?</h4>
-          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem;">Estou disponível para projetos pontuais ou parcerias contínuas. Me mande uma mensagem.</p>
-          <a href="mailto:prisantospinheiro.ssa@gmail.com" class="btn-primary-nesh" style="display: inline-flex; width: fit-content; padding: 0.75rem 1.25rem; border-radius: 8px;">
-            <span>Iniciar Projeto</span>
-            <span class="btn-arrow">→</span>
-          </a>
-        </div>
-
-      </div>
-
-      <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08);">
+  <footer class="footer" style="padding: 3rem 0 2rem; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(10, 10, 15, 0.4);">
+    <div class="container footer-container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+      <div class="footer-left" style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="#" class="brand-logo" style="display: inline-flex; align-items: center; gap: 0.75rem;">
+          <span class="logo-badge" style="width: 32px; height: 32px; font-size: 0.75rem;">PS</span>
+          <span class="logo-name" style="font-size: 0.95rem;">Priscila Santos<span class="dot">.</span></span>
+        </a>
         <span class="footer-copy" style="color: var(--text-secondary); font-size: 0.85rem;">© 2026 Priscila Santos. Todos os direitos reservados.</span>
-        <nav class="footer-social" aria-label="Redes sociais" style="display: flex; gap: 1rem;">
-          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="color: var(--text-secondary);"><svg class="social-icon icon-linkedin" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-          <a href="https://www.instagram.com/prisantos2021/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="color: var(--text-secondary);"><svg class="social-icon icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
-          <a href="https://wa.me/5571988350272" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style="color: var(--text-secondary);"><svg class="social-icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-        </nav>
       </div>
+      <nav class="footer-social" aria-label="Redes sociais" style="display: flex; gap: 1.25rem;">
+        <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="color: var(--text-secondary);"><svg class="social-icon icon-linkedin" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        <a href="https://www.instagram.com/prisantos2021/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="color: var(--text-secondary);"><svg class="social-icon icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://wa.me/5571988350272" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style="color: var(--text-secondary);"><svg class="social-icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+      </nav>
     </div>
   </footer>
 
@@ -1011,7 +1069,6 @@
   <script src="js/timeline.js"></script>
   <script src="js/clients-carousel.js"></script>
   <script src="js/carousel.js"></script>
-  <script src="js/cursor.js"></script>
   <script src="js/preloader.js"></script>
   <script src="js/tech-services.js"></script>
   <script src="js/section-reveals.js"></script>

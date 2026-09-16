@@ -61,6 +61,15 @@
      (fade + 10px, sem stagger por campo): é onde a pessoa vai digitar, não onde
      queremos prender o olhar. */
   PS.initContactReveal = function () {
+    // Mão apontando "chega" um instante antes do título, puxando o olhar pra frase final.
+    const hand = document.querySelector('.tech-pointing-hand--contact');
+    if (hand) {
+      gsap.fromTo(hand, { y: -16, opacity: 0, rotate: -8 }, {
+        y: 0, opacity: 1, rotate: 0, duration: 0.6, ease: 'back.out(1.6)',
+        scrollTrigger: { trigger: '.contact-header', start: 'top 85%', toggleActions: 'play none none reverse' }
+      });
+    }
+
     gsap.fromTo('.contact-channels .contact-card', { scale: 0.92, opacity: 0 }, {
       scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', stagger: 0.12,
       scrollTrigger: { trigger: '.contact-channels', start: 'top 88%', toggleActions: 'play none none reverse' }

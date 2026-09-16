@@ -361,10 +361,10 @@
   gap: clamp(1rem, 2vw, 1.75rem);
   padding: 0.25rem max(5%, calc((100% - 1400px) / 2 + 70px)) 1rem;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: max(5%, calc((100% - 1400px) / 2 + 70px));
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent-color) transparent;
+  scrollbar-width: none;
+}
+.timeline-list::-webkit-scrollbar {
+  display: none;
 }
 .trajectory.is-scrubbed .timeline-list {
   overflow: visible;
@@ -382,7 +382,6 @@
   overflow: hidden;
   background: var(--bg-color);
   border: 1px solid rgba(255,255,255,0.06);
-  scroll-snap-align: start;
   transition: opacity 0.6s ease, scale 0.8s var(--ease-out-expo), border-color 0.6s ease, box-shadow 0.6s ease;
 }
 .trajectory.is-ready .timeline-card:not(.is-active) {

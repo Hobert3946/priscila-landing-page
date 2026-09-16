@@ -79,8 +79,8 @@ let browser;
 before(async () => { browser = await chromium.launch(); });
 after(async () => { await browser.close(); });
 
-async function openPage(viewport, { blockCdn = false } = {}) {
-  const page = await browser.newPage({ viewport });
+async function openPage(viewport, { blockCdn = false, hasTouch = false } = {}) {
+  const page = await browser.newPage({ viewport, hasTouch, isMobile: hasTouch });
   if (blockCdn) {
     await page.route(/unpkg\.com|cdnjs\.cloudflare\.com/, route => route.abort());
   }
@@ -429,6 +429,24 @@ test('faixa de clientes desacelera suavemente no hover', async () => {
 
   await page.close();
   assert.ok(hoverSpeed < normalSpeed * 0.6, `velocidade no hover (${hoverSpeed.toFixed(1)}) não caiu o suficiente vs. normal (${normalSpeed.toFixed(1)})`);
+});
+
+// Regressão: em touch, o navegador pode sintetizar "mouseenter" no toque sem um "mouseleave"
+// correspondente ao soltar o dedo. Isso chamava lenis.stop() e nunca lenis.start(), travando
+// o scroll suave da página pra sempre depois de deslizar sobre a trajetória/carrossel de clientes.
+test('deslizar (touch) sobre a trajetória ou o carrossel de clientes não trava o scroll suave', async () => {
+  const page = await openPage({ width: 390, height: 844 }, { hasTouch: true });
+  await page.waitForFunction(() => window.PS && window.PS.lenis, null, { timeout: 5000 });
+
+  const stoppedAfter = await page.evaluate(() => {
+    // mesmo evento sintético que um toque dispara: mouseenter sem mouseleave depois.
+    document.querySelector('.trajectory')?.dispatchEvent(new MouseEvent('mouseenter', { bubbles: false }));
+    document.querySelector('.clients-carousel')?.dispatchEvent(new MouseEvent('mouseenter', { bubbles: false }));
+    return window.PS.lenis.isStopped;
+  });
+
+  await page.close();
+  assert.equal(stoppedAfter, false, 'lenis ficou parado (isStopped) após simular um toque, travando o scroll');
 });
 
 // Regressão: a palavra do rotator sumia de uma vez (fromTo com immediateRender) e ficava ~43% do tempo invisível.

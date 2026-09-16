@@ -63,10 +63,35 @@
     update();
   }
 
+  /* Menu encolhe ao rolar (não some) e ganha uma linha de progresso da página inteira
+     na borda de baixo (--scroll-progress, styles.css .header::after). */
+  function initHeaderShrink() {
+    const header = document.querySelector('.header');
+    if (!header) return;
+
+    let ticking = false;
+    function update() {
+      const y = window.scrollY;
+      header.classList.toggle('is-compact', y > 40);
+
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      header.style.setProperty('--scroll-progress', max > 0 ? Math.min(1, y / max) : 0);
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+    update();
+  }
+
   PS.initUI = function () {
     initMobileMenu();
     initAnchorLinks();
     initFaq();
     initScrollCue();
+    initHeaderShrink();
   };
 })();

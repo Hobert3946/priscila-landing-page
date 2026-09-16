@@ -35,3 +35,42 @@ PS.lockScroll = function (locked) {
   if (locked) PS.lenis.stop();
   else PS.lenis.start();
 };
+
+/* Page Transitions: fade suave ao navegar entre seções por links âncora */
+PS.initPageTransitions = function () {
+  const overlay = document.getElementById('page-transition');
+  if (!overlay) return;
+
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href');
+      if (!targetId || targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (!target) return;
+
+      e.preventDefault();
+
+      // Fade in do overlay
+      gsap.to(overlay, {
+        opacity: 0.6,
+        duration: 0.25,
+        ease: 'power2.in',
+        onComplete: () => {
+          // Scroll para o destino
+          if (PS.lenis) {
+            PS.lenis.scrollTo(target, { offset: -80, immediate: false, duration: 1.2 });
+          } else {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+          // Fade out do overlay
+          gsap.to(overlay, {
+            opacity: 0,
+            duration: 0.4,
+            delay: 0.15,
+            ease: 'power2.out'
+          });
+        }
+      });
+    });
+  });
+};

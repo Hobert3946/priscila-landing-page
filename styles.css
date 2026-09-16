@@ -198,6 +198,40 @@ body {
   padding: 1.5rem 0;
   z-index: 100;
   mix-blend-mode: difference; /* Adds a premium touch over light elements */
+  transition: padding 0.4s var(--ease-out-expo);
+}
+
+/* Menu "encolhe" ao rolar (js/ui.js PS.initHeaderShrink) em vez de sumir: some incomodava
+   mais do que ajudava. Dois toques próprios em vez do shrink genérico de qualquer site:
+   1) a borda de baixo vira uma linha de progresso da página inteira (--scroll-progress,
+   atualizado no JS); 2) o selo da logo gira devagar feito um selo/moeda enquanto compacto. */
+.header.is-compact {
+  padding: 0.85rem 0;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: calc(var(--scroll-progress, 0) * 100%);
+  background: var(--accent-color);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.header.is-compact::after {
+  opacity: 1;
+}
+.header.is-compact .logo-badge {
+  animation: logo-seal-spin 9s linear infinite;
+}
+@keyframes logo-seal-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .header { transition: none; }
+  .header.is-compact .logo-badge { animation: none; }
 }
 
 .nav-container {
@@ -1398,4 +1432,256 @@ textarea:focus-visible {
 ::selection {
   background: var(--accent-color);
   color: var(--accent-ink);
+}
+
+/* Form Chips */
+.form-chip { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+.form-chip:hover { border-color: rgba(255,255,255,0.3); color: var(--text-primary); }
+.form-chip.active { background: rgba(201,242,39,0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; box-shadow: 0 0 15px rgba(201,242,39,0.2); }
+
+
+/* Glassmorphism */
+.glass { background: rgba(28, 35, 57, 0.45) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; border: 1px solid rgba(255,255,255,0.05) !important; }
+
+
+
+/* ─── Ticker Wall ─── */
+.ticker-wall {
+  padding: clamp(4rem, 10vw, 8rem) 0;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(254,99,61,0.04), transparent);
+}
+
+.ticker-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  flex-wrap: wrap;
+}
+
+.ticker-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+.ticker-number {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 12vw, 9rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #ff9a76 40%, var(--text-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ticker-label {
+  font-family: var(--font-sans);
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.ticker-divider {
+  width: 1px;
+  height: clamp(3rem, 8vw, 6rem);
+  background: linear-gradient(to bottom, transparent, rgba(254,99,61,0.3), transparent);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .ticker-grid {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .ticker-divider {
+    width: clamp(3rem, 20vw, 6rem);
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(254,99,61,0.3), transparent);
+  }
+}
+
+
+
+/* --- Page Transitions --- */
+.page-transition-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-color);
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ─── 1. Viewfinder Cinematográfico (Bordas & Cantos de Câmera) ─── */
+.cinema-viewfinder {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 45;
+}
+
+.viewfinder-corner {
+  position: fixed;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(255, 255, 255, 0.22);
+  border-style: solid;
+  pointer-events: none;
+  transition: border-color 0.4s ease;
+}
+.viewfinder-corner.top-left {
+  top: 24px;
+  left: 24px;
+  border-width: 1.5px 0 0 1.5px;
+}
+.viewfinder-corner.top-right {
+  top: 24px;
+  right: 24px;
+  border-width: 1.5px 1.5px 0 0;
+}
+.viewfinder-corner.bottom-left {
+  bottom: 24px;
+  left: 24px;
+  border-width: 0 0 1.5px 1.5px;
+}
+.viewfinder-corner.bottom-right {
+  bottom: 24px;
+  right: 24px;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+.viewfinder-spec-badge {
+  position: fixed;
+  bottom: 24px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(13, 17, 26, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 0.42rem 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  user-select: none;
+  pointer-events: none;
+}
+.rec-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  animation: recBlink 1.8s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(254, 99, 61, 0.85);
+}
+@keyframes recBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(0.85); }
+}
+.rec-text {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+.rec-info {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─── 2. Micro-Widget de Status & Equalizador (Canto Inferior Esquerdo) ─── */
+.corner-status-widget {
+  position: fixed;
+  bottom: 24px;
+  left: 32px;
+  z-index: 90;
+  text-decoration: none;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.corner-status-widget:hover {
+  transform: translateY(-2px);
+}
+.status-widget-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(13, 17, 26, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.42rem 0.95rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.corner-status-widget:hover .status-widget-inner {
+  border-color: rgba(254, 99, 61, 0.45);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), 0 0 18px rgba(254, 99, 61, 0.2);
+}
+
+.status-pulse-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.85);
+  animation: statusPulse 2.2s ease-in-out infinite;
+}
+@keyframes statusPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
+}
+
+.status-text {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #e2e4e9;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.status-divider {
+  width: 1px;
+  height: 11px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.audio-visualizer {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 13px;
+  padding-bottom: 1px;
+}
+.audio-bar {
+  width: 2.5px;
+  border-radius: 1px;
+  background: var(--accent-color);
+}
+.audio-bar:nth-child(1) { height: 5px; animation: wave1 1.2s ease-in-out infinite; }
+.audio-bar:nth-child(2) { height: 12px; animation: wave2 0.9s ease-in-out infinite 0.2s; }
+.audio-bar:nth-child(3) { height: 7px; animation: wave3 1.1s ease-in-out infinite 0.4s; }
+.audio-bar:nth-child(4) { height: 10px; animation: wave4 1.3s ease-in-out infinite 0.1s; }
+
+@keyframes wave1 { 0%, 100% { height: 4px; } 50% { height: 12px; } }
+@keyframes wave2 { 0%, 100% { height: 13px; } 50% { height: 5px; } }
+@keyframes wave3 { 0%, 100% { height: 6px; } 50% { height: 13px; } }
+@keyframes wave4 { 0%, 100% { height: 11px; } 50% { height: 4px; } }
+
+/* Oculta em telas menores que 1024px para manter celulares e tablets 100% limpos */
+@media (max-width: 1024px) {
+  .cinema-viewfinder { display: none !important; }
+  .corner-status-widget { display: none !important; }
 }
