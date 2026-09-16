@@ -15,6 +15,7 @@
     try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) { /* modo privado: só não memoriza */ }
 
     const count = el.querySelector('.preloader-count');
+    const logo = el.querySelector('.preloader-logo');
 
     // Versão rápida (recarregamentos seguintes da mesma sessão): sem contar, só um
     // flash da marca e sai — mantém a sensação de "toda carga tem entrada" sem repetir
@@ -26,14 +27,27 @@
       return 0.35;
     }
 
+    // Contagem mais devagar (dá tempo de acompanhar o número) e, na saída, o "PS." cresce
+    // e dissolve — o "PS" gigante do hero começa a crescer nesse exato instante (heroDelay
+    // abaixo), como se fosse a mesma marca continuando a se expandir, não duas telas soltas.
+    //
+    // No celular a abertura é mais curta. No desktop ela é um respiro; numa tela pequena,
+    // segurando o aparelho no 4G, é só espera antes de ver o conteúdo — e quem chega pelo
+    // Instagram desiste rápido. Mesma cena, menos tempo.
+    const quick = PS.env.touch || PS.env.lowEnd;
+    const contagem = quick ? 0.6 : 1.3;
+    const saida = quick ? 0.35 : 0.5;
+
     const state = { value: 0 };
     gsap.timeline({ onComplete: () => root.classList.remove('show-preloader') })
       .to(state, {
-        value: 100, duration: 0.7, ease: 'power2.inOut',
+        value: 100, duration: contagem, ease: 'power2.out',
         onUpdate: () => { count.textContent = Math.round(state.value); }
       })
-      .to(el, { yPercent: -100, duration: 0.55, ease: 'power4.inOut' });
+      .to(count, { opacity: 0, duration: 0.15 }, '-=0.05')
+      .to(logo, { scale: 1.6, opacity: 0, duration: saida, ease: 'power2.in' }, '-=0.1')
+      .to(el, { yPercent: -100, duration: saida, ease: 'power4.inOut' }, '-=0.25');
 
-    return 0.95;
+    return contagem;
   };
 })();

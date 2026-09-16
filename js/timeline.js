@@ -105,7 +105,9 @@
 
     function cardTarget(card) {
       const paddingOffset = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-      return card.offsetLeft - paddingOffset - 20;
+      const target = card.offsetLeft - paddingOffset - 20;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      return Math.max(0, Math.min(target, maxScroll));
     }
 
     // Sem scroll-snap nativo (ele forçava o scrollLeft de volta a 0 sempre que o wheel/hover
@@ -115,22 +117,32 @@
     function scheduleSnap() {
       clearTimeout(snapTimer);
       snapTimer = setTimeout(() => {
+        if (gsap.isTweening(track)) return; // Ignora o scroll acionado pelo GSAP
         let nearest = cards[0];
         let nearestDist = Infinity;
         cards.forEach((card) => {
           const dist = Math.abs(cardTarget(card) - track.scrollLeft);
           if (dist < nearestDist) { nearestDist = dist; nearest = card; }
         });
-        if (nearestDist > 4) track.scrollTo({ left: cardTarget(nearest), behavior: 'smooth' });
+        if (nearestDist > 4) {
+          gsap.to(track, { scrollLeft: cardTarget(nearest), duration: 0.6, ease: 'power2.out', overwrite: 'auto' });
+        }
       }, 140);
     }
     track.addEventListener('scroll', scheduleSnap, { passive: true });
 
-    // Permite clicar ou passar o mouse nas bolinhas para navegar
+    // Permite clicar nas bolinhas ou nos próprios cards para navegar
+    cards.forEach((card, index) => {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => {
+        gsap.to(track, { scrollLeft: cardTarget(card), duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
+      });
+    });
+
     dots.forEach((dot, index) => {
       const navigateToCard = () => {
         const card = cards[index];
-        if (card) track.scrollTo({ left: cardTarget(card), behavior: 'smooth' });
+        if (card) gsap.to(track, { scrollLeft: cardTarget(card), duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
       };
       dot.addEventListener('click', navigateToCard);
     });
@@ -140,10 +152,10 @@
     const nextBtn = wrap.querySelector('[data-timeline-next]');
 
     if (prevBtn) {
-      prevBtn.addEventListener('click', () => track.scrollBy({ left: -400, behavior: 'smooth' }));
+      prevBtn.addEventListener('click', () => gsap.to(track, { scrollLeft: track.scrollLeft - 400, duration: 0.8, ease: 'power2.out', overwrite: 'auto' }));
     }
     if (nextBtn) {
-      nextBtn.addEventListener('click', () => track.scrollBy({ left: 400, behavior: 'smooth' }));
+      nextBtn.addEventListener('click', () => gsap.to(track, { scrollLeft: track.scrollLeft + 400, duration: 0.8, ease: 'power2.out', overwrite: 'auto' }));
     }
 
     // Panning (rolagem) ultra-suave ao passar o mouse pelas bordas dos cards

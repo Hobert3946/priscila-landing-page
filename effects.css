@@ -111,6 +111,9 @@ body.scroll-locked {
   object-position: bottom center;
   filter: drop-shadow(0 30px 50px rgba(0,0,0,0.5));
   will-change: filter, transform;
+  /* Suaviza o corte inferior da imagem fundindo-a com o escuro do fundo */
+  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
 }
 
 .hero-copy {
@@ -137,39 +140,72 @@ body.scroll-locked {
   justify-content: flex-start;
 }
 
+/*
+  Hero no celular: a ordem é TEXTO → CTA → FOTO.
+  Antes a foto vinha primeiro (order:-1, 52vh) e, somada ao padding do topo, empurrava
+  o título e o botão para fora da primeira tela — quem abria o site via só uma foto, sem
+  saber o que a Priscila faz. Agora a promessa e o CTA aparecem de cara, e o retrato entra
+  logo abaixo, com altura limitada para caber junto na mesma tela.
+*/
 @media (max-width: 900px) {
+  /* `display: contents` dissolve a caixa do .hero-copy e promove título, CTA e galeria
+     a filhos diretos do stage — só assim dá para intercalar o retrato entre eles com
+     `order`, já que o retrato é irmão do .hero-copy, não filho.
+     Em navegador antigo sem suporte, cai no empilhamento normal (galeria antes da foto):
+     continua legível, só perde a ordem ideal. */
   .hero-stage {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-  .hero-giant-type {
-    font-size: clamp(6rem, 32vw, 11rem);
-    opacity: 0.55;
-    top: -2vh;
-    right: 50%;
-    transform: translateX(50%);
-  }
-  .hero-portrait {
-    grid-column: 1;
-    grid-row: auto;
-    height: 52vh;
-    order: -1;
-    margin-bottom: 1rem;
-    align-self: auto;
-  }
-  .hero-portrait img {
-    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0 0 1rem;
   }
   .hero-copy {
-    grid-column: 1;
-    grid-row: auto;
-    align-items: center;
-    text-align: center;
+    display: contents;
   }
-  .hero-tag-wrap {
+  .hero-stage .hero-title {
+    order: 1;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .hero-stage .hero-actions {
+    order: 2;
+    width: 100%;
     justify-content: center;
   }
-  .hero-copy .hero-actions {
+  /* O "PS" sai do posicionamento absoluto e entra no fluxo, logo antes do retrato.
+     Absoluto exigia adivinhar a altura do título (2 ou 3 linhas conforme o aparelho) e
+     acabava caindo por cima da prova social. No fluxo, a margem negativa faz o retrato
+     subir por cima dele — o efeito de cartaz continua e não depende de medida fixa. */
+  .hero-giant-type {
+    position: relative;
+    z-index: 0;
+    order: 3;
+    top: auto;
+    right: auto;
+    transform: none;
+    font-size: min(30vw, 8rem);
+    line-height: 0.8;
+    opacity: 0.45;
+    margin-bottom: -0.62em;
+  }
+  .hero-portrait {
+    position: relative;
+    z-index: 1;
+    order: 3;
+    height: min(36vh, 280px);
+    margin: 0;
+    align-self: center;
+    transform: none;
+  }
+  .hero-portrait img {
+    max-width: min(76vw, 280px);
+  }
+  .hero-stage .hero-gallery {
+    order: 4;
+    margin-top: 1rem;
+  }
+  .hero-tag-wrap {
     justify-content: center;
   }
 }
@@ -246,7 +282,6 @@ body.scroll-locked {
 }
 
 .js.js-pending .hero-gallery,
-.js.js-pending .hero-shortcuts,
 .js.js-pending .hero-giant-type,
 .js.js-pending .hero-portrait img {
   opacity: 0;
@@ -274,49 +309,6 @@ body.scroll-locked {
   .hero-gallery-item {
     width: 58px;
     height: 76px;
-  }
-}
-
-/* ---------- Atalhos verticais do hero (estilo NESH) ---------- */
-.hero-shortcuts {
-  position: absolute;
-  top: 50%;
-  left: 1.75rem;
-  transform: translateY(-50%);
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
-
-.hero-shortcut {
-  display: flex;
-  align-items: baseline;
-  gap: 0.65rem;
-  text-decoration: none;
-  color: var(--text-secondary);
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  transition: color 0.3s ease;
-}
-.hero-shortcut:hover,
-.hero-shortcut:focus-visible {
-  color: var(--text-primary);
-}
-
-.hero-shortcut-idx {
-  font-family: monospace;
-  font-size: 0.7rem;
-  color: var(--accent-color);
-}
-
-/* Some abaixo de ~1180px: nesse ponto a coluna de texto do hero já perde a folga
-   necessária no gutter esquerdo, e o menu hamburger cobre a navegação. */
-@media (max-width: 1180px) {
-  .hero-shortcuts {
-    display: none;
   }
 }
 

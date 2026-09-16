@@ -3,7 +3,7 @@
   revelação de títulos/cards e parágrafo que acende palavra por palavra no scroll.
 */
 (function () {
-  const ROLL_TARGETS = '.nav-link, .btn-pill > span:last-child, .btn-primary-nesh > span:first-child, .btn-ghost-nesh > span, .hero-shortcut-label';
+  const ROLL_TARGETS = '.nav-link-label, .btn-pill > span:last-child, .btn-primary-nesh > span:first-child, .btn-ghost-nesh > span';
   const ROTATE_EVERY = 2.6; // segundos
 
   /* Duplica o texto em duas camadas; no hover a de baixo sobe (CSS em effects.css) */
@@ -75,27 +75,64 @@
   */
   function animateHero(delay) {
     const split = new SplitType('#hero-heading .hero-split', { types: 'words, chars' });
+    // "PS" gigante também ganha stagger por letra, igual ao título — antes era um bloco só
+    // (fade+scale), agora combina com o resto da entrada e continua o crescimento que o
+    // "PS." do preloader começou ao sumir (ver js/preloader.js).
+    const giantSplit = new SplitType('.hero-giant-type', { types: 'chars' });
     // Ordem inspirada no NESH: título, palavra girando, tag, ações, faixa de fotos — atalhos por último.
-    const reveals = ['#hero-tag', '#hero-actions', '.hero-gallery'];
+    const reveals = ['#hero-actions', '.hero-gallery'];
     const portraitImg = document.querySelector('.hero-portrait img');
 
     gsap.set(split.chars, { yPercent: 100, opacity: 0 });
     gsap.set('.word-rotator-item', { yPercent: 100, opacity: 0 });
     gsap.set(reveals, { y: 30, opacity: 0 });
-    gsap.set('.hero-shortcut', { x: -24, opacity: 0 });
-    gsap.set('.hero-giant-type', { opacity: 0, scale: 0.94 });
-    if (portraitImg) gsap.set(portraitImg, { opacity: 0, scale: 1.08, filter: 'blur(28px) saturate(0.7)' });
+    gsap.set(giantSplit.chars, { yPercent: 55, opacity: 0, scale: 0.9 });
+    gsap.set('.header', { y: -16, opacity: 0 });
+
+    /*
+      Entrada do retrato: pesada no desktop, leve no celular.
+
+      A versão do desktop anima `filter: blur(28px) -> 0` junto com escala por 2,2s. Blur
+      animado é dos efeitos mais caros que existem: o navegador não consegue tratá-lo só
+      na composição, precisa redesenhar a imagem inteira a cada quadro. Numa tela grande
+      com GPU dedicada passa liso; num celular de entrada é justo o momento da abertura
+      competindo com o resto da montagem do hero.
+
+      No celular fica só o fade (e um leve deslize), que roda na thread de composição e
+      praticamente não custa nada. O corte segue o mesmo limite do layout (900px), para a
+      animação combinar com o hero empilhado do celular.
+    */
+    var heroLeve = window.matchMedia('(max-width: 900px)').matches || PS.env.lowEnd;
+
+    if (portraitImg) {
+      if (heroLeve) {
+        gsap.set(portraitImg, { opacity: 0, y: 16 });
+      } else {
+        gsap.set(portraitImg, { opacity: 0, scale: 1.08, filter: 'blur(28px) saturate(0.7)' });
+      }
+    }
 
     const tl = gsap.timeline({ delay, defaults: { ease: 'power4.out' } });
-    tl.to('.hero-giant-type', { opacity: 0.9, scale: 1, duration: 1.1, ease: 'power3.out' }, 0);
-    // Retrato: entra desfocado e assume foco devagar, como um retrato "revelando" a pessoa.
+    tl.to(giantSplit.chars, { yPercent: 0, opacity: 0.9, scale: 1, duration: 0.9, stagger: 0.1, ease: 'power3.out' }, 0);
     if (portraitImg) {
-      tl.to(portraitImg, { opacity: 1, scale: 1, filter: 'blur(0px) saturate(1)', duration: 1.8, ease: 'power2.out' }, 0.1);
+      if (heroLeve) {
+        tl.to(portraitImg, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.1);
+      } else {
+        // Retrato: entra desfocado e assume foco devagar, como um retrato "revelando" a pessoa.
+        tl.to(portraitImg, { opacity: 1, scale: 1, filter: 'blur(0px) saturate(1)', duration: 2.2, ease: 'power4.out' }, 0.1);
+      }
     }
     tl.to(split.chars, { yPercent: 0, opacity: 1, duration: 1, stagger: 0.02 }, 0.3)
       .to('.word-rotator-item', { yPercent: 0, opacity: 1, duration: 0.8 }, '-=0.8');
     reveals.forEach(sel => tl.to(sel, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6'));
-    tl.to('.hero-shortcut', { x: 0, opacity: 1, duration: 0.7, stagger: 0.07, ease: 'back.out(1.6)' }, '-=0.5');
+    // Menu entra por último, mas logo em seguida (sem pausa longa) — só pra não competir
+    // com a atenção do resto da entrada, não pra fazer a pessoa esperar.
+    // clearProps ao final: sem isso, o estilo inline do GSAP (transform/opacity) fica gravado
+    // no elemento pra sempre e vence qualquer classe CSS depois (ex: .header.is-hidden ao rolar).
+    tl.to('.header', {
+      y: 0, opacity: 1, duration: 0.5, ease: 'power3.out',
+      clearProps: 'transform,opacity'
+    }, '-=0.3');
     tl.add(initWordRotator);
 
     // Efeito sutil de parallax: O "PS" se move mais devagar que a rolagem
@@ -112,6 +149,54 @@
       });
     }
   }
+
+  /*
+    Fundo Vivo: Animações sutis e contínuas para os brilhos de fundo (glows), 
+    o brilho interativo do mouse e o sutil parallax da malha (grid).
+  */
+  PS.initAmbientAnimations = function () {
+    // 1. Glows flutuando lentamente
+    const glows = document.querySelectorAll('.glow-1, .glow-2');
+    glows.forEach(glow => {
+      gsap.to(glow, {
+        x: () => gsap.utils.random(-80, 80),
+        y: () => gsap.utils.random(-80, 80),
+        duration: () => gsap.utils.random(8, 15),
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        overwrite: 'auto'
+      });
+    });
+
+    // 2. Brilho do mouse
+    if (PS.env.finePointer) {
+      const mouseGlow = document.getElementById('mouse-glow');
+      if (mouseGlow) {
+        const moveX = gsap.quickTo(mouseGlow, 'left', { duration: 0.8, ease: 'power3' });
+        const moveY = gsap.quickTo(mouseGlow, 'top', { duration: 0.8, ease: 'power3' });
+        
+        window.addEventListener('mousemove', (e) => {
+          mouseGlow.style.opacity = '1';
+          moveX(e.clientX);
+          moveY(e.clientY);
+        });
+        
+        window.addEventListener('mouseleave', () => {
+          mouseGlow.style.opacity = '0';
+        });
+      }
+    }
+
+    // 3. Parallax super sutil do Grid no fundo
+    const grid = document.querySelector('.background-grid');
+    if (grid) {
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY * 0.15; // move a 15% da velocidade do scroll
+        grid.style.transform = `translateY(${-y}px)`;
+      }, { passive: true });
+    }
+  };
 
   /*
     Puxão magnético: o elemento acompanha o mouse dentro de um raio pequeno e volta

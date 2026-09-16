@@ -26,7 +26,7 @@
 
 
   <!-- Favicon (SVG inline, sem requisição extra) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%23C9F227'/%3E%3Ctext x='50' y='68' font-family='Syne,sans-serif' font-size='46' font-weight='800' text-anchor='middle' fill='%231E2023'%3EPS%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%23FE633D'/%3E%3Ctext x='50' y='68' font-family='Helvetica,sans-serif' font-size='46' font-weight='800' text-anchor='middle' fill='%231C2339'%3EPS%3C/text%3E%3C/svg%3E">
 
   <!--
     Marca o documento como JS-habilitado. `js-pending` esconde os elementos que serão animados,
@@ -55,12 +55,19 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Preconnect pros CDNs de script (GSAP, ScrollTrigger, SplitType, Lenis): a conexão
+       (DNS/TLS) já começa enquanto o HTML ainda está sendo lido, em vez de só no momento
+       em que o navegador chega nas tags <script> lá no fim do body. -->
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="effects.css">
   <link rel="stylesheet" href="sections.css">
   <link rel="stylesheet" href="cases.css">
   <link rel="stylesheet" href="about.css">
+  <!-- mobile.css por último: os ajustes de celular precisam vencer os arquivos acima -->
+  <link rel="stylesheet" href="mobile.css">
 
   <!-- Lenis CSS -->
   <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.9/dist/lenis.css">
@@ -109,42 +116,18 @@
     <span class="preloader-count">0</span>
   </div>
 
-  <!-- Background Ambient Glows -->
+  <!-- Background Ambient Glows & Grid -->
+  <div class="background-grid" aria-hidden="true"></div>
   <div class="glow-sphere glow-1"></div>
   <div class="glow-sphere glow-2"></div>
+  <div class="glow-sphere glow-mouse" id="mouse-glow"></div>
+  <div class="grain-overlay" aria-hidden="true"></div>
   <div class="page-transition-overlay" id="page-transition"></div>
 
 
-  <!-- 1. Viewfinder Cinematográfico (Cantoneiras e Specs de Câmera de Cinema nas bordas) -->
-  <div class="cinema-viewfinder" aria-hidden="true">
-    <div class="viewfinder-corner top-left"></div>
-    <div class="viewfinder-corner top-right"></div>
-    <div class="viewfinder-corner bottom-left"></div>
-    <div class="viewfinder-corner bottom-right"></div>
-    <div class="viewfinder-spec-badge">
-      <span class="rec-dot"></span>
-      <span class="rec-text">REC</span>
-      <span class="rec-info">4K · 60FPS · SALVADOR</span>
-    </div>
-  </div>
-
-  <!-- 2. Micro-Widget de Status & Equalizador de Reels (Canto Inferior Esquerdo) -->
-  <a href="#contact" class="corner-status-widget" aria-label="Disponível para novos projetos — Envie uma mensagem">
-    <div class="status-widget-inner">
-      <span class="status-pulse-dot"></span>
-      <span class="status-text">Disponível para projetos</span>
-      <span class="status-divider"></span>
-      <div class="audio-visualizer" title="Áudio dinâmico">
-        <span class="audio-bar"></span>
-        <span class="audio-bar"></span>
-        <span class="audio-bar"></span>
-        <span class="audio-bar"></span>
-      </div>
-    </div>
-  </a>
 
   <!-- Navbar -->
-  <header class="header glass">
+  <header class="header">
     <nav class="nav-container">
       <a href="#" class="brand-logo">
         <span class="logo-badge">PS</span>
@@ -152,21 +135,23 @@
       </a>
 
       <div class="nav-menu">
-        <a href="#about" class="nav-link">Minha Jornada</a>
-        <a href="#work" class="nav-link">Projetos</a>
-        <a href="#testimonials" class="nav-link">Depoimentos</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-        <a href="#contact" class="nav-link">Contato</a>
+        <a href="#what-you-get" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Serviços</span></a>
+        <a href="#work" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Projetos</span></a>
+        <a href="#testimonials" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Depoimentos</span></a>
+        <a href="#about" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Minha Jornada</span></a>
+        <a href="#faq" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">FAQ</span></a>
+        <a href="#contact" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Contato</span></a>
       </div>
 
       <div class="nav-action">
         <a href="#contact" class="btn-pill">
           <span class="status-indicator"></span>
-          <span>Iniciar Parceria</span>
+          <span>Disponível para novos projetos</span>
         </a>
 
         <button class="nav-toggle" id="nav-toggle" type="button"
                 aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="nav-toggle-bar"></span>
           <span class="nav-toggle-bar"></span>
           <span class="nav-toggle-bar"></span>
         </button>
@@ -174,14 +159,25 @@
     </nav>
   </header>
 
+  <!-- Rail lateral (desktop): aparece só quando a barra do topo some ao rolar (styles.css .header.is-hidden ~ .side-rail) -->
+  <nav class="side-rail" aria-label="Navegação lateral">
+    <a href="#what-you-get" class="side-dot" data-label="Serviços"></a>
+    <a href="#work" class="side-dot" data-label="Projetos"></a>
+    <a href="#testimonials" class="side-dot" data-label="Depoimentos"></a>
+    <a href="#about" class="side-dot" data-label="Minha Jornada"></a>
+    <a href="#faq" class="side-dot" data-label="FAQ"></a>
+    <a href="#contact" class="side-dot" data-label="Contato"></a>
+  </nav>
+
   <!-- Mobile Drawer -->
   <div class="mobile-menu" id="mobile-menu" hidden>
     <nav class="mobile-menu-inner" aria-label="Navegação principal (celular)">
-      <a href="#about" class="mobile-link"><span class="mobile-link-idx">01</span> Minha Jornada</a>
-      <a href="#work" class="mobile-link"><span class="mobile-link-idx">02</span> Projetos</a>
-      <a href="#testimonials" class="mobile-link"><span class="mobile-link-idx">03</span> Depoimentos</a>
-      <a href="#faq" class="mobile-link"><span class="mobile-link-idx">04</span> FAQ</a>
-      <a href="#contact" class="mobile-link"><span class="mobile-link-idx">05</span> Contato</a>
+      <a href="#what-you-get" class="mobile-link"><span class="mobile-link-idx" aria-hidden="true"></span> Serviços</a>
+      <a href="#work" class="mobile-link"><span class="mobile-link-idx" aria-hidden="true"></span> Projetos</a>
+      <a href="#testimonials" class="mobile-link"><span class="mobile-link-idx" aria-hidden="true"></span> Depoimentos</a>
+      <a href="#about" class="mobile-link"><span class="mobile-link-idx" aria-hidden="true"></span> Minha Jornada</a>
+      <a href="#faq" class="mobile-link"><span class="mobile-link-idx" aria-hidden="true"></span> FAQ</a>
+      <a href="#contact" class="mobile-link"><span class="mobile-link-idx" aria-hidden="true"></span> Contato</a>
       <div class="mobile-menu-footer">
         <a href="https://wa.me/5571988350272" target="_blank" rel="noopener noreferrer"><svg class="social-icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</a>
         <a href="https://www.instagram.com/prisantos2021/" target="_blank" rel="noopener noreferrer"><svg class="social-icon icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg> Instagram</a>
@@ -189,6 +185,10 @@
       </div>
     </nav>
   </div>
+
+  <!-- A barra de atalhos do celular fica no fim do <body> (uma só). Havia uma segunda
+       cópia aqui, exatamente sobreposta à outra: invisível, mas duplicando os links
+       para leitores de tela e repintando duas barras fixas a cada rolagem. -->
 
   <main>
     <!-- Hero Section -->
@@ -205,13 +205,6 @@
           </div>
 
           <div class="hero-copy">
-            <div class="hero-tag-wrap" id="hero-tag">
-              <span class="availability-badge">
-                <span class="status-indicator" aria-hidden="true"></span>
-                Disponível para novos projetos
-              </span>
-            </div>
-
             <h1 class="hero-title" id="hero-heading">
               <span class="hero-split">Comunicação</span>
               <span class="word-rotator" data-words="Estratégica,|Que Converte,|Sem Ruído,|Que Transforma,|Que Engaja,|Com Propósito,">
@@ -234,16 +227,16 @@
                 <span>anos unindo jornalismo<br>e estratégia digital</span>
               </div>
               <figure class="hero-gallery-item">
-                <img src="assets/priscila/trabalhando.jpeg" alt="Priscila em ação na praia, de uniforme da Limpurb" width="300" height="300" loading="lazy" decoding="async">
+                <img src="assets/priscila/trabalhando-thumb.jpg" alt="Priscila em ação na praia, de uniforme da Limpurb" width="300" height="300" loading="lazy" decoding="async">
               </figure>
               <figure class="hero-gallery-item">
-                <img src="assets/priscila/priscilafototrabalho.jpeg" alt="Priscila registrando conteúdo nas ruas, de uniforme da Limpurb" width="300" height="300" loading="lazy" decoding="async">
+                <img src="assets/priscila/priscilafototrabalho-thumb.jpg" alt="Priscila registrando conteúdo nas ruas, de uniforme da Limpurb" width="300" height="300" loading="lazy" decoding="async">
               </figure>
               <figure class="hero-gallery-item">
-                <img src="assets/priscila/priscilafototrabalhoescrita.jpeg" alt="Priscila escrevendo pauta na redação" width="300" height="300" loading="lazy" decoding="async">
+                <img src="assets/priscila/priscilafototrabalhoescrita-thumb.jpg" alt="Priscila escrevendo pauta na redação" width="300" height="300" loading="lazy" decoding="async">
               </figure>
               <figure class="hero-gallery-item">
-                <img src="assets/rodrigofaro2meninas.jpeg" alt="Priscila com Rodrigo Faro e meninas" width="300" height="300" loading="lazy" decoding="async">
+                <img src="assets/rodrigofaro2meninas-thumb.jpg" alt="Priscila com Rodrigo Faro e meninas" width="300" height="300" loading="lazy" decoding="async">
               </figure>
             </div>
           </div>
@@ -251,7 +244,7 @@
 
       </div>
       <!-- Convite para rolar: canto inferior, some ao começar a rolar (effects.css + ui.js) -->
-      <a href="#about" class="scroll-cue" id="scroll-cue" aria-label="Role para conhecer a trajetória">
+      <a href="#what-you-get" class="scroll-cue" id="scroll-cue" aria-label="Role para conhecer os serviços">
         <span class="scroll-cue-inner">
           <span class="scroll-cue-label" aria-hidden="true">Role para conhecer</span>
           <span class="scroll-cue-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 13l7 7 7-7"/></svg></span>
@@ -259,151 +252,103 @@
       </a>
     </section>
 
-    <!-- Quem é Priscila Santos: apresentação + linha do tempo horizontal (about.css + js/timeline.js) -->
-    <section id="about" class="section timeline-section">
+    <!-- Faixa de Separação (Sem texto) -->
+    <div class="infinite-strip" aria-hidden="true"></div>
+
+    <!-- O Que Você Recebe (What You Get) -->
+    <section id="what-you-get" class="section tech-services-section">
+      <div class="section-glow section-glow--right" aria-hidden="true"></div>
       <div class="container">
-        <div class="about-intro">
-          <div class="about-copy">
-            <span class="section-subtitle">Trajetória &amp; Credenciais</span>
-            <h2 class="section-title split-text">Quem é Priscila Santos</h2>
+        
+        <div class="section-header">
+          <span class="section-subtitle">O Que Você Recebe</span>
+          <h2 class="section-title split-text">Comunicação Que Converte</h2>
+          <p class="section-lead">Seu negócio não precisa de mais posts genéricos, precisa de autoridade e conversão. Selecione as opções abaixo e descubra exatamente o que a sua marca ganha quando construímos uma comunicação estratégica focada em resultados.</p>
+        </div>
 
-            <ul class="about-manifesto">
-              <li><span class="about-line"><strong>Jornalista</strong> por formação</span></li>
-              <li><span class="about-line"><strong>Comunicadora</strong> por essência</span></li>
-              <li><span class="about-line"><strong>Estrategista</strong> por escolha</span></li>
-            </ul>
-            <p class="section-lead about-lead">Criatividade é o ponto de partida; estratégia é o que direciona cada entrega.</p>
+        <div class="tech-services-container">
+          <!-- Menu Esquerdo (Abas) -->
+          <div class="tech-tabs-menu" role="tablist">
+            <button class="tech-tab-btn active" role="tab" aria-selected="true" data-target="tab-estrategia">
+              <span class="tech-tab-num">01</span>
+              <span class="tech-tab-label">Estratégia de Conteúdo</span>
+            </button>
+            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-social">
+              <span class="tech-tab-num">02</span>
+              <span class="tech-tab-label">Social Media &amp; Gestão</span>
+            </button>
+            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-imprensa">
+              <span class="tech-tab-num">03</span>
+              <span class="tech-tab-label">Assessoria de Imprensa</span>
+            </button>
+            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-eventos">
+              <span class="tech-tab-num">04</span>
+              <span class="tech-tab-label">Cobertura de Eventos</span>
+            </button>
           </div>
 
-          <div class="about-collage">
-            <figure class="about-photo about-photo--main">
-              <img src="assets/priscila/priscilafototrabalho.jpeg" alt="Priscila gravando com o celular nas ruas de Salvador, de uniforme da Limpurb" width="640" height="800" loading="lazy" decoding="async">
-            </figure>
-            <figure class="about-photo about-photo--float">
-              <img src="assets/priscila/foto.jpeg" alt="Retrato de Priscila Santos sorrindo" width="1058" height="1280" loading="lazy" decoding="async">
-            </figure>
-            <span class="about-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              Salvador · BA
-            </span>
-            <span class="about-stamp" aria-hidden="true">
-              <svg viewBox="0 0 120 120"><defs><path id="about-stamp-path" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text><textPath href="#about-stamp-path" textLength="286" lengthAdjust="spacing">JORNALISMO · ESTRATÉGIA · CONTEÚDO ·</textPath></text></svg>
-              <span class="about-stamp-core">PS.</span>
-            </span>
+          <!-- Display Direito (Conteúdo dinâmico) -->
+          <div class="tech-display-wrapper">
+
+            <div class="tech-display-panel">
+              <!-- Painel 1 -->
+              <div class="tech-panel-content active" id="tab-estrategia" role="tabpanel">
+                <div class="tech-panel-glow"></div>
+                <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><path d="M7 13h3M7 17h5M14 13h3"/></svg></span>
+                <h3 class="tech-panel-title">Estratégia de Conteúdo</h3>
+              <p class="tech-panel-desc">Você recebe um direcionamento claro. Planejo temas, formatos e a linguagem ideal para atingir os objetivos da sua marca.</p>
+              <ul class="tech-panel-list">
+                <li>Cronograma editorial estruturado e previsível</li>
+                <li>Mapeamento de oportunidades de comunicação e métricas</li>
+              </ul>
+            </div>
+            
+            <!-- Painel 2 -->
+            <div class="tech-panel-content" id="tab-social" role="tabpanel" hidden>
+              <div class="tech-panel-glow"></div>
+              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 15c1.2 1 2.6 1.5 4 1.5s2.8-.5 4-1.5"/><circle cx="9" cy="10" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="0.9" fill="currentColor" stroke="none"/></svg></span>
+              <h3 class="tech-panel-title">Social Media &amp; Gestão</h3>
+              <p class="tech-panel-desc">Você recebe uma presença digital constante e autêntica. Assumo a gestão completa para construir conexão real com sua audiência.</p>
+              <ul class="tech-panel-list">
+                <li>Gestão completa de calendário e publicações</li>
+                <li>Consistência visual e de narrativa para a marca</li>
+              </ul>
+            </div>
+            
+            <!-- (Painéis 3 e 4 removidos) -->
+            <!-- Painel 5 -->
+            <div class="tech-panel-content" id="tab-imprensa" role="tabpanel" hidden>
+              <div class="tech-panel-glow"></div>
+              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11v6a2 2 0 0 0 2 2h1v-8"/><path d="M7 11l11-6v14L7 13"/><path d="M18 9a3 3 0 0 1 0 6"/></svg></span>
+              <h3 class="tech-panel-title">Assessoria de Imprensa</h3>
+              <p class="tech-panel-desc">Você recebe autoridade. Faço a ponte entre a sua marca e os veículos de comunicação, gerando mídia espontânea e credibilidade.</p>
+              <ul class="tech-panel-list">
+                <li>Produção de releases com rigor jornalístico</li>
+                <li>Relacionamento ativo com a imprensa local e nacional</li>
+              </ul>
+            </div>
+            
+            <!-- Painel 6 -->
+            <div class="tech-panel-content" id="tab-eventos" role="tabpanel" hidden>
+              <div class="tech-panel-glow"></div>
+              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></span>
+              <h3 class="tech-panel-title">Cobertura de Eventos</h3>
+              <p class="tech-panel-desc">Você recebe seu evento documentado em tempo real. Registro os melhores momentos para que quem não foi sinta que estava lá.</p>
+              <ul class="tech-panel-list">
+                <li>Cobertura ágil e estratégica focada em engajamento</li>
+                <li>Acervo audiovisual completo para material de pós-venda</li>
+              </ul>
+            </div>
+          </div>
           </div>
         </div>
 
-        <ul class="about-credentials">
-          <li class="credential-card">
-            <span class="cred-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2.5 9 2.5 12 0v-5"/></svg></span>
-            <span class="cred-text"><strong>Graduação em Jornalismo</strong><span>Faculdade de Comunicação · UFBA</span></span>
-          </li>
-          <li class="credential-card">
-            <span class="cred-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10M9.5 21V10M14.5 21V10M19 21V10"/><path d="M12 3 3 8h18z"/></svg></span>
-            <span class="cred-text"><strong>Atuação Institucional</strong><span>Assessora de Comunicação &amp; Redes · Limpurb</span></span>
-          </li>
-          <li class="credential-card">
-            <span class="cred-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span>
-            <span class="cred-text"><strong>Comunicação 360°</strong><span>Audiovisual, Imprensa &amp; Gestão Digital</span></span>
-          </li>
-        </ul>
-      </div>
-
-      <div class="trajectory">
-        <div class="trajectory-sticky">
-          <div class="container trajectory-head">
-            <div>
-              <span class="trajectory-kicker">Linha do tempo</span>
-              <h3 class="trajectory-title">Da redação às ruas</h3>
-            </div>
-            <div class="trajectory-nav" style="display: flex; align-items: center; gap: 1.25rem;">
-              <div class="trajectory-dots" aria-hidden="true">
-                <span class="dot is-active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-              </div>
-              <div class="carousel-controls" style="margin-top: 0;">
-                <button class="carousel-btn" type="button" data-timeline-prev aria-label="Anterior">←</button>
-                <button class="carousel-btn" type="button" data-timeline-next aria-label="Próximo">→</button>
-              </div>
-            </div>
-          </div>
-
-          <ol class="timeline-list">
-            <li class="timeline-card" data-year="2020">
-              <figure class="timeline-media">
-                <img src="assets/priscila/priscilafototrabalhoescrita.jpeg" alt="Priscila escrevendo uma pauta no caderno, na redação" width="640" height="800" loading="lazy" decoding="async" style="object-position: center 45%">
-              </figure>
-              <div class="timeline-body">
-                <span class="timeline-index" aria-hidden="true">01</span>
-                <div class="timeline-meta">
-                  <span class="timeline-year">2020</span>
-                  <span class="timeline-tag">@ufba_jornalismo</span>
-                </div>
-                <div class="timeline-content">
-                  <h4>Formação &amp; Rigor Ético na UFBA</h4>
-                  <p>Graduação em Comunicação Social com habilitação em Jornalismo na UFBA. Apuração rigorosa e método investigativo aplicados ao conteúdo.</p>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-card" data-year="2020 — Hoje">
-              <figure class="timeline-media">
-                <img src="assets/priscila/trabalhando.jpeg" alt="Priscila de costas, com a camisa Comunicação Limpurb, orientando uma gravação na praia" width="640" height="800" loading="lazy" decoding="async" style="object-position: center 40%">
-              </figure>
-              <div class="timeline-body">
-                <span class="timeline-index" aria-hidden="true">02</span>
-                <div class="timeline-meta">
-                  <span class="timeline-year">2020 — Hoje</span>
-                  <span class="timeline-tag">@limpurb</span>
-                </div>
-                <div class="timeline-content">
-                  <h4>Comunicação Pública &amp; Gestão de Imagem</h4>
-                  <p>Assessoria de comunicação e gestão de redes sociais da Limpurb: releases, notas oficiais, relacionamento com a imprensa e produção de Reels.</p>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-card" data-year="2024 — 2025">
-              <figure class="timeline-media">
-                <img src="assets/clients/kasa-cover.webp" alt="Grade de publicações do Instagram de um cliente de social media" width="640" height="800" loading="lazy" decoding="async" style="object-position: center top">
-              </figure>
-              <div class="timeline-body">
-                <span class="timeline-index" aria-hidden="true">03</span>
-                <div class="timeline-meta">
-                  <span class="timeline-year">2024 — 2025</span>
-                  <span class="timeline-tag">@social_media</span>
-                </div>
-                <div class="timeline-content">
-                  <h4>Social Media &amp; Projetos Multissetoriais</h4>
-                  <p>Planejamento editorial, redação e posicionamento digital para clínicas de saúde, profissionais liberais e marcas do varejo.</p>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-card" data-year="2026">
-              <figure class="timeline-media">
-                <img src="assets/priscila/priscila%20carnaval.jpeg" alt="Priscila em selfie com a equipe no trio, durante a cobertura do Carnaval de Salvador" width="640" height="800" loading="lazy" decoding="async" style="object-position: 45% 70%">
-              </figure>
-              <div class="timeline-body">
-                <span class="timeline-index" aria-hidden="true">04</span>
-                <div class="timeline-meta">
-                  <span class="timeline-year">2026</span>
-                  <span class="timeline-tag">@estrategia_digital</span>
-                </div>
-                <div class="timeline-content">
-                  <h4>Dinamismo Audiovisual &amp; Consultoria 360°</h4>
-                  <p>Comunicação que pensa, cria e conecta: integração de roteirização ágil, captação em vídeo, edição em CapCut e assessoria estratégica.</p>
-                </div>
-              </div>
-            </li>
-
-          </ol>
-
-        </div>
       </div>
     </section>
 
     <!-- Selected Work Grid -->
-    <section id="work" class="section work-section">
+    <section id="work" class="section work-section" style="padding-bottom: 4rem;">
+      <div class="section-glow section-glow--left" aria-hidden="true"></div>
       <div class="container">
         
         <div class="section-header">
@@ -416,7 +361,7 @@
         <article class="case-featured">
           <div class="case-featured-head">
             <div class="case-featured-cover">
-              <img src="assets/cases/limpurb-capa.webp" alt="Agente de limpeza da Limpurb sorrindo na arte &quot;Gigante pela própria natureza&quot; do Dia da Independência" width="720" height="960" loading="lazy" decoding="async">
+              <img src="assets/cases/trabalhando-limpurb.jpeg" alt="Priscila trabalhando na rua durante a gravação de conteúdo para a Limpurb" width="720" height="960" loading="lazy" decoding="async" style="object-position: center 20%; object-fit: cover;">
             </div>
 
             <div class="case-featured-info">
@@ -435,7 +380,7 @@
               <dl class="case-stats">
                 <div><dt>Seguidores</dt><dd data-count="44" data-suffix=" mil">44 mil</dd></div>
                 <div><dt>Publicações</dt><dd data-count="2531">2.531</dd></div>
-                <div><dt>Reel mais visto</dt><dd data-count="80.5" data-suffix=" mil">80,5 mil</dd></div>
+                <div><dt>Reel mais visto</dt><dd data-count="2.4" data-suffix=" mi">2,4 mi</dd></div>
               </dl>
 
               <ol class="case-process" aria-label="Meu processo na Limpurb">
@@ -459,15 +404,15 @@
             <h4 class="case-subtitle">Insights & Resultados</h4>
             <div class="insights-data-grid">
               <div class="insight-data-card">
-                <span class="insight-number" data-count="150" data-prefix="+" data-suffix="%">+150%</span>
-                <span class="insight-text">Contas alcançadas no primeiro trimestre após a aplicação da nova estratégia.</span>
+                <span class="insight-number" data-count="3" data-suffix="M+">3M+</span>
+                <span class="insight-text">Contas alcançadas organicamente, expandindo massivamente a visibilidade da marca institucional.</span>
               </div>
               <div class="insight-data-card">
-                <span class="insight-number" data-count="10" data-suffix="K+">10K+</span>
-                <span class="insight-text">Interações com o conteúdo, mantendo a comunidade engajada e ativa organicamente.</span>
+                <span class="insight-number" data-count="500" data-suffix="K+">500K+</span>
+                <span class="insight-text">Interações totais (curtidas, compartilhamentos e salvamentos), criando uma comunidade ativa.</span>
               </div>
               <div class="insight-data-card">
-                <span class="insight-number" data-count="158" data-suffix="K+">158K+</span>
+                <span class="insight-number" data-count="2.4" data-suffix="M+">2.4M+</span>
                 <span class="insight-text">Visualizações em um único Reel, trazendo autoridade e visibilidade massiva para a marca.</span>
               </div>
             </div>
@@ -647,141 +592,15 @@
               </div>
 
             </div>
-            <div class="carousel-controls">
-              <button class="carousel-btn" type="button" data-carousel-prev aria-label="Projeto anterior">←</button>
-              <button class="carousel-btn" type="button" data-carousel-next aria-label="Próximo projeto">→</button>
-            </div>
           </div>
         </div>
 
       </div>
     </section>
-
-    <!-- O Que Você Recebe (What You Get) -->
-    <section id="what-you-get" class="section tech-services-section">
-      <div class="container">
-        
-        <div class="section-header">
-          <span class="section-subtitle">O Que Você Recebe</span>
-          <h2 class="section-title split-text">Comunicação Que Converte</h2>
-          <p class="section-lead">Seu negócio não precisa de mais posts genéricos, precisa de autoridade e conversão. Selecione as opções abaixo e descubra exatamente o que a sua marca ganha quando construímos uma comunicação estratégica focada em resultados.</p>
-        </div>
-
-        <div class="tech-services-container">
-          <!-- Menu Esquerdo (Abas) -->
-          <div class="tech-tabs-menu" role="tablist">
-            <button class="tech-tab-btn active" role="tab" aria-selected="true" data-target="tab-estrategia">
-              <span class="tech-tab-num">01</span>
-              <span class="tech-tab-label">Estratégia de Conteúdo</span>
-            </button>
-            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-social">
-              <span class="tech-tab-num">02</span>
-              <span class="tech-tab-label">Social Media &amp; Gestão</span>
-            </button>
-            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-producao">
-              <span class="tech-tab-num">03</span>
-              <span class="tech-tab-label">Produção Audiovisual</span>
-            </button>
-            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-copy">
-              <span class="tech-tab-num">04</span>
-              <span class="tech-tab-label">Roteiros &amp; Copywriting</span>
-            </button>
-            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-imprensa">
-              <span class="tech-tab-num">05</span>
-              <span class="tech-tab-label">Assessoria de Imprensa</span>
-            </button>
-            <button class="tech-tab-btn" role="tab" aria-selected="false" data-target="tab-eventos">
-              <span class="tech-tab-num">06</span>
-              <span class="tech-tab-label">Cobertura de Eventos</span>
-            </button>
-          </div>
-
-          <!-- Display Direito (Conteúdo dinâmico) -->
-          <div class="tech-display-wrapper">
-            <video src="assets/priscila/pointing-hands.webm" class="tech-pointing-hand" autoplay loop muted playsinline></video>
-            <div class="tech-display-panel">
-              <!-- Painel 1 -->
-              <div class="tech-panel-content active" id="tab-estrategia" role="tabpanel">
-                <div class="tech-panel-glow"></div>
-                <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><path d="M7 13h3M7 17h5M14 13h3"/></svg></span>
-                <h3 class="tech-panel-title">Estratégia de Conteúdo</h3>
-              <p class="tech-panel-desc">Você recebe um direcionamento claro. Planejo temas, formatos e a linguagem ideal para atingir os objetivos da sua marca.</p>
-              <ul class="tech-panel-list">
-                <li>Cronograma editorial estruturado e previsível</li>
-                <li>Mapeamento de oportunidades de comunicação e métricas</li>
-              </ul>
-            </div>
-            
-            <!-- Painel 2 -->
-            <div class="tech-panel-content" id="tab-social" role="tabpanel" hidden>
-              <div class="tech-panel-glow"></div>
-              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 15c1.2 1 2.6 1.5 4 1.5s2.8-.5 4-1.5"/><circle cx="9" cy="10" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="0.9" fill="currentColor" stroke="none"/></svg></span>
-              <h3 class="tech-panel-title">Social Media &amp; Gestão</h3>
-              <p class="tech-panel-desc">Você recebe uma presença digital constante e autêntica. Assumo a gestão completa para construir conexão real com sua audiência.</p>
-              <ul class="tech-panel-list">
-                <li>Gestão completa de calendário e publicações</li>
-                <li>Consistência visual e de narrativa para a marca</li>
-              </ul>
-            </div>
-            
-            <!-- Painel 3 -->
-            <div class="tech-panel-content" id="tab-producao" role="tabpanel" hidden>
-              <div class="tech-panel-glow"></div>
-              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
-              <h3 class="tech-panel-title">Produção Audiovisual</h3>
-              <p class="tech-panel-desc">Você recebe materiais prontos e de alta qualidade. Vou até você captar fotos e vídeos, e entrego tudo editado no formato ideal para as redes.</p>
-              <ul class="tech-panel-list">
-                <li>Captação de imagem presencial de alto nível</li>
-                <li>Edição dinâmica e arrojada de Reels e Stories</li>
-              </ul>
-            </div>
-            
-            <!-- Painel 4 -->
-            <div class="tech-panel-content" id="tab-copy" role="tabpanel" hidden>
-              <div class="tech-panel-glow"></div>
-              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
-              <h3 class="tech-panel-title">Roteiros &amp; Copywriting</h3>
-              <p class="tech-panel-desc">Você recebe textos que engajam e convertem. Transformo suas ideias em roteiros magnéticos e legendas que prendem a atenção.</p>
-              <ul class="tech-panel-list">
-                <li>Roteiros envolventes projetados para retenção</li>
-                <li>Textos persuasivos com CTA estratégicos</li>
-              </ul>
-            </div>
-            
-            <!-- Painel 5 -->
-            <div class="tech-panel-content" id="tab-imprensa" role="tabpanel" hidden>
-              <div class="tech-panel-glow"></div>
-              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11v6a2 2 0 0 0 2 2h1v-8"/><path d="M7 11l11-6v14L7 13"/><path d="M18 9a3 3 0 0 1 0 6"/></svg></span>
-              <h3 class="tech-panel-title">Assessoria de Imprensa</h3>
-              <p class="tech-panel-desc">Você recebe autoridade. Faço a ponte entre a sua marca e os veículos de comunicação, gerando mídia espontânea e credibilidade.</p>
-              <ul class="tech-panel-list">
-                <li>Produção de releases com rigor jornalístico</li>
-                <li>Relacionamento ativo com a imprensa local e nacional</li>
-              </ul>
-            </div>
-            
-            <!-- Painel 6 -->
-            <div class="tech-panel-content" id="tab-eventos" role="tabpanel" hidden>
-              <div class="tech-panel-glow"></div>
-              <span class="tech-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></span>
-              <h3 class="tech-panel-title">Cobertura de Eventos</h3>
-              <p class="tech-panel-desc">Você recebe seu evento documentado em tempo real. Registro os melhores momentos para que quem não foi sinta que estava lá.</p>
-              <ul class="tech-panel-list">
-                <li>Cobertura ágil e estratégica focada em engajamento</li>
-                <li>Acervo audiovisual completo para material de pós-venda</li>
-              </ul>
-            </div>
-          </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-
 
     <!-- Testimonials -->
-    <section id="testimonials" class="section testimonials-section">
+    <section id="testimonials" class="section testimonials-section" style="padding-top: 5rem;">
+      <div class="section-glow section-glow--right" aria-hidden="true"></div>
       <div class="container">
 
         <div class="section-header">
@@ -795,65 +614,39 @@
 
           <figure class="testimonial-card gsap-reveal">
             <blockquote class="testimonial-quote">
-              A clareza dos releases mudou a forma como a imprensa local passou a cobrir nossas ações. Virou referência interna de padrão de escrita.
+              "O seu trabalho foi crucial para eu conseguir voltar a atuar. Ter alguém com o seu olhar, não só como social media, mas com formação em Jornalismo e experiência em comunicação, fez muita diferença para construir algo profissional, estratégico e com a minha cara."
             </blockquote>
             <figcaption class="testimonial-author">
-              <div class="author-avatar" role="img" aria-label="Foto do depoente">AC</div>
+              <div class="author-avatar" role="img" aria-label="Foto de Andressa Alves">AA</div>
               <div class="author-info">
-                <span class="author-name">Nome do Cliente</span>
-                <span class="author-role">Cargo · Organização</span>
+                <span class="author-name">Andressa Alves</span>
+                <span class="author-role">Empreendedora</span>
               </div>
             </figcaption>
           </figure>
 
           <figure class="testimonial-card gsap-reveal">
             <blockquote class="testimonial-quote">
-              O planejamento editorial deu direção ao nosso Instagram. Saímos de posts aleatórios para uma linha de conteúdo que gera consulta.
+              "Ela tem um olhar sensível e estratégico para os temas, além de ser pontual e cuidadosa nas entregas. Desde que iniciamos a parceria, nosso perfil cresceu e novas pessoas passaram a chegar pelo feed. Uma superparceira!"
             </blockquote>
             <figcaption class="testimonial-author">
-              <div class="author-avatar" role="img" aria-label="Foto do depoente">VS</div>
+              <img class="author-avatar" src="assets/clients/kasa-avatar.webp" alt="Logo Kasa dos Cachos" width="48" height="48" loading="lazy" decoding="async">
               <div class="author-info">
-                <span class="author-name">Nome do Cliente</span>
-                <span class="author-role">Cargo · Organização</span>
+                <span class="author-name">Kasa dos Cachos</span>
+                <span class="author-role">Salão Especialista</span>
               </div>
             </figcaption>
           </figure>
 
           <figure class="testimonial-card gsap-reveal">
             <blockquote class="testimonial-quote">
-              Rapidez de produção sem perder rigor de apuração. É raro encontrar as duas coisas na mesma pessoa.
+              "Indicaria para conseguirem montar seu Instagram, site e portfólio de modo eficiente e eficaz. Ela consegue entender perfeitamente o que a pessoa faz e encontrar a melhor maneira de expressar isso e apresentar o trabalho."
             </blockquote>
             <figcaption class="testimonial-author">
-              <div class="author-avatar" role="img" aria-label="Foto do depoente">UF</div>
+              <img class="author-avatar" src="assets/clients/calazans-avatar.webp" alt="Logo Óticas Calazans" width="48" height="48" loading="lazy" decoding="async">
               <div class="author-info">
-                <span class="author-name">Nome do Cliente</span>
-                <span class="author-role">Cargo · Organização</span>
-              </div>
-            </figcaption>
-          </figure>
-
-          <figure class="testimonial-card gsap-reveal">
-            <blockquote class="testimonial-quote">
-              Os vídeos passaram a segurar a atenção logo nos primeiros segundos. O alcance dos Reels mudou de patamar em poucas semanas.
-            </blockquote>
-            <figcaption class="testimonial-author">
-              <div class="author-avatar" role="img" aria-label="Foto do depoente">SB</div>
-              <div class="author-info">
-                <span class="author-name">Nome do Cliente</span>
-                <span class="author-role">Cargo · Organização</span>
-              </div>
-            </figcaption>
-          </figure>
-
-          <figure class="testimonial-card gsap-reveal">
-            <blockquote class="testimonial-quote">
-              Entrega no prazo, texto limpo e zero retrabalho. Em pouco tempo virou parte da nossa equipe.
-            </blockquote>
-            <figcaption class="testimonial-author">
-              <div class="author-avatar" role="img" aria-label="Foto do depoente">EJ</div>
-              <div class="author-info">
-                <span class="author-name">Nome do Cliente</span>
-                <span class="author-role">Cargo · Organização</span>
+                <span class="author-name">Óticas Calazans</span>
+                <span class="author-role">Rede de Óticas</span>
               </div>
             </figcaption>
           </figure>
@@ -864,6 +657,150 @@
             <button class="carousel-btn" type="button" data-carousel-prev aria-label="Depoimento anterior">←</button>
             <button class="carousel-btn" type="button" data-carousel-next aria-label="Próximo depoimento">→</button>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quem é Priscila Santos: apresentação + linha do tempo horizontal (about.css + js/timeline.js) -->
+    <section id="about" class="section timeline-section">
+      <div class="section-glow section-glow--left" aria-hidden="true"></div>
+      <div class="container">
+        <div class="about-intro">
+          <div class="about-copy">
+            <span class="section-subtitle">Trajetória &amp; Credenciais</span>
+            <h2 class="section-title split-text">Quem é Priscila Santos</h2>
+
+            <ul class="about-manifesto">
+              <li><span class="about-line"><strong>Jornalista</strong> por formação</span></li>
+              <li><span class="about-line"><strong>Comunicadora</strong> por essência</span></li>
+              <li><span class="about-line"><strong>Estrategista</strong> por escolha</span></li>
+            </ul>
+            <p class="section-lead about-lead">Criatividade é o ponto de partida; estratégia é o que direciona cada entrega.</p>
+          </div>
+
+          <div class="about-collage">
+            <figure class="about-photo about-photo--main">
+              <img src="assets/priscila/priscilafototrabalho.jpeg" alt="Priscila gravando com o celular nas ruas de Salvador, de uniforme da Limpurb" width="640" height="800" loading="lazy" decoding="async">
+            </figure>
+            <figure class="about-photo about-photo--float">
+              <img src="assets/priscila/foto.jpeg" alt="Retrato de Priscila Santos sorrindo" width="1058" height="1280" loading="lazy" decoding="async">
+            </figure>
+            <span class="about-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              Salvador · BA
+            </span>
+            <span class="about-stamp" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><defs><path id="about-stamp-path" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text><textPath href="#about-stamp-path" textLength="286" lengthAdjust="spacing">JORNALISMO · ESTRATÉGIA · CONTEÚDO ·</textPath></text></svg>
+              <span class="about-stamp-core">PS.</span>
+            </span>
+          </div>
+        </div>
+
+        <ul class="about-credentials">
+          <li class="credential-card">
+            <span class="cred-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2.5 9 2.5 12 0v-5"/></svg></span>
+            <span class="cred-text"><strong>Graduação em Jornalismo</strong><span>Faculdade de Comunicação · UFBA</span></span>
+          </li>
+          <li class="credential-card">
+            <span class="cred-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10M9.5 21V10M14.5 21V10M19 21V10"/><path d="M12 3 3 8h18z"/></svg></span>
+            <span class="cred-text"><strong>Atuação Institucional</strong><span>Assessora de Comunicação &amp; Redes · Limpurb</span></span>
+          </li>
+          <li class="credential-card">
+            <span class="cred-icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span>
+            <span class="cred-text"><strong>Comunicação 360°</strong><span>Audiovisual, Imprensa &amp; Gestão Digital</span></span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="trajectory">
+        <div class="trajectory-sticky">
+          <div class="container trajectory-head">
+            <div>
+              <span class="trajectory-kicker">Linha do tempo</span>
+              <h3 class="trajectory-title">Da redação às ruas</h3>
+            </div>
+            <div class="trajectory-nav" style="display: flex; align-items: center; gap: 1.25rem;">
+              <div class="trajectory-dots" aria-hidden="true">
+                <span class="dot is-active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+              <div class="carousel-controls" style="margin-top: 0;">
+                <button class="carousel-btn" type="button" data-timeline-prev aria-label="Anterior">←</button>
+                <button class="carousel-btn" type="button" data-timeline-next aria-label="Próximo">→</button>
+              </div>
+            </div>
+          </div>
+
+          <ol class="timeline-list">
+            <li class="timeline-card" data-year="2020">
+              <figure class="timeline-media">
+                <img src="assets/priscila/priscilafototrabalhoescrita.jpeg" alt="Priscila escrevendo uma pauta no caderno, na redação" width="640" height="800" loading="lazy" decoding="async" style="object-position: center 45%">
+              </figure>
+              <div class="timeline-body">
+                <span class="timeline-index" aria-hidden="true">01</span>
+                <div class="timeline-meta">
+                  <span class="timeline-year">2020</span>
+                  <span class="timeline-tag">@ufba_jornalismo</span>
+                </div>
+                <div class="timeline-content">
+                  <h4>Formação &amp; Rigor Ético na UFBA</h4>
+                  <p>Graduação em Comunicação Social com habilitação em Jornalismo na UFBA. Apuração rigorosa e método investigativo aplicados ao conteúdo.</p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-card" data-year="2020 — Hoje">
+              <figure class="timeline-media">
+                <img src="assets/priscila/trabalhando.jpeg" alt="Priscila de costas, com a camisa Comunicação Limpurb, orientando uma gravação na praia" width="640" height="800" loading="lazy" decoding="async" style="object-position: center 40%">
+              </figure>
+              <div class="timeline-body">
+                <span class="timeline-index" aria-hidden="true">02</span>
+                <div class="timeline-meta">
+                  <span class="timeline-year">2020 — Hoje</span>
+                  <span class="timeline-tag">@limpurb</span>
+                </div>
+                <div class="timeline-content">
+                  <h4>Comunicação Pública &amp; Gestão de Imagem</h4>
+                  <p>Assessoria de comunicação e gestão de redes sociais da Limpurb: releases, notas oficiais, relacionamento com a imprensa e produção de Reels.</p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-card" data-year="2024 — 2025">
+              <figure class="timeline-media">
+                <img src="assets/clients/kasa-cover.webp" alt="Grade de publicações do Instagram de um cliente de social media" width="640" height="800" loading="lazy" decoding="async" style="object-position: center top">
+              </figure>
+              <div class="timeline-body">
+                <span class="timeline-index" aria-hidden="true">03</span>
+                <div class="timeline-meta">
+                  <span class="timeline-year">2024 — 2025</span>
+                  <span class="timeline-tag">@social_media</span>
+                </div>
+                <div class="timeline-content">
+                  <h4>Social Media &amp; Projetos Multissetoriais</h4>
+                  <p>Planejamento editorial, redação e posicionamento digital para clínicas de saúde, profissionais liberais e marcas do varejo.</p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-card" data-year="2026">
+              <figure class="timeline-media">
+                <img src="assets/priscila/priscila%20carnaval.jpeg" alt="Priscila em selfie com a equipe no trio, durante a cobertura do Carnaval de Salvador" width="640" height="800" loading="lazy" decoding="async" style="object-position: 45% 70%">
+              </figure>
+              <div class="timeline-body">
+                <span class="timeline-index" aria-hidden="true">04</span>
+                <div class="timeline-meta">
+                  <span class="timeline-year">2026</span>
+                  <span class="timeline-tag">@estrategia_digital</span>
+                </div>
+                <div class="timeline-content">
+                  <h4>Dinamismo Audiovisual &amp; Consultoria 360°</h4>
+                  <p>Comunicação que pensa, cria e conecta: integração de roteirização ágil, captação em vídeo, edição em CapCut e assessoria estratégica.</p>
+                </div>
+              </div>
+            </li>
+
+          </ol>
+
         </div>
       </div>
     </section>
@@ -881,41 +818,51 @@
 
           <details class="faq-item gsap-reveal">
             <summary class="faq-question">
-              <span>Quais são os diferenciais do seu trabalho?</span>
+              <span>Por que contratar uma Jornalista/Estrategista e não só um Social Media?</span>
               <span class="faq-icon" aria-hidden="true"></span>
             </summary>
             <div class="faq-answer">
-              <p>Trago um olhar jornalístico apurado, pensamento estratégico, criatividade e execução completa. Antes de pensar no post, penso no porquê, para quem e com qual objetivo a comunicação está sendo criada.</p>
+              <p>Porque eu não penso em "postar", penso em comunicar com propósito. Uso minha formação em jornalismo pra investigar seu público, estruturar sua mensagem e criar conteúdo com estratégia por trás — não só estética.</p>
             </div>
           </details>
 
           <details class="faq-item gsap-reveal">
             <summary class="faq-question">
-              <span>Você faz apenas o planejamento ou também executa?</span>
+              <span>Como funciona o início do trabalho?</span>
               <span class="faq-icon" aria-hidden="true"></span>
             </summary>
             <div class="faq-answer">
-              <p>Faço os dois. Não fico apenas no planejamento: coloco a ideia em prática com roteiro, texto, captação presencial de imagem, edição, publicação e acompanhamento de resultados.</p>
+              <p>Começamos com um briefing profundo pra entender seu negócio, seus diferenciais e seus objetivos. Depois eu analiso a concorrência e monto um planejamento de conteúdo estratégico, com linha editorial e cronograma definidos.</p>
             </div>
           </details>
 
           <details class="faq-item gsap-reveal">
             <summary class="faq-question">
-              <span>Qual a sua experiência na área?</span>
+              <span>Como funciona a gravação de fotos e vídeos?</span>
               <span class="faq-icon" aria-hidden="true"></span>
             </summary>
             <div class="faq-answer">
-              <p>Sou formada em Jornalismo pela UFBA e atuo como assessora de comunicação e gestora de redes na Limpurb, além de gerenciar outros projetos. Minha trajetória transita pela assessoria, produção de conteúdo e comunicação digital.</p>
+              <p>Eu chego com roteiro pronto e conduzo tudo no dia; do texto à postura na câmera. Trabalho no ritmo de cada cliente, principalmente quem tem vergonha de gravar, até o resultado sair natural.</p>
             </div>
           </details>
 
           <details class="faq-item gsap-reveal">
             <summary class="faq-question">
-              <span>Por que contratar uma estrategista e não apenas um Social Media?</span>
+              <span>Assessoria de imprensa é só pra empresa grande?</span>
               <span class="faq-icon" aria-hidden="true"></span>
             </summary>
             <div class="faq-answer">
-              <p>Porque comunicação não é apenas publicar. É entender quem precisa ouvir, o que precisa ser dito, como essa mensagem deve chegar e qual história faz sentido contar. Estratégia é o que direciona cada entrega.</p>
+              <p>Não! Profissionais autônomos, clínicas e marcas menores ganham muita credibilidade ao aparecer na mídia local. Eu cuido de tudo: produção de release e relacionamento com jornalistas e veículos.</p>
+            </div>
+          </details>
+
+          <details class="faq-item gsap-reveal">
+            <summary class="faq-question">
+              <span>Como é a cobertura de eventos?</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>Trabalho os dois formatos: conteúdo em tempo real pros stories durante o evento, e um vídeo editado (after-movie) pra eternizar o momento depois.</p>
             </div>
           </details>
 
@@ -933,7 +880,11 @@
           <div class="contact-info-col">
             <div class="contact-header gsap-reveal" style="margin-bottom: 2rem;">
               <span class="pill-tag">Vamos Conversar</span>
-              <video src="assets/priscila/pointing-hands.webm" class="tech-pointing-hand tech-pointing-hand--contact" autoplay loop muted playsinline aria-hidden="true"></video>
+              <!-- Sem `src` de propósito: 948 KB decorativos baixavam junto com a página,
+                   mesmo estando lá embaixo no contato. O js/media-lite.js carrega o arquivo
+                   só quando ele chega perto da tela — e nunca em conexão lenta/economia de
+                   dados. O endereço real fica em data-src. -->
+              <video data-src="assets/priscila/pointing-hands.webm" class="tech-pointing-hand tech-pointing-hand--contact" loop muted playsinline preload="none" aria-hidden="true"></video>
               <h2 class="contact-title" style="margin-top: 1rem; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2;">
                 Seu próximo conteúdo começa com uma boa ideia.
               </h2>
@@ -1072,6 +1023,24 @@
   <script src="js/preloader.js"></script>
   <script src="js/tech-services.js"></script>
   <script src="js/section-reveals.js"></script>
+  <script src="js/media-lite.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- Mobile Tabbar (Navegação Inferior) -->
+  <nav class="mobile-tabbar" aria-label="Navegação rápida">
+    <a href="#what-you-get" class="tab-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Serviços</span>
+    </a>
+    <a href="#work" class="tab-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      <span>Projetos</span>
+    </a>
+    <a href="#contact" class="tab-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
+      <span>Contato</span>
+    </a>
+  </nav>
+
 </body>
 </html>

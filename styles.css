@@ -19,6 +19,7 @@
   /* Typography */
   --font-sans: 'Helvetica Now Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-display: 'Helvetica Now Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-nav: 'Space Grotesk', var(--font-sans);
 
   /* Spacing */
   --space-sm: 0.5rem;
@@ -169,9 +170,24 @@ body {
 
 /* 
    ---------------------------------
-   Ambient Glows (Background)
+   Ambient Glows & Grid (Background)
    ---------------------------------
 */
+.background-grid {
+  position: fixed;
+  inset: -100%;
+  width: 300%;
+  height: 300%;
+  background-size: 60px 60px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  z-index: -2;
+  pointer-events: none;
+  transform-origin: center center;
+  transition: transform 0.1s linear; /* Para parallax suave */
+}
+
 .glow-sphere {
   position: fixed;
   width: 600px;
@@ -181,8 +197,72 @@ body {
   filter: blur(80px);
   z-index: -1;
   pointer-events: none;
+  will-change: transform;
 }
 .glow-1 { top: -200px; left: -200px; }
+.glow-2 { bottom: -200px; right: -200px; }
+
+/* Brilho interativo que segue o mouse */
+.glow-mouse {
+  top: 0; left: 0;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(254, 99, 61, 0.045) 0%, transparent 60%);
+  filter: blur(70px);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.6s ease;
+}
+
+/* Grain dinâmico (Film Grain em movimento) */
+.grain-overlay {
+  position: fixed;
+  inset: -200%;
+  width: 500%;
+  height: 500%;
+  z-index: 500;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  animation: grain-dance 0.4s steps(2) infinite;
+}
+
+@keyframes grain-dance {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-20px, 20px); }
+  50% { transform: translate(20px, -20px); }
+  75% { transform: translate(-20px, -20px); }
+  100% { transform: translate(20px, 20px); }
+}
+
+/* Glows por seção: em vez de só os dois fixos de canto, cada seção de conteúdo ganha
+   um brilho próprio (mesma técnica, sem acompanhar o scroll) pra não deixar o fundo
+   chapado nas partes do meio da página. */
+.section-glow {
+  position: absolute;
+  top: 80px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 99, 61, 0.11) 0%, transparent 70%);
+  filter: blur(90px);
+  z-index: 0;
+  pointer-events: none;
+}
+/* O da direita encosta na borda em vez de vazar 160px: transbordo à direita aumenta a
+   largura rolável da página (à esquerda o navegador ignora). Como é um degradê radial
+   que já termina transparente, encostar na borda não muda o que se vê. */
+.section-glow--left { left: -160px; }
+.section-glow--right { right: 0; }
+
+.section {
+  position: relative;
+}
+.section > .container {
+  position: relative;
+  z-index: 1;
+}
 .glow-2 { bottom: -200px; right: -200px; }
 
 /* 
@@ -195,33 +275,14 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1.5rem 0;
   z-index: 100;
-  mix-blend-mode: difference; /* Adds a premium touch over light elements */
-  transition: padding 0.4s var(--ease-out-expo);
+  transition: transform 0.45s var(--ease-out-expo), opacity 0.35s ease;
 }
 
-/* Menu "encolhe" ao rolar (js/ui.js PS.initHeaderShrink) em vez de sumir: some incomodava
-   mais do que ajudava. Dois toques próprios em vez do shrink genérico de qualquer site:
-   1) a borda de baixo vira uma linha de progresso da página inteira (--scroll-progress,
-   atualizado no JS); 2) o selo da logo gira devagar feito um selo/moeda enquanto compacto. */
+/* Menu "encolhe" ao rolar (js/ui.js PS.initHeaderShrink). O selo da logo gira devagar
+   feito um selo/moeda enquanto compacto. */
 .header.is-compact {
-  padding: 0.85rem 0;
-}
-.header::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: calc(var(--scroll-progress, 0) * 100%);
-  background: var(--accent-color);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-.header.is-compact::after {
-  opacity: 1;
+  padding: 0.75rem 5% 0;
 }
 .header.is-compact .logo-badge {
   animation: logo-seal-spin 9s linear infinite;
@@ -234,13 +295,102 @@ body {
   .header.is-compact .logo-badge { animation: none; }
 }
 
+.side-rail {
+  display: none;
+}
+
+/* No desktop, a barra some ao rolar pra baixo e um rail de pontos aparece na lateral
+   (mais discreto que a barra inteira); ao rolar pra cima, a barra volta e o rail some.
+   Não mexe no mobile: lá o header já é só logo + hambúrguer. */
+@media (min-width: 901px) {
+  .header.is-hidden {
+    transform: translateY(-130%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .side-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    position: fixed;
+    right: 1.75rem;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    z-index: 95;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+  }
+
+  .header.is-hidden ~ .side-rail {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.side-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.25);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.side-dot:hover,
+.side-dot.is-active {
+  background-color: var(--accent-color);
+  transform: scale(1.35);
+}
+
+/* Nome da seção sempre visível ao lado do ponto (não é mais tooltip de hover) */
+.side-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: var(--font-nav);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0.75;
+  transition: opacity 0.25s ease, color 0.25s ease;
+}
+
+.side-dot:hover::after,
+.side-dot.is-active::after {
+  opacity: 1;
+  color: var(--text-primary);
+}
+.side-dot.is-active::after {
+  color: var(--accent-color);
+}
+
 .nav-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 5%;
+  padding: 1rem 5%;
+  background: rgba(28, 35, 57, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: padding 0.4s var(--ease-out-expo), background-color 0.4s ease;
+}
+
+.header.is-compact .nav-container {
+  padding: 0.7rem 5%;
+  background: rgba(28, 35, 57, 0.82);
 }
 
 .brand-logo {
@@ -266,11 +416,11 @@ body {
 }
 
 .logo-name {
-  font-family: var(--font-display);
+  font-family: var(--font-nav);
   font-weight: 700;
   font-size: 1.1rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 .logo-name .dot {
   color: var(--accent-color);
@@ -278,36 +428,75 @@ body {
 
 .nav-menu {
   display: flex;
-  gap: 2.5rem;
+  align-items: center;
+  gap: 1.9rem;
+  margin-left: auto;
+  margin-right: 2.5rem;
+  counter-reset: nav-idx;
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-family: var(--font-nav);
+  font-size: 0.82rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
+  letter-spacing: 0.3px;
+  padding: 0.25rem 0;
   position: relative;
+  transition: color 0.25s ease;
+  counter-increment: nav-idx;
+}
+
+/* Número gerado por CSS (counter), não hardcoded no HTML: adicionar/remover um link
+   renumera os outros sozinho, sem precisar editar cada item à mão. */
+.nav-link-idx {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--accent-color);
+  opacity: 0.7;
+  transition: opacity 0.25s ease;
+}
+.nav-link-idx::before {
+  content: "0" counter(nav-idx);
+}
+.nav-link:hover .nav-link-idx,
+.nav-link.is-active .nav-link-idx {
+  opacity: 1;
 }
 
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: -4px;
   left: 0;
-  width: 0%;
+  bottom: -2px;
+  width: 100%;
   height: 1px;
-  background-color: var(--accent-color);
-  transition: width 0.3s var(--ease-out-expo);
+  background-color: var(--text-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out-expo);
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link:focus-visible {
   color: var(--text-primary);
 }
-.nav-link:hover::after {
-  width: 100%;
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.nav-link.is-active {
+  color: var(--text-primary);
+}
+.nav-link.is-active::after {
+  background-color: var(--accent-color);
+  transform: scaleX(1);
 }
 
 /* Pill Button */
@@ -318,10 +507,12 @@ body {
   background-color: var(--surface-color-light);
   color: var(--text-primary);
   text-decoration: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.7rem 1.25rem;
   border-radius: 50px;
-  font-size: 0.85rem;
+  font-family: var(--font-nav);
+  font-size: 0.75rem;
   font-weight: 600;
+  white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 1px;
   border: 1px solid rgba(255,255,255,0.1);
@@ -490,11 +681,14 @@ body {
 */
 .infinite-strip {
   width: 100%;
-  background: var(--accent-color);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-primary);
   padding: 1.5rem 0;
   overflow: hidden;
   border-top: 1px solid rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .strip-track {
   display: inline-flex;
@@ -575,8 +769,8 @@ body {
    garantindo que nada fique invisível se GSAP não carregar.
 */
 .js.js-pending .gsap-reveal,
-.js.js-pending .hero-tag-wrap,
-.js.js-pending .hero-actions {
+.js.js-pending .hero-actions,
+.js.js-pending .header {
   opacity: 0;
 }
 .js.js-pending .gsap-reveal {
@@ -868,6 +1062,12 @@ body {
   gap: 1rem;
 }
 
+@media (max-width: 900px) {
+  .nav-action {
+    margin-left: auto;
+  }
+}
+
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -888,14 +1088,17 @@ body {
   width: 18px;
   height: 1.5px;
   background-color: var(--accent-color);
-  transition: transform 0.3s var(--ease-out-expo);
+  transition: transform 0.3s var(--ease-out-expo), opacity 0.3s ease;
 }
 
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:first-child {
-  transform: translateY(3.75px) rotate(45deg);
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7.5px) rotate(45deg);
 }
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:last-child {
-  transform: translateY(-3.75px) rotate(-45deg);
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7.5px) rotate(-45deg);
 }
 
 .mobile-menu {
@@ -922,6 +1125,7 @@ body {
   gap: 0.25rem;
   width: 100%;
   padding: 0 8%;
+  counter-reset: mobile-nav-idx;
 }
 
 .mobile-link {
@@ -937,13 +1141,19 @@ body {
   text-decoration: none;
   padding: 0.4rem 0;
   border-bottom: 1px solid rgba(255,255,255,0.06);
+  counter-increment: mobile-nav-idx;
 }
 
+/* Número gerado por CSS (counter), não hardcoded: renumera sozinho se um item for
+   adicionado/removido, sem precisar editar cada link à mão. */
 .mobile-link-idx {
   font-family: monospace;
   font-size: 0.8rem;
   font-weight: 400;
   color: #666;
+}
+.mobile-link-idx::before {
+  content: "0" counter(mobile-nav-idx);
 }
 
 .mobile-menu-footer {
@@ -964,6 +1174,84 @@ body {
 /* Trava o scroll enquanto o drawer está aberto */
 body.menu-open {
   overflow: hidden;
+}
+
+/*
+   ---------------------------------
+   Mobile Tabbar (atalhos rápidos)
+   ---------------------------------
+*/
+.mobile-tabbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-tabbar {
+    display: flex;
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 90;
+    padding: 0.4rem;
+    padding-bottom: calc(0.4rem + env(safe-area-inset-bottom, 0px));
+    background: rgba(28, 35, 57, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: transform 0.35s var(--ease-out-expo), opacity 0.35s ease;
+  }
+
+  /* Some ao rolar pra baixo (dá espaço pra ler), volta ao rolar pra cima (js/ui.js initTabbarAutoHide) */
+  .mobile-tabbar.is-hidden {
+    transform: translateY(calc(100% + 1.5rem));
+    opacity: 0;
+  }
+
+  /* Espaço pra barra não tampar o fim do conteúdo/rodapé */
+  body {
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.tab-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.25rem;
+  border-radius: 18px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.tab-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tab-link.is-active {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.tab-link-cta {
+  color: var(--accent-color);
+  background-color: rgba(254, 99, 61, 0.12);
+}
+.tab-link-cta.is-active,
+.tab-link-cta:hover {
+  color: var(--accent-ink);
+  background-color: var(--accent-color);
 }
 
 /* O slot de mídia já cria respiro: reduz o gap exagerado do topo do card */
@@ -1295,10 +1583,6 @@ textarea:focus-visible {
 }
 
 @media (max-width: 900px) {
-  .header {
-    mix-blend-mode: normal; /* evita inversão do logo sobre a faixa clara */
-    background: linear-gradient(180deg, rgba(30,32,35,0.94) 0%, transparent 100%);
-  }
   .nav-toggle {
     display: flex;
   }
@@ -1330,16 +1614,18 @@ textarea:focus-visible {
   .logo-name {
     display: none;
   }
+  /* 22vh de topo somados à foto jogavam o título para fora da primeira tela.
+     Agora só o espaço da barra fixa + respiro. */
   .hero-section {
     min-height: auto;
-    padding-top: 22vh;
-    padding-bottom: 4rem;
+    padding-top: 5.5rem;
+    padding-bottom: 2rem;
   }
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
-    margin-bottom: 3rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
   .btn-primary-nesh {
     justify-content: center;
@@ -1684,4 +1970,54 @@ textarea:focus-visible {
 @media (max-width: 1024px) {
   .cinema-viewfinder { display: none !important; }
   .corner-status-widget { display: none !important; }
+}
+/*
+   ---------------------------------
+   Mobile Tabbar (Bottom Navigation)
+   ---------------------------------
+*/
+.mobile-tabbar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(28, 35, 57, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1rem calc(0.8rem + env(safe-area-inset-bottom));
+  z-index: 98;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.mobile-tabbar.is-hidden {
+  transform: translateY(100%);
+}
+.tab-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-nav);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+.tab-link svg {
+  width: 22px;
+  height: 22px;
+}
+.tab-link.is-active,
+.tab-link:hover {
+  color: var(--accent-color);
+}
+@media (max-width: 768px) {
+  .mobile-tabbar {
+    display: flex;
+    justify-content: space-around;
+  }
 }

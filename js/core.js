@@ -4,17 +4,51 @@
 */
 window.PS = window.PS || {};
 
-PS.env = {
-  hasLibs: typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof SplitType !== 'undefined',
-  reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  finePointer: window.matchMedia('(hover: hover) and (pointer: fine)').matches
-};
-PS.env.animate = PS.env.hasLibs && !PS.env.reducedMotion;
+/*
+  Flags de ambiente.
+
+  `lowEnd` existe porque o site roda em celular de entrada e em 4G instável: nesses
+  aparelhos as animações contínuas (grão, brilhos, parallax) competem com a rolagem
+  pela mesma CPU/GPU e o resultado é travamento. As pistas usadas:
+    - saveData: a pessoa pediu explicitamente economia de dados;
+    - effectiveType: rede 2g/3g;
+    - deviceMemory <= 4GB e hardwareConcurrency <= 4: perfil de aparelho de entrada.
+  Nenhuma delas existe em todo navegador (Safari não expõe memória/conexão), por isso
+  são todas opcionais e o padrão é "não é fraco" — degradar só quando há sinal claro.
+*/
+(function () {
+  var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+  var slowNet = !!conn && (conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || ''));
+  var weakDevice = (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+                   (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+
+  PS.env = {
+    hasLibs: typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof SplitType !== 'undefined',
+    reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    finePointer: window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+    touch: window.matchMedia('(pointer: coarse)').matches,
+    saveData: !!(conn && conn.saveData),
+    lowEnd: slowNet || !!weakDevice
+  };
+  PS.env.animate = PS.env.hasLibs && !PS.env.reducedMotion;
+
+  // Deixa o CSS reagir às mesmas condições (ver bloco MOBILE em styles.css)
+  if (PS.env.lowEnd) document.documentElement.classList.add('low-end');
+  if (PS.env.touch) document.documentElement.classList.add('is-touch');
+})();
 
 PS.lenis = null;
 
+/*
+  Scroll suave só no desktop. Em touch o Lenis não suaviza nada (smoothTouch é falso por
+  padrão) mas mantém um laço de rAF rodando todo frame junto com o ScrollTrigger — CPU
+  gasta à toa justo onde ela é escassa. Sem Lenis, a rolagem é a nativa do aparelho, que
+  roda no processo de composição e é sempre mais fluida. Os pontos que usam PS.lenis
+  (âncoras, travar rolagem, transição de página) já têm caminho alternativo para null.
+*/
 PS.initSmoothScroll = function () {
   if (typeof Lenis === 'undefined') return;
+  if (PS.env.touch || PS.env.lowEnd) return;
 
   PS.lenis = new Lenis({
     duration: 1.2,

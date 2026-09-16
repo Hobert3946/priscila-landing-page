@@ -1,0 +1,228 @@
+/*
+   =====================================================================
+   mobile.css — ajustes de celular. CARREGA POR ÚLTIMO, DE PROPÓSITO.
+   =====================================================================
+   Estas regras existem para VENCER as anteriores. Media query não soma
+   especificidade: uma regra igual em sections.css ou cases.css (que carregam
+   depois de styles.css) ganharia mesmo dentro de @media. Foi exatamente o que
+   aconteceu antes — o override do retrato do hero morava em styles.css e o
+   effects.css continuava mandando. Morando aqui, no último arquivo do <head>,
+   elas ganham sem precisar de !important.
+
+   Se for criar uma regra só de celular, escreva neste arquivo.
+   =====================================================================
+*/
+
+/*
+   =====================================================================
+   MOBILE — bloco final (vence os anteriores por vir por último)
+   =====================================================================
+   Três problemas que este bloco resolve:
+
+   1. LARGURA. O conteúdo media 550px num aparelho de 390px (glows decorativos
+      posicionados com `right: -160px`). Navegador de celular não corta: ele
+      aumenta o viewport e dá zoom-out na página inteira — era por isso que o
+      site aparecia "encolhido" no telefone. Só o transbordo à DIREITA faz isso;
+      à esquerda o navegador ignora.
+
+   2. PESO GRÁFICO. blur() e backdrop-filter em camadas grandes são o que mais
+      trava GPU de celular antigo. No desktop passam despercebidos; num aparelho
+      de entrada viram travamento na rolagem. Aqui eles caem no mobile.
+
+   3. ALCANCE DO DEDO. Alvos de toque menores que ~44px e conteúdo escondido
+      atrás da barra inferior / do notch.
+   ===================================================================== */
+
+@media (max-width: 900px) {
+  /* --- 1. Contenção de largura --- */
+
+  /* Os glows de seção são decorativos: no celular eles só custavam GPU e
+     estouravam a lateral direita. */
+  .section-glow,
+  .glow-sphere,
+  .glow-mouse,
+  .tech-panel-glow {
+    display: none !important;
+  }
+
+  /* Rede de segurança: nenhuma seção pode empurrar a largura da página.
+     `clip` corta sem criar área rolável (diferente de `hidden`, não vira
+     container de rolagem nem quebra `position: sticky` dos filhos). */
+  .section,
+  .hero-section,
+  .contact-section,
+  footer {
+    overflow-x: clip;
+  }
+
+  /* Palavras longas (e-mail, URLs) não podem alargar a página */
+  body {
+    overflow-wrap: break-word;
+  }
+
+  /* --- 2. Peso gráfico --- */
+
+  /* Grão animado: repintava a tela inteira 2,5x por segundo. Vira estático. */
+  .grain-overlay {
+    animation: none !important;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.035;
+  }
+
+  /* Malha de fundo: sem parallax e sem área gigante para repintar */
+  .background-grid {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* backdrop-filter é o efeito mais caro em GPU de celular. Os cards mantêm a
+     aparência com fundo sólido equivalente — visualmente quase idêntico sobre
+     o fundo escuro, sem o custo de recomposição a cada frame de rolagem. */
+  .service-card,
+  .testimonial-card,
+  .plan-card,
+  .case-card,
+  .case-featured {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgba(39, 46, 70, 0.92);
+  }
+
+  /* A borda em gradiente girando é uma animação infinita por card. Fica estática. */
+  .service-card::after,
+  .testimonial-card::after,
+  .plan-card::after,
+  .case-card::after,
+  .case-featured::after {
+    animation: none !important;
+  }
+
+  /* Sombra projetada em imagem grande é cara a cada frame de rolagem */
+  .hero-portrait img {
+    filter: none;
+    will-change: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  /* --- 3. Alcance do dedo e áreas seguras --- */
+
+  /* Espaço para a barra de atalhos fixa (≈87px) + área do gesto de home do iPhone */
+  body {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Respiro lateral padrão em telas estreitas (notch/bordas curvas) */
+  .container,
+  .nav-container {
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
+
+  /* Alvos de toque: mínimo confortável recomendado */
+  .nav-toggle,
+  .carousel-btn,
+  .form-chip,
+  .tab-link {
+    min-height: 44px;
+  }
+
+  /* Campos de formulário com 16px+: abaixo disso o iOS dá zoom automático
+     ao focar o campo e desalinha a página inteira. */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* Rolagem horizontal dos carrosséis sem "puxar" a página junto */
+  .carousel-track,
+  .clients-track,
+  .timeline-track {
+    overscroll-behavior-x: contain;
+  }
+}
+
+/* Telas bem estreitas (iPhone SE, Android de entrada) */
+@media (max-width: 380px) {
+  .container,
+  .nav-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .tab-link {
+    font-size: 0.58rem;
+  }
+  .tab-link svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Âncoras sem Lenis (celular): o menu fixo cobriria o topo da seção ao pular.
+   scroll-margin-top reserva essa altura. No desktop o Lenis usa seu próprio
+   deslocamento e simplesmente ignora esta propriedade. */
+section[id],
+main [id] {
+  scroll-margin-top: 5rem;
+}
+
+html.is-touch {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.is-touch {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Peso gráfico: o que sobrou de backdrop-filter
+   ---------------------------------------------------------------------
+   Estes estão definidos em sections.css / cases.css, que carregam depois do
+   styles.css — por isso precisam ficar aqui para valer.
+
+   Os dois primeiros são os mais caros de todos: barra do topo e barra de baixo
+   são fixas, então o navegador refaz o desfoque do que passa atrás delas a cada
+   quadro da rolagem, do início ao fim da página. Sobre um fundo escuro, um fundo
+   sólido equivalente é visualmente quase igual e não custa nada.
+   --------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .nav-container,
+  .mobile-tabbar,
+  .infinite-strip,
+  .tech-display-panel,
+  .contact-form-col,
+  .reel-views {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* .glass (styles.css) declara o desfoque com !important — só outro !important
+     desfaz. É o único ponto do arquivo que precisa disso. */
+  .glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(28, 35, 57, 0.94) !important;
+  }
+
+  .nav-container {
+    background: rgba(24, 30, 50, 0.96);
+  }
+  .mobile-tabbar {
+    background: rgba(24, 30, 50, 0.97);
+  }
+
+  /* Sombra projetada numa imagem grande é recalculada a cada quadro; e sem
+     animação de filtro no retrato (ver js/text-effects.js), o will-change só
+     mantinha uma camada extra na memória da GPU sem motivo. */
+  .hero-portrait img {
+    filter: none;
+    will-change: auto;
+  }
+}

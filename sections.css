@@ -477,13 +477,13 @@
   background: transparent;
   border: none;
   text-align: left;
-  padding: 1.25rem 1.5rem;
+  padding: 1.6rem 2rem;
   color: var(--text-secondary);
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.8rem;
   position: relative;
   cursor: pointer;
   border-radius: 8px;
@@ -521,7 +521,8 @@
 
 .tech-tab-num {
   font-family: monospace;
-  font-size: 0.85rem;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: var(--accent-color);
   opacity: 0.6;
 }

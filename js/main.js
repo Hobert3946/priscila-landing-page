@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
   PS.initUI();
+  PS.initLazyMedia();
   PS.initContactForm();
   PS.initRollHover();
   PS.initCarousels();
@@ -43,9 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (PS.env.animate) {
       PS.initSmoothScroll();
-      PS.initMagnetic('.hero-shortcut', 0.25);
+      PS.initAmbientAnimations();
       PS.initMagnetic('.btn-primary-nesh, .btn-ghost-nesh', 0.15);
-      PS.initMagnetic('.btn-pill, .carousel-btn, .nav-link, .form-submit', 0.1);
+      PS.initMagnetic('.btn-pill, .nav-link, .form-submit', 0.1);
       PS.initMagnetic('.form-chip', 0.12);
       PS.initTiltCards('.contact-card');
       PS.initMarquee();

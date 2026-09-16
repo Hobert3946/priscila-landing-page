@@ -63,19 +63,20 @@
     update();
   }
 
-  /* Menu encolhe ao rolar (não some) e ganha uma linha de progresso da página inteira
-     na borda de baixo (--scroll-progress, styles.css .header::after). */
+  /* Menu encolhe ao rolar (sempre). No desktop (>900px) também some assim que passa de um
+     limiar de rolagem e o rail lateral (.side-rail) assume — baseado só na posição, não na
+     direção, pra o rail continuar ativo mesmo rolando pra cima. Só volta perto do topo. */
   function initHeaderShrink() {
     const header = document.querySelector('.header');
     if (!header) return;
+
+    const desktopQuery = window.matchMedia('(min-width: 901px)');
 
     let ticking = false;
     function update() {
       const y = window.scrollY;
       header.classList.toggle('is-compact', y > 40);
-
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      header.style.setProperty('--scroll-progress', max > 0 ? Math.min(1, y / max) : 0);
+      header.classList.toggle('is-hidden', desktopQuery.matches && y > 120);
       ticking = false;
     }
     window.addEventListener('scroll', () => {
@@ -87,11 +88,69 @@
     update();
   }
 
+  /* Marca no .nav-menu e na .mobile-tabbar o link da seção visível no momento (scroll-spy simples) */
+  function initNavSpy() {
+    const links = document.querySelectorAll('.nav-menu .nav-link[href^="#"], .mobile-tabbar .tab-link[href^="#"], .side-rail .side-dot[href^="#"]');
+    if (!links.length) return;
+
+    const ids = new Set(Array.from(links).map(link => link.getAttribute('href').slice(1)));
+    const sections = Array.from(ids).map(id => document.getElementById(id)).filter(Boolean);
+    if (!sections.length) return;
+
+    const setActive = (id) => {
+      links.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`));
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting);
+      if (visible.length) setActive(visible[0].target.id);
+    }, { rootMargin: '-45% 0px -50% 0px' });
+
+    sections.forEach(section => observer.observe(section));
+  }
+
+  /* Tabbar mobile some ao rolar pra baixo (mais espaço pra ler o conteúdo) e volta assim
+     que a pessoa rola pra cima — igual à barra de endereço do Safari/Instagram no celular.
+     Fica sempre visível perto do topo, pra não sumir logo que a página carrega. */
+  function initTabbarAutoHide() {
+    const bar = document.querySelector('.mobile-tabbar');
+    if (!bar) return;
+
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    function update() {
+      const y = window.scrollY;
+      const goingDown = y > lastY + 4;
+      const goingUp = y < lastY - 4;
+
+      if (y < 80) {
+        bar.classList.remove('is-hidden');
+      } else if (goingDown) {
+        bar.classList.add('is-hidden');
+      } else if (goingUp) {
+        bar.classList.remove('is-hidden');
+      }
+
+      lastY = y;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
   PS.initUI = function () {
     initMobileMenu();
     initAnchorLinks();
     initFaq();
     initScrollCue();
     initHeaderShrink();
+    initNavSpy();
+    initTabbarAutoHide();
   };
 })();
