@@ -185,7 +185,7 @@ test('Fonte Outfit do Fontshare está configurada e aplicada no site', async () 
   await browser.close();
 });
 
-test('No desktop web, nav-toggle e mobile-menu ficam ocultos e caixinha de novos projetos está renovada', async () => {
+test('No desktop web, nav-toggle e mobile-menu ficam ocultos (sem ponto branco) e caixinha de projetos permanece visível', async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   await page.goto(PAGE_URL);
