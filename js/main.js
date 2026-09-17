@@ -54,6 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // fontes carregadas mudam a altura dos textos: recalcula os triggers
     if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
+
+    // Recalcula triggers e posições dinamicamente ao redimensionar a janela
+    let resizeDebounce;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeDebounce);
+      resizeDebounce = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
+    }, { passive: true });
   } else {
     root.classList.remove('show-preloader');
   }

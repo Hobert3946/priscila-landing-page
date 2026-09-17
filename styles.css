@@ -1,6 +1,6 @@
-/* A fonte Outfit é carregada pelo <link> no <head> do index.html/404.html, não por @import:
-   um @import aqui só começa a baixar depois que este arquivo chega, atrasando a primeira
-   pintura, e era a mesma fonte sendo pedida duas vezes. */
+/* As fontes (Outfit + Satoshi) são carregadas pelo <link> no <head> do index.html/404.html,
+   não por @import: um @import aqui só começa a baixar depois que este arquivo chega,
+   atrasando a primeira pintura. */
 
 /*
    ---------------------------------
@@ -26,8 +26,14 @@
   --sand-soft: rgba(232, 220, 205, 0.09);
   --sand-line: rgba(232, 220, 205, 0.22);
 
-  /* Typography (Outfit via Fontshare) */
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Typography (Fontshare): Outfit nos títulos e frases grandes, Satoshi no texto corrido
+     e nos rótulos pequenos (menu, pills, badges) — corpo pequeno lê melhor numa fonte de
+     menor contraste de traço e x-height maior. Também evita um defeito real da Outfit: no
+     peso 700 (usado nesses rótulos), o acento do "Í"/"É" maiúsculo sai desconectado da
+     letra — em texto grande vira um espaço estranho acima da letra, em texto pequeno vira
+     um pontinho solto (ex.: "DISPONÍVEL" no botão do menu). Testado isolado: Satoshi não
+     tem esse problema em nenhum tamanho. */
+  --font-sans: 'Outfit', 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-nav: var(--font-sans);
 
@@ -1080,10 +1086,13 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .nav-menu {
-    display: none;
+    display: none !important;
   }
+}
+
+@media (max-width: 768px) {
   .contact-channels {
     flex-direction: column;
   }
@@ -1103,19 +1112,46 @@ body {
   gap: 1rem;
 }
 
-/* No desktop (>900px), o toggle (hambúrguer) e o drawer mobile ficam estritamente desativados */
+/* Adaptação fluida do menu desktop em telas intermediárias (laptops e tablets landscape) */
+@media (min-width: 1001px) and (max-width: 1280px) {
+  .nav-container {
+    padding: 0.85rem clamp(1rem, 2.5vw, 2.5rem);
+  }
+  .nav-menu {
+    gap: clamp(0.65rem, 1.2vw, 1.4rem);
+    margin-right: clamp(0.75rem, 1.5vw, 1.8rem);
+  }
+  .nav-link {
+    font-size: clamp(0.74rem, 0.84vw, 0.86rem);
+    padding: 0.2rem 0;
+  }
+  .btn-pill {
+    padding: 0.45rem clamp(0.65rem, 1vw, 1.1rem);
+    font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+    gap: 0.45rem;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 1001px) and (max-width: 1140px) {
+  .nav-link::before {
+    display: none;
+  }
+}
+
+/* No desktop (>1000px), o toggle (hambúrguer) e o drawer mobile ficam estritamente desativados */
 .nav-toggle {
   display: none;
 }
 
-@media (min-width: 901px) {
+@media (min-width: 1001px) {
   .nav-toggle,
   .mobile-menu {
     display: none !important;
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .header {
     padding: 0.65rem 0.85rem 0;
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
@@ -1812,13 +1848,16 @@ textarea:focus-visible {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .nav-toggle {
     display: flex;
   }
   .nav-action .btn-pill {
     display: none;
   }
+}
+
+@media (max-width: 900px) {
   .section {
     padding: 5rem 0;
   }

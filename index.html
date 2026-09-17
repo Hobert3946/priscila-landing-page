@@ -53,9 +53,14 @@
     })();
   </script>
 
-  <!-- Fontshare Outfit -->
+  <!-- Fontshare: Outfit nos títulos/frases grandes, Satoshi no texto corrido.
+       Satoshi é mais legível em corpo pequeno (contraste de traço mais baixo, x-height maior)
+       e é da mesma fundição, então os dois compartilham a mesma "temperatura" geométrica.
+       Duas chamadas separadas: combinar as duas famílias num só f[]=...&f[]=... faz a API
+       devolver só a primeira, sem erro — a Satoshi some silenciosamente. -->
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=outfit@400,500,600,700,800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
   <!-- Preconnect pros CDNs de script (GSAP, ScrollTrigger, SplitType, Lenis): a conexão
        (DNS/TLS) já começa enquanto o HTML ainda está sendo lido, em vez de só no momento
@@ -253,7 +258,7 @@
 
       </div>
       <!-- Convite para rolar: canto inferior, some ao começar a rolar (effects.css + ui.js) -->
-      <a href="#what-you-get" class="scroll-cue" id="scroll-cue" aria-label="Role para conhecer os serviços">
+      <a href="#about" class="scroll-cue" id="scroll-cue" aria-label="Role para conhecer os serviços">
         <span class="scroll-cue-inner">
           <span class="scroll-cue-label" aria-hidden="true">Role para conhecer</span>
           <span class="scroll-cue-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 13l7 7 7-7"/></svg></span>
@@ -264,6 +269,7 @@
     <!-- Faixa de Separação (Sem texto) -->
     <div class="infinite-strip" aria-hidden="true"></div>
 
+    <div id="about"></div>
     <!-- O Que Você Recebe (What You Get) -->
     <section id="what-you-get" class="section tech-services-section">
       <div class="section-glow section-glow--right" aria-hidden="true"></div>
@@ -468,7 +474,7 @@
 
           <div class="leaf-grid">
 
-            <article class="leaf-card is-featured" data-leaf-card>
+            <article class="leaf-card case-card is-featured" data-leaf-card>
               <header class="leaf-head">
                 <img class="leaf-avatar" src="assets/clients/kasa-avatar.webp" alt="" width="48" height="48" loading="lazy" decoding="async">
                 <div class="leaf-id">
@@ -498,7 +504,7 @@
               </div>
             </article>
 
-            <article class="leaf-card" data-leaf-card>
+            <article class="leaf-card case-card" data-leaf-card>
               <header class="leaf-head">
                 <img class="leaf-avatar" src="assets/clients/calazans-avatar.webp" alt="" width="48" height="48" loading="lazy" decoding="async">
                 <div class="leaf-id">
@@ -527,7 +533,7 @@
               </div>
             </article>
 
-            <article class="leaf-card" data-leaf-card>
+            <article class="leaf-card case-card" data-leaf-card>
               <header class="leaf-head">
                 <img class="leaf-avatar" src="assets/clients/andressa-avatar.webp" alt="" width="48" height="48" loading="lazy" decoding="async">
                 <div class="leaf-id">
