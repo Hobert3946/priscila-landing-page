@@ -384,11 +384,17 @@ body {
   transition: opacity 0.25s ease, color 0.25s ease;
 }
 
-.side-dot:hover::after {
+/* Os nomes aparecem quando o mouse chega no rail; parados, só as bolinhas ficam visíveis e a
+   laranja já diz em que seção a pessoa está. Assim nada fica permanentemente por cima do
+   conteúdo das seções largas. */
+.side-rail:hover .side-dot::after {
+  opacity: 0.85;
+}
+.side-rail .side-dot:hover::after {
   opacity: 1;
   color: var(--text-primary);
 }
-.side-dot.is-active::after {
+.side-rail:hover .side-dot.is-active::after {
   opacity: 1;
   color: var(--accent-color);
 }
