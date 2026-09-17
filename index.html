@@ -205,6 +205,9 @@
           </div>
 
           <div class="hero-copy">
+            <div class="hero-tag-wrap">
+              <span class="pill-tag">Jornalista formada pela UFBA</span>
+            </div>
             <h1 class="hero-title" id="hero-heading">
               <span class="hero-split">Comunicação</span>
               <span class="word-rotator" data-words="Estratégica,|Que Converte,|Sem Ruído,|Que Transforma,|Que Engaja,|Com Propósito,">
@@ -263,7 +266,7 @@
         <div class="section-header">
           <span class="section-subtitle">O Que Você Recebe</span>
           <h2 class="section-title split-text">Comunicação Que Converte</h2>
-          <p class="section-lead">Seu negócio não precisa de mais posts genéricos, precisa de autoridade e conversão. Selecione as opções abaixo e descubra exatamente o que a sua marca ganha quando construímos uma comunicação estratégica focada em resultados.</p>
+          <p class="section-lead">Perfil parado ou post que não converte? O que resolve é estratégia e consistência. Clique nas abas abaixo para ver o escopo de entregáveis e o formato de atuação em cada área.</p>
         </div>
 
         <div class="tech-services-container">
@@ -764,6 +767,42 @@
     </section>
 
     <!-- FAQ -->
+    <!-- Comparação honesta com agência (sections.css .versus) -->
+    <section id="why-me" class="section versus-section">
+      <div class="section-glow section-glow--right" aria-hidden="true"></div>
+      <div class="container">
+
+        <div class="section-header">
+          <span class="section-subtitle">Por Que Eu</span>
+          <h2 class="section-title split-text">Eu ou uma agência?</h2>
+          <p class="section-lead">A resposta honesta: depende do que você precisa.</p>
+        </div>
+
+        <div class="versus">
+          <div class="versus-col versus-col--them">
+            <h3 class="versus-title">Numa agência</h3>
+            <ul class="versus-list">
+              <li>Quem te atende não é quem produz. O seu contexto passa por um atendimento antes de virar post.</li>
+              <li>Sua marca entra numa fila com dezenas de outras contas.</li>
+              <li>Estrutura grande, com time de tráfego, design e mídia — e o custo que vem junto.</li>
+            </ul>
+          </div>
+
+          <div class="versus-col versus-col--me">
+            <h3 class="versus-title">Comigo</h3>
+            <ul class="versus-list">
+              <li>Quem conversa com você é quem apura, escreve, grava e publica. Sem telefone sem fio.</li>
+              <li>Poucos clientes por vez, porque cada marca precisa de tempo de escuta.</li>
+              <li>Formação em jornalismo aplicada ao conteúdo: pauta, checagem e texto que sustenta o que promete.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="versus-note">Se o que você precisa é volume industrial de peças e verba grande de mídia paga, uma agência vai te atender melhor — e eu digo isso antes de fechar, não depois.</p>
+
+      </div>
+    </section>
+
     <section id="faq" class="section faq-section">
       <div class="container">
 
@@ -892,20 +931,22 @@
           <div class="contact-form-col glass" style="padding: 2.5rem; border-radius: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
               <h3 style="font-size: 1.4rem; color: var(--text-primary); font-family: var(--font-display); margin: 0;">Ou envie um briefing rápido</h3>
-              <span style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: var(--accent-color); background: rgba(201,242,39,0.1); padding: 0.3rem 0.6rem; border-radius: 50px; border: 1px solid rgba(201,242,39,0.2);">
+              <span style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: var(--accent-color); background: rgba(254, 99, 61, 0.12); padding: 0.3rem 0.6rem; border-radius: 50px; border: 1px solid rgba(254, 99, 61, 0.3);">
                 <span class="status-indicator" style="position: static; transform: none; width: 6px; height: 6px;"></span> Respondo em até 24h
               </span>
             </div>
-            <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">Preencha os dados abaixo e entrarei em contato para conversarmos sobre a comunicação da sua marca.</p>
+            <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">Responda em menos de um minuto. Ao enviar, abro o WhatsApp com o seu briefing já escrito — você só confere e manda. Nada é publicado nem enviado sem você ver.</p>
             
             <form class="contact-form contact-form-compact" id="contact-form" novalidate style="margin-top: 0; display: flex; flex-direction: column; gap: 1rem;">
               <div class="form-field" style="margin-bottom: 0;">
                 <input type="text" id="field-name" name="name" maxlength="80" autocomplete="name"
                        required placeholder="Seu nome ou marca">
+                <span class="field-error" data-error-for="field-name" aria-live="polite"></span>
               </div>
               <div class="form-field" style="margin-bottom: 0;">
                 <input type="text" id="field-contact" name="contact" maxlength="120" autocomplete="email"
                        required placeholder="WhatsApp ou E-mail">
+                <span class="field-error" data-error-for="field-contact" aria-live="polite"></span>
               </div>
               <!-- Interactive Chips Section -->
               <div class="form-chips-section">
@@ -936,10 +977,10 @@
               </div>
 
               <button type="submit" class="btn-primary-nesh form-submit" style="width: 100%; margin-top: 1rem;">
-                <span>Enviar briefing</span>
+                <span>Abrir WhatsApp com meu briefing</span>
                 <span class="btn-arrow">→</span>
               </button>
-              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+              <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
             </form>
           </div>
           

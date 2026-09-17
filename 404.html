@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Não Encontrada (404) — Priscila Santos</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#1C2339">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%23FE633D'/%3E%3Ctext x='50' y='68' font-family='Helvetica,sans-serif' font-size='46' font-weight='800' text-anchor='middle' fill='%231C2339'%3EPS%3C/text%3E%3C/svg%3E">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="effects.css">
+
+  <style>
+    .error-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background: radial-gradient(circle at 50% 20%, rgba(254, 99, 61, 0.08) 0%, transparent 70%), #0A0C14;
+      overflow: hidden;
+    }
+    .error-header {
+      padding: 2rem 1.5rem;
+    }
+    .error-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1.5rem;
+      z-index: 2;
+    }
+    .error-code-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-color, #FE633D);
+      background: rgba(254, 99, 61, 0.1);
+      border: 1px solid rgba(254, 99, 61, 0.25);
+      margin-bottom: 1.5rem;
+    }
+    .error-giant-num {
+      font-family: var(--font-display, 'Syne', sans-serif);
+      font-size: clamp(5rem, 15vw, 9rem);
+      font-weight: 800;
+      line-height: 1;
+      margin: 0 0 1rem;
+      background: linear-gradient(135deg, #ffffff 40%, rgba(254, 99, 61, 0.8) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.04em;
+    }
+    .error-title {
+      font-family: var(--font-display, 'Syne', sans-serif);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 1rem;
+    }
+    .error-desc {
+      max-width: 520px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--text-secondary, #94a3b8);
+      margin: 0 auto 2.5rem;
+    }
+    .error-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .error-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 50px;
+      background: var(--accent-color, #FE633D);
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(254, 99, 61, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .error-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(254, 99, 61, 0.5);
+    }
+    .error-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .error-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .error-footer {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary, #94a3b8);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="error-page-wrapper">
+    <header class="error-header">
+      <div class="container" style="display: flex; justify-content: center;">
+        <a href="/" class="brand-logo" style="display: inline-flex; align-items: center; gap: 0.75rem;">
+          <span class="logo-badge" style="width: 34px; height: 34px; font-size: 0.8rem;">PS</span>
+          <span class="logo-name" style="font-size: 1.05rem;">Priscila Santos<span class="dot" style="color: var(--accent-color, #FE633D);">.</span></span>
+        </a>
+      </div>
+    </header>
+
+    <main class="error-content container">
+      <div class="error-code-badge">
+        <span>Erro 404</span>
+      </div>
+      <h1 class="error-giant-num">404</h1>
+      <h2 class="error-title">Página Não Encontrada</h2>
+      <p class="error-desc">
+        O link que você tentou acessar não existe, foi movido ou o endereço foi digitado incorretamente. Não se preocupe, você pode voltar ao site ou falar diretamente comigo.
+      </p>
+      <div class="error-actions">
+        <a href="/" class="error-btn-primary">
+          <span>Voltar para o Início</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <a href="https://wa.me/5571988350272?text=Ol%C3%A1%2C%20Priscila!%20Encontrei%20um%20link%20quebrado%20no%20seu%20site." target="_blank" rel="noopener noreferrer" class="error-btn-secondary">
+          <span>Falar no WhatsApp</span>
+        </a>
+      </div>
+    </main>
+
+    <footer class="error-footer">
+      <p>© 2026 Priscila Santos. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+</body>
+</html>

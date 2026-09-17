@@ -1,0 +1,84 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, existsSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
+import { chromium } from 'playwright';
+
+const PAGE_URL = pathToFileURL(resolve('index.html')).href;
+const ERROR_PAGE_URL = pathToFileURL(resolve('404.html')).href;
+
+test('Arquivos de SEO (robots.txt e sitemap.xml) existem e são válidos', () => {
+  assert.ok(existsSync(resolve('robots.txt')), 'robots.txt deve existir');
+  const robots = readFileSync(resolve('robots.txt'), 'utf-8');
+  assert.match(robots, /User-agent:\s*\*/i);
+  assert.match(robots, /Sitemap:\s*https:\/\/priscilasantos\.com\.br\/sitemap\.xml/i);
+
+  assert.ok(existsSync(resolve('sitemap.xml')), 'sitemap.xml deve existir');
+  const sitemap = readFileSync(resolve('sitemap.xml'), 'utf-8');
+  assert.match(sitemap, /<loc>https:\/\/priscilasantos\.com\.br\/<\/loc>/);
+});
+
+test('Página 404.html existe, contém noindex e botão para página inicial', async () => {
+  assert.ok(existsSync(resolve('404.html')), '404.html deve existir');
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(ERROR_PAGE_URL);
+
+  const noindexMeta = await page.$('meta[name="robots"][content*="noindex"]');
+  assert.ok(noindexMeta, 'Deve ter meta tag noindex');
+
+  const titleText = await page.title();
+  assert.match(titleText, /404/);
+
+  const homeBtn = await page.$('a[href="/"]');
+  assert.ok(homeBtn, 'Deve ter botão de retorno para o início');
+
+  await page.close();
+  await browser.close();
+});
+
+test('Formulário exibe erro visual ao submeter vazio e exibe sucesso + botão fallback (Plano B) ao submeter preenchido', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await page.goto(PAGE_URL);
+
+  // 1. Rola até o formulário
+  await page.locator('#contact-form').scrollIntoViewIfNeeded();
+
+  // 2. Tenta submeter vazio
+  await page.click('#contact-form button[type="submit"]');
+
+  // Verifica estado de erro no container e campo
+  const errorFeedback = await page.$('.form-feedback--error');
+  assert.ok(errorFeedback, 'Deve exibir card visual de erro');
+
+  const nameError = await page.$eval('[data-error-for="field-name"]', el => el.textContent.trim());
+  assert.ok(nameError.length > 0, 'Deve exibir texto de erro no campo nome');
+
+  // 3. Preenche os campos
+  await page.fill('#field-name', 'Empresa Teste');
+  await page.fill('#field-contact', '71999999999');
+
+  // Seleciona um chip
+  const firstChip = await page.$('#services-chips .form-chip');
+  if (firstChip) await firstChip.click();
+
+  // Submete preenchido
+  await page.click('#contact-form button[type="submit"]');
+
+  // 4. Verifica estado de sucesso visível
+  const successFeedback = await page.waitForSelector('.form-feedback--success', { timeout: 3000 });
+  assert.ok(successFeedback, 'Deve exibir card visual de sucesso');
+
+  // 5. Verifica existência do link visível de contingência (Plano B)
+  const fallbackLink = await page.$('#fallback-whatsapp-link');
+  assert.ok(fallbackLink, 'Deve existir o botão de contingência (Plano B) para o WhatsApp');
+
+  const href = await fallbackLink.getAttribute('href');
+  assert.match(href, /^https:\/\/wa\.me\/5571988350272\?text=/);
+  assert.ok(href.includes('Empresa%20Teste') || href.includes('Empresa+Teste'), 'Href deve conter o nome codificado');
+
+  await page.close();
+  await browser.close();
+});

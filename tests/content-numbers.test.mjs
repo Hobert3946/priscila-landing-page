@@ -17,29 +17,22 @@ test('números na seção Conteúdo com Intenção sobem continuamente e atingem
   // 2. Aguarda os contadores dos insights subirem e atingirem os valores
   await page.waitForFunction(() => {
     const numbers = Array.from(document.querySelectorAll('.insight-number')).map(el => el.textContent.trim());
-    return numbers.includes('+150%') && numbers.includes('10K+') && numbers.includes('158K+');
+    return numbers.includes('3M+') && numbers.includes('500K+') && numbers.includes('2.4M+');
   }, null, { timeout: 6000 });
 
   const insightTexts = await page.$$eval('.insight-number', els => els.map(e => e.textContent.trim()));
-  assert.equal(insightTexts[0], '+150%');
-  assert.equal(insightTexts[1], '10K+');
-  assert.equal(insightTexts[2], '158K+');
+  assert.equal(insightTexts[0], '3M+');
+  assert.equal(insightTexts[1], '500K+');
+  assert.equal(insightTexts[2], '2.4M+');
 
   // 3. Rola até os reels da Limpurb
   await page.locator('.case-reels').scrollIntoViewIfNeeded();
 
-  // 4. Aguarda as views dos reels visíveis contarem até os valores esperados
-  await page.waitForFunction(() => {
-    const firstReel = document.querySelector('.reel-card .reel-views-count');
-    return firstReel && firstReel.textContent.trim() === '2,4 mi';
-  }, null, { timeout: 6000 });
-
-  const firstReelViews = await page.$eval('.reel-card .reel-views-count', el => el.textContent.trim());
-  assert.equal(firstReelViews, '2,4 mi');
-
-  // Verifica que o ícone de play está presente no badge
-  const hasPlayIcon = await page.$eval('.reel-card .reel-views-icon', el => el.textContent.trim() === '▶');
-  assert.ok(hasPlayIcon, 'Ícone de play deve estar visível no badge de views');
+  // 4. Verifica que as imagens dos reels estão presentes e sem sobreposição de contadores
+  const reelCards = await page.$$('.reel-card');
+  assert.ok(reelCards.length >= 1, 'Deve haver ao menos 1 card de reel');
+  const reelViews = await page.$$('.reel-card .reel-views-count');
+  assert.equal(reelViews.length, 0, 'Reels não devem ter contadores de visualização sobrepostos');
 
   await page.close();
   await browser.close();

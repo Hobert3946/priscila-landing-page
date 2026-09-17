@@ -5,12 +5,12 @@
   const FIELD_RULES = {
     'field-name': {
       validate: (v) => v.length >= 2,
-      message: 'Informe seu nome (mínimo 2 caracteres).'
+      message: 'Informe seu nome ou marca (mínimo 2 caracteres).'
     },
     'field-contact': {
       // aceita e-mail OU telefone com 10+ dígitos
       validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) || (v.replace(/\D/g, '').length >= 10),
-      message: 'Informe um e-mail válido ou um telefone com DDD.'
+      message: 'Informe um e-mail válido ou telefone com DDD.'
     }
   };
 
@@ -22,7 +22,10 @@
     const errorEl = document.querySelector(`[data-error-for="${input.id}"]`);
 
     input.setAttribute('aria-invalid', String(!valid));
-    if (errorEl) errorEl.textContent = valid ? '' : rule.message;
+    if (errorEl) {
+      errorEl.textContent = valid ? '' : rule.message;
+      errorEl.style.display = valid ? 'none' : 'block';
+    }
     return valid;
   }
 
@@ -52,25 +55,66 @@
   function handleSubmit(e) {
     e.preventDefault();
     const status = document.getElementById('form-status');
-    const fields = Object.keys(FIELD_RULES).map(id => document.getElementById(id));
+    const fields = Object.keys(FIELD_RULES).map(id => document.getElementById(id)).filter(Boolean);
     
-    // valida TODOS os campos (find() pararia no primeiro inválido e não marcaria os demais)
+    // valida TODOS os campos
     const results = fields.map(validateField);
     const firstInvalid = fields[results.indexOf(false)];
 
     if (firstInvalid) {
-      status.textContent = 'Revise os campos destacados antes de enviar.';
-      status.classList.remove('is-success');
+      if (status) {
+        status.innerHTML = `
+          <div class="form-feedback form-feedback--error" role="alert">
+            <div class="form-feedback-title">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Por favor, revise os campos destacados</span>
+            </div>
+            <p class="form-feedback-desc">Preencha seu nome e contato com WhatsApp ou e-mail para gerar o briefing.</p>
+          </div>
+        `;
+      }
       firstInvalid.focus();
       return;
     }
 
-    status.textContent = 'Abrindo o WhatsApp com seu briefing...';
-    status.classList.add('is-success');
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage())}`, '_blank', 'noopener');
+    const messageText = buildMessage();
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
+
+    if (status) {
+      status.innerHTML = `
+        <div class="form-feedback form-feedback--success" role="status">
+          <div class="form-feedback-title">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Briefing enviado com sucesso!</span>
+          </div>
+          <p class="form-feedback-desc">Seu briefing foi gerado. Estamos abrindo o WhatsApp da Priscila com o texto pronto para envio.</p>
+          <div class="form-fallback-box">
+            <p class="form-fallback-label">O WhatsApp não abriu? Bloqueador de pop-up ativo?</p>
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="form-fallback-btn" id="fallback-whatsapp-link">
+              <span>Abrir WhatsApp com meu briefing</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    // Tenta abrir o WhatsApp na nova aba
+    try {
+      const openedWindow = window.open(waUrl, '_blank', 'noopener');
+      if (!openedWindow || openedWindow.closed || typeof openedWindow.closed === 'undefined') {
+        const fallbackBtn = document.getElementById('fallback-whatsapp-link');
+        if (fallbackBtn) fallbackBtn.focus();
+      }
+    } catch (err) {
+      console.warn('Bloqueador impediu window.open:', err);
+      const fallbackBtn = document.getElementById('fallback-whatsapp-link');
+      if (fallbackBtn) fallbackBtn.focus();
+    }
   }
 
-  PS.initContactForm = function () {
+  window.PS = window.PS || {};
+  window.PS.initContactForm = function () {
     const form = document.getElementById('contact-form');
     if (!form) return;
 

@@ -667,3 +667,67 @@
   color: var(--text-secondary);
 }
 
+
+/* ---------- Eu ou uma agência: comparação honesta (index.html #why-me) ---------- */
+.versus {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.versus-col {
+  padding: 1.75rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.02);
+}
+.versus-col--me {
+  border-color: rgba(254,99,61,0.45);
+  background: rgba(254,99,61,0.05);
+}
+
+.versus-title {
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+}
+.versus-col--me .versus-title {
+  color: var(--accent-color);
+}
+
+.versus-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.versus-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.versus-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: rgba(255,255,255,0.3);
+}
+.versus-col--me .versus-list li::before {
+  content: "✓";
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.versus-note {
+  max-width: 70ch;
+  margin: 2rem auto 0;
+  text-align: center;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
