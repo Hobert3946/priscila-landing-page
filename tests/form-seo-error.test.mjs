@@ -184,3 +184,26 @@ test('Fonte Outfit do Fontshare está configurada e aplicada no site', async () 
   await page.close();
   await browser.close();
 });
+
+test('No desktop web, nav-toggle e mobile-menu ficam ocultos e caixinha de novos projetos está renovada', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+  await page.goto(PAGE_URL);
+
+  const toggleDisplay = await page.locator('#nav-toggle').evaluate(el => getComputedStyle(el).display);
+  assert.equal(toggleDisplay, 'none', 'nav-toggle não deve ser visível no desktop (sem ponto branco)');
+
+  const pill = page.locator('.btn-pill');
+  const pillDisplay = await pill.evaluate(el => getComputedStyle(el).display);
+  assert.notEqual(pillDisplay, 'none', 'A caixinha de disponível para novos projetos deve ser visível no desktop');
+
+  const pillText = await pill.innerText();
+  assert.match(pillText, /Disponível para novos projetos/i);
+
+  const statusIndicator = page.locator('.btn-pill .status-indicator');
+  const isIndicatorVisible = await statusIndicator.isVisible();
+  assert.equal(isIndicatorVisible, true, 'O indicador de status deve estar visível dentro da caixinha');
+
+  await page.close();
+  await browser.close();
+});

@@ -19,7 +19,10 @@
       setTimeout(() => { if (!menu.classList.contains('is-open')) menu.hidden = true; }, 400);
     }
 
-    toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+    toggle.addEventListener('click', () => {
+      if (window.innerWidth > 900) return;
+      setMenu(toggle.getAttribute('aria-expanded') !== 'true');
+    });
     menu.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', () => setMenu(false)));
 
     document.addEventListener('keydown', (e) => {
