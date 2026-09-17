@@ -53,14 +53,18 @@
     })();
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fontshare Outfit -->
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=outfit@400,500,600,700,800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
   <!-- Preconnect pros CDNs de script (GSAP, ScrollTrigger, SplitType, Lenis): a conexão
        (DNS/TLS) já começa enquanto o HTML ainda está sendo lido, em vez de só no momento
        em que o navegador chega nas tags <script> lá no fim do body. -->
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Retrato do hero: é a maior imagem da primeira tela. Sem o preload, o navegador só
+       descobre o endereço dela depois de ler o CSS todo. -->
+  <link rel="preload" as="image" href="assets/priscila/priscila-hero-limpa.webp" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="effects.css">
   <link rel="stylesheet" href="sections.css">
@@ -69,8 +73,9 @@
   <!-- mobile.css por último: os ajustes de celular precisam vencer os arquivos acima -->
   <link rel="stylesheet" href="mobile.css">
 
-  <!-- Lenis CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.9/dist/lenis.css">
+  <!-- O CSS do Lenis não é carregado do CDN de propósito: era uma folha de estilo externa
+       bloqueando a primeira pintura, e as regras dele já estão copiadas em styles.css
+       ("Lenis Recommended CSS"). -->
 
   <script type="application/ld+json">
   {
@@ -201,7 +206,7 @@
           <span class="hero-giant-type" aria-hidden="true">PS</span>
 
           <div class="hero-portrait" id="hero-portrait">
-            <img src="assets/priscila/priscila-hero.webp" alt="Priscila Santos sorrindo, retrato de estúdio" width="640" height="978" fetchpriority="high">
+            <img src="assets/priscila/priscila-hero-limpa.webp" alt="Priscila Santos sorrindo, retrato de estúdio" width="640" height="978" fetchpriority="high">
           </div>
 
           <div class="hero-copy">
@@ -573,7 +578,7 @@
         <div class="carousel" data-carousel role="region" aria-roledescription="carrossel" aria-label="Depoimentos de clientes">
           <div class="carousel-track" tabindex="0" data-cursor="Arraste">
 
-          <figure class="testimonial-card gsap-reveal">
+          <figure class="testimonial-card">
             <blockquote class="testimonial-quote">
               "O seu trabalho foi crucial para eu conseguir voltar a atuar. Ter alguém com o seu olhar, não só como social media, mas com formação em Jornalismo e experiência em comunicação, fez muita diferença para construir algo profissional, estratégico e com a minha cara."
             </blockquote>
@@ -586,7 +591,7 @@
             </figcaption>
           </figure>
 
-          <figure class="testimonial-card gsap-reveal">
+          <figure class="testimonial-card">
             <blockquote class="testimonial-quote">
               "Ela tem um olhar sensível e estratégico para os temas, além de ser pontual e cuidadosa nas entregas. Desde que iniciamos a parceria, nosso perfil cresceu e novas pessoas passaram a chegar pelo feed. Uma superparceira!"
             </blockquote>
@@ -599,7 +604,7 @@
             </figcaption>
           </figure>
 
-          <figure class="testimonial-card gsap-reveal">
+          <figure class="testimonial-card">
             <blockquote class="testimonial-quote">
               "Indicaria para conseguirem montar seu Instagram, site e portfólio de modo eficiente e eficaz. Ela consegue entender perfeitamente o que a pessoa faz e encontrar a melhor maneira de expressar isso e apresentar o trabalho."
             </blockquote>
@@ -1007,26 +1012,28 @@
     </div>
   </footer>
 
-  <!-- GSAP & Lenis Scripts -->
-  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <!-- SplitType for Text Animations -->
-  <script src="https://unpkg.com/split-type"></script>
-  
-  <script src="js/core.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/form.js"></script>
-  <script src="js/text-effects.js"></script>
-  <script src="js/numbers.js"></script>
-  <script src="js/timeline.js"></script>
-  <script src="js/clients-carousel.js"></script>
-  <script src="js/carousel.js"></script>
-  <script src="js/preloader.js"></script>
-  <script src="js/tech-services.js"></script>
-  <script src="js/section-reveals.js"></script>
-  <script src="js/media-lite.js"></script>
-  <script src="js/main.js"></script>
+  <!-- Todos com `defer`: baixam em paralelo enquanto o HTML é lido e só executam depois,
+       na ordem em que estão aqui. Sem isso, cada arquivo parava a leitura da página.
+       O split-type tem a versão fixada — sem número, a unpkg responde com um redirecionamento
+       a cada visita (e uma versão nova pode quebrar o site sem ninguém mexer em nada). -->
+  <script defer src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
+
+  <script defer src="js/core.js"></script>
+  <script defer src="js/ui.js"></script>
+  <script defer src="js/form.js"></script>
+  <script defer src="js/text-effects.js"></script>
+  <script defer src="js/numbers.js"></script>
+  <script defer src="js/timeline.js"></script>
+  <script defer src="js/clients-carousel.js"></script>
+  <script defer src="js/carousel.js"></script>
+  <script defer src="js/preloader.js"></script>
+  <script defer src="js/tech-services.js"></script>
+  <script defer src="js/section-reveals.js"></script>
+  <script defer src="js/media-lite.js"></script>
+  <script defer src="js/main.js"></script>
 
   <!-- Mobile Tabbar (Navegação Inferior Fixa) -->
   <nav class="mobile-tabbar" aria-label="Navegação rápida">

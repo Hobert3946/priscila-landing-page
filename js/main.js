@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     PS.initScrollReveals();
     PS.initCaseReveals();
     PS.initTechServicesReveal();
-    PS.initTestimonialsReveal();
     PS.initFaqReveal();
     PS.initContactReveal();
     // Entrada do hero + títulos de seção: conteúdo aparecendo, roda sempre. Só o giro

@@ -169,3 +169,18 @@ test('Botão de envio para o WhatsApp no mobile tem todo o texto visível sem es
   await page.close();
   await browser.close();
 });
+
+test('Fonte Outfit do Fontshare está configurada e aplicada no site', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(PAGE_URL);
+
+  const bodyFont = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
+  assert.match(bodyFont, /Outfit/i, 'A fonte do body deve conter Outfit');
+
+  const headingFont = await page.evaluate(() => getComputedStyle(document.querySelector('.hero-heading, h1, h2')).fontFamily);
+  assert.match(headingFont, /Outfit/i, 'A fonte dos títulos deve conter Outfit');
+
+  await page.close();
+  await browser.close();
+});

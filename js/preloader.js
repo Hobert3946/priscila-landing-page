@@ -35,8 +35,8 @@
     // segurando o aparelho no 4G, é só espera antes de ver o conteúdo — e quem chega pelo
     // Instagram desiste rápido. Mesma cena, menos tempo.
     const quick = PS.env.touch || PS.env.lowEnd;
-    const contagem = quick ? 0.6 : 1.3;
-    const saida = quick ? 0.35 : 0.5;
+    const contagem = quick ? 0.45 : 0.8;
+    const saida = quick ? 0.3 : 0.4;
 
     const state = { value: 0 };
     gsap.timeline({ onComplete: () => root.classList.remove('show-preloader') })

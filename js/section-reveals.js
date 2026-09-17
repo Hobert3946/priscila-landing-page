@@ -13,7 +13,7 @@
 
     gsap.fromTo(section.querySelectorAll('.tech-tab-btn'), { x: -24, opacity: 0 }, {
       x: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.08,
-      scrollTrigger: { trigger: '.tech-tabs-menu', start: 'top 85%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: '.tech-tabs-menu', start: 'top 74%', toggleActions: 'play none none reverse' }
     });
 
     const activePanel = section.querySelector('.tech-panel-content.active');
@@ -23,22 +23,8 @@
       { y: 20, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.08,
-        scrollTrigger: { trigger: '.tech-display-panel', start: 'top 82%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.tech-display-panel', start: 'top 72%', toggleActions: 'play none none reverse' }
       });
-  };
-
-  /* Cards alternam o lado de entrada (ímpar da esquerda, par da direita) num timeline
-     só, com pequeno deslocamento entre eles -- lembra uma troca de falas, não uma lista. */
-  PS.initTestimonialsReveal = function () {
-    const cards = gsap.utils.toArray('.testimonial-card');
-    if (!cards.length) return;
-
-    const tl = gsap.timeline({
-      scrollTrigger: { trigger: '.testimonials-section .carousel-track', start: 'top 85%', toggleActions: 'play none none reverse' }
-    });
-    cards.forEach((card, i) => {
-      tl.fromTo(card, { x: i % 2 === 0 ? -40 : 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, i * 0.1);
-    });
   };
 
   /* Cada pergunta dispara sozinha ao entrar na tela (o próprio ritmo do scroll já
@@ -47,7 +33,7 @@
     gsap.utils.toArray('.faq-item').forEach(item => {
       const icon = item.querySelector('.faq-icon');
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: item, start: 'top 78%', toggleActions: 'play none none reverse' }
       });
       tl.fromTo(item, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' });
       if (icon) {
@@ -66,18 +52,18 @@
     if (hand) {
       gsap.fromTo(hand, { y: -16, opacity: 0, rotate: -8 }, {
         y: 0, opacity: 1, rotate: 0, duration: 0.6, ease: 'back.out(1.6)',
-        scrollTrigger: { trigger: '.contact-header', start: 'top 85%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.contact-header', start: 'top 74%', toggleActions: 'play none none reverse' }
       });
     }
 
     gsap.fromTo('.contact-channels .contact-card', { scale: 0.92, opacity: 0 }, {
       scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', stagger: 0.12,
-      scrollTrigger: { trigger: '.contact-channels', start: 'top 88%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: '.contact-channels', start: 'top 76%', toggleActions: 'play none none reverse' }
     });
 
     gsap.fromTo('.contact-box .form-divider, .contact-box .contact-form', { y: 10, opacity: 0 }, {
       y: 0, opacity: 1, duration: 0.5, ease: 'power1.out',
-      scrollTrigger: { trigger: '.contact-form', start: 'top 92%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: '.contact-form', start: 'top 78%', toggleActions: 'play none none reverse' }
     });
   };
 })();

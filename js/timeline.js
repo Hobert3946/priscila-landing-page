@@ -15,7 +15,7 @@
     if (lines.length) {
       gsap.fromTo(lines, { yPercent: 105 }, {
         yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.12,
-        scrollTrigger: { trigger: '.about-manifesto', start: 'top 85%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.about-manifesto', start: 'top 74%', toggleActions: 'play none none reverse' }
       });
     }
 
@@ -41,7 +41,7 @@
     if (credentials.length) {
       gsap.fromTo(credentials, { y: 24, opacity: 0 }, {
         y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.1,
-        scrollTrigger: { trigger: '.about-credentials', start: 'top 88%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.about-credentials', start: 'top 76%', toggleActions: 'play none none reverse' }
       });
     }
   }

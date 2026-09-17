@@ -109,7 +109,9 @@ body.scroll-locked {
   max-width: 100%;
   object-fit: contain;
   object-position: bottom center;
-  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.5));
+  /* Sem drop-shadow de propósito: a máscara abaixo recorta o elemento, e o recorte cortava
+     a sombra em linha reta nas bordas da imagem — era a "caixa" escura que aparecia em volta
+     do retrato. */
   will-change: transform, opacity;
   /* Suaviza o corte inferior da imagem fundindo-a com o escuro do fundo */
   -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);

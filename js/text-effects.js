@@ -256,7 +256,7 @@
         { opacity: 0, y: 50, rotateX: -90 },
         {
           opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.02, ease: 'back.out(1.7)',
-          scrollTrigger: { trigger: title, start: 'top 90%' }
+          scrollTrigger: { trigger: title, start: 'top 78%' }
         }
       );
     });
@@ -286,7 +286,7 @@
     gsap.utils.toArray('.gsap-reveal').forEach(el => {
       gsap.fromTo(el, { y: 60, opacity: 0 }, {
         y: 0, opacity: 1, duration: 1, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: el, start: 'top 74%', toggleActions: 'play none none reverse' }
       });
     });
   };
@@ -300,7 +300,7 @@
     const media = card.querySelectorAll(mediaSelector);
     const text = card.querySelectorAll(textSelector);
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: card, start: 'top 82%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: card, start: 'top 72%', toggleActions: 'play none none reverse' }
     });
 
     if (media.length) {
@@ -335,7 +335,7 @@
       { y: 20, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: { trigger: '.growth-compare', start: 'top 85%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.growth-compare', start: 'top 74%', toggleActions: 'play none none reverse' }
       });
 
     gsap.fromTo(featured.querySelectorAll('.growth-compare-item img'),
@@ -343,14 +343,14 @@
       {
         scale: 1, opacity: 1, duration: 0.9, ease: 'power3.out', stagger: 0.15,
         onComplete: function () { gsap.set(this.targets(), { clearProps: 'transform' }); },
-        scrollTrigger: { trigger: '.growth-compare', start: 'top 85%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.growth-compare', start: 'top 74%', toggleActions: 'play none none reverse' }
       });
 
     gsap.fromTo(featured.querySelectorAll('.case-series .case-subtitle'),
       { y: 20, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: { trigger: '.case-series', start: 'top 85%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.case-series', start: 'top 74%', toggleActions: 'play none none reverse' }
       });
 
     gsap.fromTo(featured.querySelectorAll('.series-item img'),
@@ -359,14 +359,14 @@
         scale: 1, opacity: 1, duration: 0.9, ease: 'power3.out', stagger: 0.08,
         // libera o transform inline para o zoom de hover (cases.css) voltar a funcionar
         onComplete: function () { gsap.set(this.targets(), { clearProps: 'transform' }); },
-        scrollTrigger: { trigger: '.case-series', start: 'top 85%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.case-series', start: 'top 74%', toggleActions: 'play none none reverse' }
       });
 
     gsap.fromTo('.case-reels .case-subtitle, .case-reels .case-note',
       { y: 20, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: { trigger: '.case-reels', start: 'top 88%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.case-reels', start: 'top 76%', toggleActions: 'play none none reverse' }
       });
 
     // Cada reel entra na sua vez (não o carrossel inteiro de uma vez), reforçando a
@@ -375,7 +375,7 @@
       { y: 30, opacity: 0 },
       {
         y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.07,
-        scrollTrigger: { trigger: '.case-reels', start: 'top 88%', toggleActions: 'play none none reverse' }
+        scrollTrigger: { trigger: '.case-reels', start: 'top 76%', toggleActions: 'play none none reverse' }
       });
   };
 })();

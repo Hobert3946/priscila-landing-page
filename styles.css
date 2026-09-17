@@ -1,4 +1,8 @@
-/* 
+/* A fonte Outfit é carregada pelo <link> no <head> do index.html/404.html, não por @import:
+   um @import aqui só começa a baixar depois que este arquivo chega, atrasando a primeira
+   pintura, e era a mesma fonte sendo pedida duas vezes. */
+
+/*
    ---------------------------------
    Design System & Tokens (High-End)
    ---------------------------------
@@ -22,9 +26,9 @@
   --sand-soft: rgba(232, 220, 205, 0.09);
   --sand-line: rgba(232, 220, 205, 0.22);
 
-  /* Typography */
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  /* Typography (Outfit via Fontshare) */
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-nav: var(--font-sans);
 
   /* Spacing */
@@ -609,7 +613,7 @@ body {
 .hero-title {
   font-family: var(--font-display);
   /* "Comunicação," precisa caber numa linha: se não couber, o SplitType (palavras inline-block)
-     quebra a palavra no meio. Em Fraunces 800 ela mede ~6.4em, e o 7vw deixa ~15% de folga na
+     quebra a palavra no meio. O 7vw deixa folga na
      largura mais apertada (390px). Ver tests/layout.test.mjs */
   font-size: clamp(1.4rem, 7vw, 5.6rem);
   font-weight: 800;
