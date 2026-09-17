@@ -297,10 +297,12 @@ body {
 }
 
 /* Menu "encolhe" ao rolar (js/ui.js PS.initHeaderShrink). O selo da logo gira devagar
-   feito um selo/moeda enquanto compacto. */
-.header.is-compact {
-  padding: 0.75rem 5% 0;
-}
+   feito um selo/moeda enquanto compacto.
+
+   No desktop a barra é full-bleed (fundo até a borda + border-bottom): dar padding ao
+   .header ao compactar empurrava a barra inteira 0.75rem para baixo e 5% para dentro de
+   uma vez só — e padding não está na transition do .header, então o salto era instantâneo.
+   O recuo do mobile (barra flutuante arredondada) mora no bloco @media e continua valendo. */
 .header.is-compact .logo-badge {
   animation: logo-seal-spin 9s linear infinite;
 }
@@ -319,25 +321,28 @@ body {
 /* A barra some com deslizamento suave para cima ao rolar. No desktop ao passar do topo,
    e no mobile após sair da seção hero (js/ui.js initHeaderShrink) */
 .header.is-hidden {
-  transform: translateY(-130%);
+  transform: translateY(-100%);
   opacity: 0;
   pointer-events: none;
 }
 
 @media (min-width: 901px) {
+  /* Menu flutuante lateral (desktop): nomes visíveis e sem caixa ao redor,
+     posicionado discretamente na margem direita da tela */
   .side-rail {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1.1rem;
+    align-items: flex-end;
+    gap: 0.55rem;
     position: fixed;
-    right: 1.75rem;
+    right: 1.5rem;
     top: 50%;
     transform: translateY(-50%) translateX(10px);
     z-index: 95;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+    transition: opacity 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo);
+    user-select: none;
   }
 
   .header.is-hidden ~ .side-rail {
@@ -345,64 +350,68 @@ body {
     pointer-events: auto;
     transform: translateY(-50%) translateX(0);
   }
+
+  /* Folga à direita nas seções em telas médias para o conteúdo nunca encavalar com os nomes */
+  @media (max-width: 1480px) {
+    .section > .container {
+      padding-right: 160px;
+    }
+  }
 }
 
 .side-dot {
   position: relative;
-  width: 8px;
-  height: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.side-dot-pip {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.25);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: transform 0.25s var(--ease-out-expo), background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.side-dot:hover,
-.side-dot.is-active {
-  background-color: var(--accent-color);
-  transform: scale(1.35);
-}
-
-/* Nome da seção: só o da seção atual (e o do ponto sob o mouse) fica visível. Com os seis
-   nomes sempre à mostra, eles caíam por cima do conteúdo das seções largas e disputavam a
-   leitura — ver a seção "Eu ou uma agência?". A pastilha de fundo garante contraste sobre
-   qualquer coisa que passe por baixo. */
-.side-dot::after {
-  content: attr(data-label);
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0.3rem 0.65rem;
-  border-radius: 50px;
-  background: rgba(20, 25, 42, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  white-space: nowrap;
+.side-dot-label {
   font-family: var(--font-nav);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.6px;
   color: var(--text-secondary);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+  transition: color 0.2s ease, opacity 0.2s ease;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
-/* Os nomes aparecem quando o mouse chega no rail; parados, só as bolinhas ficam visíveis e a
-   laranja já diz em que seção a pessoa está. Assim nada fica permanentemente por cima do
-   conteúdo das seções largas. */
-.side-rail:hover .side-dot::after {
-  opacity: 0.85;
+/* Hover */
+.side-dot:hover .side-dot-pip {
+  background-color: var(--text-primary);
+  transform: scale(1.3);
 }
-.side-rail .side-dot:hover::after {
-  opacity: 1;
+
+.side-dot:hover .side-dot-label {
   color: var(--text-primary);
 }
-.side-rail:hover .side-dot.is-active::after {
-  opacity: 1;
+
+/* Ativo (seção selecionada pelo scroll-spy) */
+.side-dot.is-active .side-dot-pip {
+  background-color: var(--accent-color);
+  transform: scale(1.4);
+  box-shadow: 0 0 8px rgba(254, 99, 61, 0.6);
+}
+
+.side-dot.is-active .side-dot-label {
   color: var(--accent-color);
+  font-weight: 700;
 }
 
 .nav-container {
@@ -411,7 +420,7 @@ body {
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem 5%;
+  padding: 1.35rem 5% 1.35rem 1.5rem;
   background: rgba(28, 35, 57, 0.4);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -420,18 +429,36 @@ body {
 }
 
 .header.is-compact .nav-container {
-  padding: 0.7rem 5%;
+  padding: 1.1rem 5% 1.1rem 1.5rem;
   background: rgba(28, 35, 57, 0.82);
 }
 
+/* margin-right é um piso de afastamento: o margin-left:auto do .nav-menu só separa
+   enquanto sobra espaço na linha — quando acaba, ele colapsa para 0 e a logo encostaria
+   no primeiro link. */
 .brand-logo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  margin-right: 1.75rem;
   text-decoration: none;
   color: var(--text-primary);
+  flex-shrink: 0;
 }
 
+/* Divisor entre marca e navegação: separa os dois grupos sem depender de quanto espaço
+   sobrou na linha, que era o que fazia a logo parecer colada nos links. */
+.brand-logo::after {
+  content: '';
+  width: 1px;
+  height: 26px;
+  margin-left: 1rem;
+  background: rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+}
+
+/* flex-shrink: 0 + aspect-ratio: sem isso o flex espremia o selo na horizontal quando a
+   linha ficava apertada e o círculo virava elipse. */
 .logo-badge {
   font-family: var(--font-display);
   font-weight: 800;
@@ -440,6 +467,8 @@ body {
   color: var(--bg-color);
   width: 40px;
   height: 40px;
+  aspect-ratio: 1;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -452,6 +481,7 @@ body {
   font-size: 1.1rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 .logo-name .dot {
   color: var(--accent-color);
@@ -460,10 +490,36 @@ body {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 1.9rem;
+  gap: 0.35rem;
   margin-left: auto;
   margin-right: 2.5rem;
   counter-reset: nav-idx;
+  position: relative;
+}
+
+/* Pastilha da seção atual: um único elemento que desliza entre os itens, em vez de cada
+   link acender o seu. O JS (initNavSpy) só escreve width e translateX; a transição daqui
+   é que faz o deslocamento ser suave. */
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  border-radius: 50px;
+  background: rgba(254, 99, 61, 0.13);
+  border: 1px solid rgba(254, 99, 61, 0.34);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.45s var(--ease-out-expo), width 0.45s var(--ease-out-expo), opacity 0.25s ease;
+}
+
+.nav-menu.has-active .nav-indicator {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-indicator { transition: opacity 0.25s ease; }
 }
 
 .nav-link {
@@ -477,10 +533,29 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  padding: 0.25rem 0;
+  padding: 0.55rem 0.95rem;
+  white-space: nowrap;
   position: relative;
   transition: color 0.25s ease;
   counter-increment: nav-idx;
+}
+
+/* Atalho para o topo: ícone sem rótulo, então fica fora da numeração 01–04 (counter-increment:
+   none) para não consumir um número. O nome acessível vem do aria-label no HTML. */
+.nav-home {
+  align-items: center;
+  padding: 0.55rem 0.7rem;
+  counter-increment: none;
+}
+.nav-home::after {
+  left: 0.7rem;
+  right: 0.7rem;
+}
+
+.nav-home-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 /* Número gerado por CSS (counter), não hardcoded no HTML: adicionar/remover um link
@@ -500,12 +575,14 @@ body {
   opacity: 1;
 }
 
+/* Sublinhado só de hover. A seção atual é marcada pela pastilha deslizante (.nav-indicator):
+   manter os dois no item ativo deixava a marcação duplicada. */
 .nav-link::after {
   content: '';
   position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
+  left: 0.95rem;
+  right: 0.95rem;
+  bottom: 0.2rem;
   height: 1px;
   background-color: var(--text-primary);
   transform: scaleX(0);
@@ -517,17 +594,15 @@ body {
 .nav-link:focus-visible {
   color: var(--text-primary);
 }
-.nav-link:hover::after,
-.nav-link:focus-visible::after {
+.nav-link:hover::after {
   transform: scaleX(1);
 }
 
 .nav-link.is-active {
-  color: var(--text-primary);
+  color: var(--accent-color);
 }
 .nav-link.is-active::after {
-  background-color: var(--accent-color);
-  transform: scaleX(1);
+  transform: scaleX(0);
 }
 
 /* Pill Button */
@@ -553,6 +628,47 @@ body {
 .btn-pill:hover {
   background-color: var(--accent-color);
   color: var(--bg-color);
+}
+
+/* Instagram link no menu superior (com os tons do site) */
+.nav-instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background-color: var(--surface-color-light);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.2rem;
+  border-radius: 50px;
+  font-family: var(--font-nav);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.nav-instagram-icon {
+  width: 17px;
+  height: 17px;
+  color: var(--accent-color);
+  flex-shrink: 0;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-instagram:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 16px rgba(254, 99, 61, 0.35);
+  transform: translateY(-1px);
+}
+
+.nav-instagram:hover .nav-instagram-icon {
+  color: var(--bg-color);
+  transform: scale(1.1);
 }
 
 .status-indicator {
@@ -1112,30 +1228,24 @@ body {
   gap: 1rem;
 }
 
-/* Adaptação fluida do menu desktop em telas intermediárias (laptops e tablets landscape) */
+/* Adaptação fluida do menu desktop em telas intermediárias (laptops e tablets landscape).
+   Este bloco encolhia a fonte dos links até 0.74rem e zerava o padding vertical — era a
+   causa principal da barra parecer achatada nessas larguras, e vencia os ajustes do topo
+   do arquivo por vir depois. Com quatro links no lugar de seis não é mais preciso
+   espremer: só os espaçamentos cedem. */
 @media (min-width: 1001px) and (max-width: 1280px) {
   .nav-container {
-    padding: 0.85rem clamp(1rem, 2.5vw, 2.5rem);
+    padding: 1.1rem clamp(1.5rem, 2.5vw, 2.5rem) 1.1rem 1.5rem;
   }
   .nav-menu {
-    gap: clamp(0.65rem, 1.2vw, 1.4rem);
-    margin-right: clamp(0.75rem, 1.5vw, 1.8rem);
+    margin-right: 1.25rem;
   }
-  .nav-link {
-    font-size: clamp(0.74rem, 0.84vw, 0.86rem);
-    padding: 0.2rem 0;
-  }
-  .btn-pill {
-    padding: 0.45rem clamp(0.65rem, 1vw, 1.1rem);
-    font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+  .btn-pill,
+  .nav-instagram {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.78rem;
     gap: 0.45rem;
     white-space: nowrap;
-  }
-}
-
-@media (min-width: 1001px) and (max-width: 1140px) {
-  .nav-link::before {
-    display: none;
   }
 }
 
@@ -1169,11 +1279,11 @@ body {
   }
 
   .header.is-compact {
-    padding: 0.45rem 0.85rem 0;
+    padding: 0.55rem 0.85rem 0;
   }
 
   .header.is-compact .nav-container {
-    padding: 0.5rem 0.95rem !important;
+    padding: 0.6rem 0.95rem !important;
     background: rgba(18, 22, 38, 0.94) !important;
     border-color: rgba(255, 255, 255, 0.12) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
@@ -1181,6 +1291,12 @@ body {
 
   .brand-logo {
     gap: 0.65rem;
+    margin-right: 0;
+  }
+
+  /* O divisor separa a marca dos links, que não existem na barra do celular */
+  .brand-logo::after {
+    display: none;
   }
 
   .logo-badge {
@@ -1852,7 +1968,8 @@ textarea:focus-visible {
   .nav-toggle {
     display: flex;
   }
-  .nav-action .btn-pill {
+  .nav-action .btn-pill,
+  .nav-action .nav-instagram {
     display: none;
   }
 }

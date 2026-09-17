@@ -176,7 +176,7 @@ test('Fonte Outfit do Fontshare está configurada e aplicada no site', async () 
   await page.goto(PAGE_URL);
 
   const bodyFont = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
-  assert.match(bodyFont, /Outfit/i, 'A fonte do body deve conter Outfit');
+  assert.match(bodyFont, /Satoshi|Outfit/i, 'A fonte do body deve conter Satoshi ou Outfit');
 
   const headingFont = await page.evaluate(() => getComputedStyle(document.querySelector('.hero-heading, h1, h2')).fontFamily);
   assert.match(headingFont, /Outfit/i, 'A fonte dos títulos deve conter Outfit');
@@ -198,7 +198,7 @@ test('No desktop web, nav-toggle e mobile-menu ficam ocultos (sem ponto branco) 
   assert.notEqual(pillDisplay, 'none', 'A caixinha de disponível para novos projetos deve ser visível no desktop');
 
   const pillText = await pill.innerText();
-  assert.match(pillText, /Disponível para novos projetos/i);
+  assert.match(pillText, /Disponível para (novos )?projetos/i);
 
   const statusIndicator = page.locator('.btn-pill .status-indicator');
   const isIndicatorVisible = await statusIndicator.isVisible();

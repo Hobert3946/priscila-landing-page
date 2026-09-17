@@ -144,19 +144,31 @@
         <span class="logo-name">Priscila Santos<span class="dot">.</span></span>
       </a>
 
+      <!-- Depoimentos e FAQ saíram daqui de propósito: seis itens não cabiam na linha sem
+           espremer a logo. Continuam acessíveis pela barra lateral, pelo menu do celular e
+           pelo rodapé. -->
       <div class="nav-menu">
+        <span class="nav-indicator" aria-hidden="true"></span>
+        <a href="#hero" class="nav-link nav-home" aria-label="Voltar ao início" title="Voltar ao início">
+          <svg class="nav-home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.6 12 3.4l9 7.2"/>
+            <path d="M5.6 9.6V20.6h12.8V9.6"/>
+          </svg>
+        </a>
         <a href="#what-you-get" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Serviços</span></a>
         <a href="#work" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Projetos</span></a>
-        <a href="#testimonials" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Depoimentos</span></a>
         <a href="#about" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Minha Jornada</span></a>
-        <a href="#faq" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">FAQ</span></a>
         <a href="#contact" class="nav-link"><span class="nav-link-idx" aria-hidden="true"></span><span class="nav-link-label">Contato</span></a>
       </div>
 
       <div class="nav-action">
-        <a href="#contact" class="btn-pill">
-          <span class="status-indicator"></span>
-          <span>Disponível para novos projetos</span>
+        <a href="https://www.instagram.com/prisantos2021/" target="_blank" rel="noopener noreferrer" class="nav-instagram" aria-label="Instagram de Priscila Santos">
+          <svg class="nav-instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5.5"/>
+            <circle cx="12" cy="12" r="4.5"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/>
+          </svg>
+          <span class="nav-instagram-text">Instagram</span>
         </a>
 
         <button class="nav-toggle" id="nav-toggle" type="button"
@@ -171,13 +183,34 @@
 
   <!-- Rail lateral (desktop): aparece só quando a barra do topo some ao rolar (styles.css .header.is-hidden ~ .side-rail) -->
   <nav class="side-rail" aria-label="Navegação lateral">
-    <a href="#what-you-get" class="side-dot" data-label="Serviços"></a>
-    <a href="#work" class="side-dot" data-label="Projetos"></a>
-    <a href="#testimonials" class="side-dot" data-label="Depoimentos"></a>
-    <a href="#about" class="side-dot" data-label="Minha Jornada"></a>
-    <a href="#why-me" class="side-dot" data-label="Por que eu"></a>
-    <a href="#faq" class="side-dot" data-label="FAQ"></a>
-    <a href="#contact" class="side-dot" data-label="Contato"></a>
+    <a href="#what-you-get" class="side-dot" data-label="Serviços">
+      <span class="side-dot-pip" aria-hidden="true"></span>
+      <span class="side-dot-label">Serviços</span>
+    </a>
+    <a href="#work" class="side-dot" data-label="Projetos">
+      <span class="side-dot-pip" aria-hidden="true"></span>
+      <span class="side-dot-label">Projetos</span>
+    </a>
+    <a href="#testimonials" class="side-dot" data-label="Depoimentos">
+      <span class="side-dot-pip" aria-hidden="true"></span>
+      <span class="side-dot-label">Depoimentos</span>
+    </a>
+    <a href="#about" class="side-dot" data-label="Minha Jornada">
+      <span class="side-dot-pip" aria-hidden="true"></span>
+      <span class="side-dot-label">Minha Jornada</span>
+    </a>
+    <a href="#why-me" class="side-dot" data-label="Por que eu">
+      <span class="side-dot-pip" aria-hidden="true"></span>
+      <span class="side-dot-label">Por que eu</span>
+    </a>
+    <a href="#faq" class="side-dot" data-label="FAQ">
+      <span class="side-dot-pip" aria-hidden="true"></span>
+      <span class="side-dot-label">FAQ</span>
+    </a>
+    <a href="#contact" class="side-dot" data-label="Contato">
+      <span class="side-dot-pip" aria-hidden="true"></span>
+      <span class="side-dot-label">Contato</span>
+    </a>
   </nav>
 
   <!-- Mobile Drawer -->
@@ -217,7 +250,10 @@
 
           <div class="hero-copy">
             <div class="hero-tag-wrap">
-              <span class="pill-tag">Jornalista formada pela UFBA</span>
+              <a href="#contact" class="btn-pill availability-pill">
+                <span class="status-indicator" aria-hidden="true"></span>
+                <span>Disponível para projetos</span>
+              </a>
             </div>
             <h1 class="hero-title" id="hero-heading">
               <span class="hero-split">Comunicação</span>
@@ -258,7 +294,7 @@
 
       </div>
       <!-- Convite para rolar: canto inferior, some ao começar a rolar (effects.css + ui.js) -->
-      <a href="#about" class="scroll-cue" id="scroll-cue" aria-label="Role para conhecer os serviços">
+      <a href="#what-you-get" class="scroll-cue" id="scroll-cue" aria-label="Role para conhecer os serviços">
         <span class="scroll-cue-inner">
           <span class="scroll-cue-label" aria-hidden="true">Role para conhecer</span>
           <span class="scroll-cue-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 13l7 7 7-7"/></svg></span>
@@ -269,7 +305,6 @@
     <!-- Faixa de Separação (Sem texto) -->
     <div class="infinite-strip" aria-hidden="true"></div>
 
-    <div id="about"></div>
     <!-- O Que Você Recebe (What You Get) -->
     <section id="what-you-get" class="section tech-services-section">
       <div class="section-glow section-glow--right" aria-hidden="true"></div>

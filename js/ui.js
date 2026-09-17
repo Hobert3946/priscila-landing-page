@@ -76,21 +76,31 @@
     const desktopQuery = window.matchMedia('(min-width: 901px)');
 
     let ticking = false;
+    let lastY = window.scrollY;
+
     function update() {
       const y = window.scrollY;
-      header.classList.toggle('is-compact', y > 40);
+      header.classList.toggle('is-compact', y > (desktopQuery.matches ? 100 : 40));
 
       // Não oculta se o menu mobile estiver aberto
-      const isMenuOpen = document.body.classList.contains('menu-open') || 
+      const isMenuOpen = document.body.classList.contains('menu-open') ||
                          header.querySelector('.nav-toggle[aria-expanded="true"]');
       if (isMenuOpen) {
         header.classList.remove('is-hidden');
+        lastY = y;
         ticking = false;
         return;
       }
 
+      const delta = y - lastY;
+      if (Math.abs(delta) > 6) lastY = y;
+
       if (desktopQuery.matches) {
-        header.classList.toggle('is-hidden', y > 120);
+        /* Some ao descer, volta ao subir: rolar para cima quase sempre significa "quero
+           navegar", então a barra reaparece no meio da página em vez de só no topo.
+           A margem de 6px acima evita tremer com a micro-oscilação do trackpad. */
+        if (y <= 260) header.classList.remove('is-hidden');
+        else if (Math.abs(delta) > 6) header.classList.toggle('is-hidden', delta > 0);
       } else {
         // No mobile: visível no hero, some após passar da altura do hero
         const hero = document.getElementById('hero');
@@ -123,8 +133,26 @@
     const sections = Array.from(ids).map(id => document.getElementById(id)).filter(Boolean);
     if (!sections.length) return;
 
+    /* A pastilha da seção atual é um elemento só, que anda até o link ativo. Aqui vão
+       apenas a largura e a posição; o deslizamento suave é a transition do CSS. */
+    const menu = document.querySelector('.nav-menu');
+    const indicator = menu && menu.querySelector('.nav-indicator');
+
+    const moveIndicator = () => {
+      if (!indicator) return;
+      const active = menu.querySelector('.nav-link.is-active');
+      if (!active) {
+        menu.classList.remove('has-active');
+        return;
+      }
+      indicator.style.width = `${active.offsetWidth}px`;
+      indicator.style.transform = `translateX(${active.offsetLeft}px)`;
+      menu.classList.add('has-active');
+    };
+
     const setActive = (id) => {
       links.forEach(link => link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`));
+      moveIndicator();
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -133,6 +161,7 @@
     }, { rootMargin: '-45% 0px -50% 0px' });
 
     sections.forEach(section => observer.observe(section));
+    window.addEventListener('resize', moveIndicator, { passive: true });
   }
 
   PS.initUI = function () {

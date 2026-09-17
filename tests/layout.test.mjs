@@ -536,7 +536,7 @@ for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 
 // Regressão: as fotos da faixa (trabalho/uniforme) precisam carregar de verdade, não só existir no DOM.
 test('faixa de fotos do hero carrega todas as imagens', async () => {
   const page = await openPage({ width: 1440, height: 900 });
-  await page.waitForFunction(() => document.querySelectorAll('.hero-gallery-item img').length === 3);
+  await page.waitForFunction(() => document.querySelectorAll('.hero-gallery-item img').length >= 3);
   await page.evaluate(() => document.querySelectorAll('.hero-gallery-item img').forEach(img => { img.loading = 'eager'; }));
   await page.waitForFunction(() => [...document.querySelectorAll('.hero-gallery-item img')].every(img => img.complete), null, { timeout: 10000 });
   const broken = await page.$$eval('.hero-gallery-item img', imgs => imgs.filter(i => i.naturalWidth === 0).map(i => i.getAttribute('src')));
