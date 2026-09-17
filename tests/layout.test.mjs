@@ -379,7 +379,7 @@ test('gradiente da borda não vaza para o interior translúcido do card (checage
   const { r, g, b } = pixelAt(png, 4, 4);
 
   // Cinza-grafite (--glass-bg ~ rgb 38,40,44 sobre o fundo da página): componentes próximos entre si.
-  // O gradiente neon (rgb 201,242,39) vazando por cima empurraria o verde bem acima do azul/vermelho.
+  // O gradiente neon (rgb 254, 99, 61) vazando por cima empurraria o verde bem acima do azul/vermelho.
   assert.ok(g - b < 40, `centro do card com tom esverdeado (rgb ${r},${g},${b}) — o gradiente da borda vazou para o interior`);
 });
 

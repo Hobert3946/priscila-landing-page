@@ -142,7 +142,6 @@
 
   /* Rolagem horizontal dos carrosséis sem "puxar" a página junto */
   .carousel-track,
-  .clients-track,
   .timeline-track {
     overscroll-behavior-x: contain;
   }

@@ -33,16 +33,17 @@
     const services = document.getElementById('hidden-services').value;
     const goals = document.getElementById('hidden-goals').value;
     
-    let text = `Olá, Priscila! Sou ${name}.\nContato: ${contact}\n`;
+    let text = `*Olá, Priscila!* Meu nome é *${name}*.\n\n`;
+    text += `*Meu Contato:* ${contact}\n\n`;
     
     if (services) {
-      text += `\nPreciso de:\n- ${services.split(',').join('\n- ')}\n`;
+      text += `*Tenho interesse em:*\n- ${services.split(',').join('\n- ')}\n\n`;
     }
     if (goals) {
-      text += `\nMeu objetivo é:\n- ${goals.split(',').join('\n- ')}\n`;
+      text += `*Meu principal objetivo é:*\n- ${goals.split(',').join('\n- ')}\n\n`;
     }
     if (msg) {
-      text += `\nDetalhes adicionais:\n${msg}`;
+      text += `*Mais alguns detalhes:*\n_${msg}_\n`;
     }
     
     return text;

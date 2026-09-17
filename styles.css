@@ -81,7 +81,7 @@
 .case-featured {
   position: relative;
   background-color: var(--glass-bg);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), inset 0 0 46px rgba(201,242,39,0.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), inset 0 0 46px rgba(254, 99, 61,0.05);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s ease;
@@ -116,8 +116,8 @@
 .plan-card.featured::after {
   /* mesma rotação, mas sem o trecho neutro — a borda "acesa" o tempo todo marca o destaque */
   background: conic-gradient(from var(--glass-angle, 0deg),
-    var(--glass-border-a), rgba(201,242,39,0.85) 25%,
-    var(--glass-border-a) 55%, rgba(201,242,39,0.85) 80%,
+    var(--glass-border-a), rgba(254, 99, 61,0.85) 25%,
+    var(--glass-border-a) 55%, rgba(254, 99, 61,0.85) 80%,
     var(--glass-border-a));
 }
 
@@ -127,7 +127,7 @@
 .case-card:hover,
 .case-featured:hover {
   transform: translateY(-4px);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), inset 0 0 60px rgba(201,242,39,0.09), 0 20px 40px rgba(0,0,0,0.25);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), inset 0 0 60px rgba(254, 99, 61,0.09), 0 20px 40px rgba(0,0,0,0.25);
 }
 
 @keyframes glass-rotate {
@@ -621,6 +621,17 @@ body {
   .hero-title {
     font-size: clamp(1.8rem, 3.6vw, 2.9rem);
   }
+}
+
+/* Para quem ela trabalha — abaixo da chamada do contato */
+.contact-audience {
+  max-width: 52ch;
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--accent-color);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
 }
 
 .hero-actions {
@@ -1698,7 +1709,7 @@ textarea:focus-visible {
 }
 .channel-icon--whatsapp { color: #25D366; }
 .channel-icon--email { color: var(--text-primary); }
-.channel-icon--meet { color: var(--accent-color); }
+.channel-icon--instagram { color: #E1306C; }
 .social-icon {
   width: 18px;
   height: 18px;
@@ -1723,7 +1734,7 @@ textarea:focus-visible {
 /* Form Chips */
 .form-chip { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
 .form-chip:hover { border-color: rgba(255,255,255,0.3); color: var(--text-primary); }
-.form-chip.active { background: rgba(201,242,39,0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; box-shadow: 0 0 15px rgba(201,242,39,0.2); }
+.form-chip.active { background: rgba(254, 99, 61,0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; box-shadow: 0 0 15px rgba(254, 99, 61,0.2); }
 
 
 /* Glassmorphism */
@@ -2020,4 +2031,115 @@ textarea:focus-visible {
     display: flex;
     justify-content: space-around;
   }
+}
+
+/* --- Refatoração de Estilos Inline --- */
+
+/* Contato */
+.contact-box {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 4rem !important;
+  align-items: start !important;
+  text-align: left !important;
+}
+.contact-header {
+  margin-bottom: 2rem !important;
+}
+.contact-title {
+  margin-top: 1rem !important;
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  line-height: 1.2 !important;
+}
+.contact-header .section-lead {
+  margin-top: 1.25rem !important;
+  color: var(--text-secondary) !important;
+  font-size: 1.1rem !important;
+  line-height: 1.6 !important;
+}
+.contact-channels {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+.contact-card {
+  padding: 1.5rem !important;
+  min-width: auto !important;
+}
+.contact-form-col {
+  padding: 2.5rem !important;
+  border-radius: 16px !important;
+}
+.contact-form-col .contact-form {
+  margin-top: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+.form-field {
+  margin-bottom: 0 !important;
+}
+.form-submit {
+  width: 100% !important;
+  margin-top: 1rem !important;
+}
+.form-chips-section label {
+  display: block !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+  margin-bottom: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+.form-chips-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Footer */
+.footer {
+  padding: 3rem 0 2rem !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  background: rgba(10, 10, 15, 0.4) !important;
+}
+.footer-container {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 1.5rem !important;
+}
+.footer-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+}
+.brand-logo {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+.logo-badge {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 0.75rem !important;
+}
+.logo-name {
+  font-size: 0.95rem !important;
+}
+.footer-copy {
+  color: var(--text-secondary) !important;
+  font-size: 0.85rem !important;
+}
+.footer-social {
+  display: flex !important;
+  gap: 1.25rem !important;
+}
+.footer-social a {
+  color: var(--text-secondary) !important;
 }

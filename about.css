@@ -100,12 +100,9 @@
   rotate: -5deg; /* `rotate`, não transform: a entrada do GSAP escreve transform inline */
   box-shadow: 0 25px 50px -15px rgba(0,0,0,0.55);
 }
-/* Altura maior que o quadro dá folga de recorte vertical (mesma técnica da foto principal)
-   — sem isso a "foto.jpeg" (retrato de corpo inteiro, com muita parede acima) mostraria
-   mais parede do que rosto num recorte quase quadrado como este. */
 .about-photo--float img {
-  height: 150%;
-  object-position: center 18%;
+  height: 100%;
+  object-position: center 30%;
 }
 
 .about-badge {
