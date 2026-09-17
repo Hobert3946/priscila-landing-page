@@ -91,7 +91,7 @@
           <div class="form-fallback-box">
             <p class="form-fallback-label">O WhatsApp não abriu? Bloqueador de pop-up ativo?</p>
             <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="form-fallback-btn" id="fallback-whatsapp-link">
-              <span>Abrir WhatsApp com meu briefing</span>
+              <span>Abrir conversa no WhatsApp</span>
               <span class="btn-arrow" aria-hidden="true">→</span>
             </a>
           </div>

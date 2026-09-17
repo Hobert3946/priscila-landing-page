@@ -3,7 +3,7 @@
   revelação de títulos/cards e parágrafo que acende palavra por palavra no scroll.
 */
 (function () {
-  const ROLL_TARGETS = '.nav-link-label, .btn-pill > span:last-child, .btn-primary-nesh > span:first-child, .btn-ghost-nesh > span';
+  const ROLL_TARGETS = '.nav-link-label, .btn-pill > span:last-child, .btn-primary-nesh:not(.form-submit) > span:first-child, .btn-ghost-nesh > span';
   const ROTATE_EVERY = 2.6; // segundos
 
   /* Duplica o texto em duas camadas; no hover a de baixo sobe (CSS em effects.css) */

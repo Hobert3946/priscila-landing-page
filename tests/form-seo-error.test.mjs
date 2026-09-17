@@ -139,3 +139,33 @@ test('Barra de menu principal (header) é visível no hero e some ao rolar para 
   await page.close();
   await browser.close();
 });
+
+test('Botão de envio para o WhatsApp no mobile tem todo o texto visível sem estouro ou corte em 360px', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 360, height: 740 } });
+  await page.goto(PAGE_URL);
+
+  const btn = page.locator('#btn-form-submit');
+  await btn.scrollIntoViewIfNeeded();
+
+  const metrics = await btn.evaluate(el => {
+    const rect = el.getBoundingClientRect();
+    const span = el.querySelector('span:first-child');
+    const spanRect = span ? span.getBoundingClientRect() : null;
+    return {
+      btnWidth: rect.width,
+      scrollWidth: el.scrollWidth,
+      clientWidth: el.clientWidth,
+      spanWidth: spanRect ? spanRect.width : 0,
+      text: el.textContent.trim(),
+      hasOverflow: el.scrollWidth > el.clientWidth + 1
+    };
+  });
+
+  assert.match(metrics.text, /WhatsApp/i);
+  assert.equal(metrics.hasOverflow, false, 'Botão não deve ter estouro horizontal de texto');
+  assert.ok(metrics.btnWidth <= 360, 'Botão deve caber na viewport');
+
+  await page.close();
+  await browser.close();
+});
