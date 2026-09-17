@@ -303,15 +303,13 @@ body {
    .header ao compactar empurrava a barra inteira 0.75rem para baixo e 5% para dentro de
    uma vez só — e padding não está na transition do .header, então o salto era instantâneo.
    O recuo do mobile (barra flutuante arredondada) mora no bloco @media e continua valendo. */
-.header.is-compact .logo-badge {
-  animation: logo-seal-spin 9s linear infinite;
-}
-@keyframes logo-seal-spin {
-  to { transform: rotate(360deg); }
+/* A logo ao lado de Priscila Santos não deve se mexer */
+.logo-badge {
+  animation: none !important;
+  transform: none !important;
 }
 @media (prefers-reduced-motion: reduce) {
   .header { transition: none; }
-  .header.is-compact .logo-badge { animation: none; }
 }
 
 .side-rail {
@@ -412,6 +410,24 @@ body {
 .side-dot.is-active .side-dot-label {
   color: var(--accent-color);
   font-weight: 700;
+}
+
+.side-home-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: inherit;
+  transition: transform 0.25s var(--ease-out-expo), color 0.2s ease;
+}
+
+.side-dot.side-home:hover .side-home-icon {
+  transform: scale(1.2);
+  color: var(--text-primary);
+}
+
+.side-dot.side-home.is-active .side-home-icon {
+  color: var(--accent-color);
+  transform: scale(1.2);
 }
 
 .nav-container {
@@ -540,23 +556,6 @@ body {
   counter-increment: nav-idx;
 }
 
-/* Atalho para o topo: ícone sem rótulo, então fica fora da numeração 01–04 (counter-increment:
-   none) para não consumir um número. O nome acessível vem do aria-label no HTML. */
-.nav-home {
-  align-items: center;
-  padding: 0.55rem 0.7rem;
-  counter-increment: none;
-}
-.nav-home::after {
-  left: 0.7rem;
-  right: 0.7rem;
-}
-
-.nav-home-icon {
-  width: 18px;
-  height: 18px;
-  display: block;
-}
 
 /* Número gerado por CSS (counter), não hardcoded no HTML: adicionar/remover um link
    renumera os outros sozinho, sem precisar editar cada item à mão. */

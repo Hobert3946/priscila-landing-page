@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 
 const PAGE_URL = pathToFileURL(resolve('index.html')).href;
 
-describe('Menu flutuante lateral (side-rail)', () => {
+describe('Menu flutuante lateral (side-rail) e Header estático', () => {
   let browser;
 
   before(async () => {
@@ -17,7 +17,7 @@ describe('Menu flutuante lateral (side-rail)', () => {
     if (browser) await browser.close();
   });
 
-  test('nomes das seções aparecem visíveis e corretos no desktop', async () => {
+  test('nomes das seções incluem Início com ícone de casinha e aparecem visíveis no desktop', async () => {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
     await page.goto(PAGE_URL, { waitUntil: 'load' });
 
@@ -25,17 +25,37 @@ describe('Menu flutuante lateral (side-rail)', () => {
       els.map(el => el.textContent.trim())
     );
 
-    const expected = ['Serviços', 'Projetos', 'Depoimentos', 'Minha Jornada', 'Por que eu', 'FAQ', 'Contato'];
-    assert.deepEqual(labels, expected, 'todos os 7 nomes de seção devem estar presentes na barra lateral');
+    const expected = ['Início', 'Serviços', 'Projetos', 'Depoimentos', 'Minha Jornada', 'Por que eu', 'FAQ', 'Contato'];
+    assert.deepEqual(labels, expected, 'todos os 8 links devem estar presentes na barra lateral (incluindo Início)');
 
-    // Verifica que os textos estão visíveis (display != none, opacity > 0)
-    const visibilities = await page.$$eval('.side-rail .side-dot-label', els =>
-      els.map(el => {
-        const style = getComputedStyle(el);
-        return style.display !== 'none' && style.visibility !== 'hidden' && parseFloat(style.opacity || '1') > 0;
-      })
-    );
-    assert.ok(visibilities.every(Boolean), 'todos os rótulos de texto devem estar visíveis');
+    const hasHomeIcon = await page.locator('.side-rail .side-home-icon').isVisible();
+    assert.equal(hasHomeIcon, true, 'ícone de casinha deve estar presente no link Início da lateral');
+
+    // Verifica que não há casinha na barra de menu principal
+    const navMenuHome = await page.locator('.nav-menu .nav-home').count();
+    assert.equal(navMenuHome, 0, 'não deve haver ícone de casinha na barra de menu principal');
+
+    await page.close();
+  });
+
+  test('logo badge ao lado de Priscila Santos não gira e não se mexe ao rolar', async () => {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.goto(PAGE_URL, { waitUntil: 'load' });
+
+    // Rola para compactar o header
+    await page.mouse.wheel(0, 500);
+    await page.waitForTimeout(500);
+
+    const badgeAnimation = await page.$eval('.logo-badge', el => {
+      const s = getComputedStyle(el);
+      return {
+        animationName: s.animationName,
+        transform: s.transform
+      };
+    });
+
+    assert.equal(badgeAnimation.animationName, 'none', 'a logo não deve possuir animação de rotação');
+    assert.ok(badgeAnimation.transform === 'none' || badgeAnimation.transform === 'matrix(1, 0, 0, 1, 0, 0)', 'a logo não deve se mover');
 
     await page.close();
   });
