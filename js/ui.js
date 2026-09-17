@@ -109,41 +109,6 @@
     sections.forEach(section => observer.observe(section));
   }
 
-  /* Tabbar mobile some ao rolar pra baixo (mais espaço pra ler o conteúdo) e volta assim
-     que a pessoa rola pra cima — igual à barra de endereço do Safari/Instagram no celular.
-     Fica sempre visível perto do topo, pra não sumir logo que a página carrega. */
-  function initTabbarAutoHide() {
-    const bar = document.querySelector('.mobile-tabbar');
-    if (!bar) return;
-
-    let lastY = window.scrollY;
-    let ticking = false;
-
-    function update() {
-      const y = window.scrollY;
-      const goingDown = y > lastY + 4;
-      const goingUp = y < lastY - 4;
-
-      if (y < 80) {
-        bar.classList.remove('is-hidden');
-      } else if (goingDown) {
-        bar.classList.add('is-hidden');
-      } else if (goingUp) {
-        bar.classList.remove('is-hidden');
-      }
-
-      lastY = y;
-      ticking = false;
-    }
-
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
-    }, { passive: true });
-  }
-
   PS.initUI = function () {
     initMobileMenu();
     initAnchorLinks();
@@ -151,6 +116,5 @@
     initScrollCue();
     initHeaderShrink();
     initNavSpy();
-    initTabbarAutoHide();
   };
 })();

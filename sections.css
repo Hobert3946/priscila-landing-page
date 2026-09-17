@@ -603,7 +603,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(201, 242, 39, 0.08) 0%, transparent 50%);
+  background: radial-gradient(circle at center, var(--sand-soft) 0%, transparent 50%);
   opacity: 0;
   transform: rotate(0deg);
   transition: opacity 0.8s ease;
@@ -628,7 +628,7 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: rgba(201, 242, 39, 0.1);
+  background: var(--sand-soft);
   color: var(--accent-color);
   margin-bottom: 1.2rem;
 }
@@ -726,6 +726,10 @@
 .versus-note {
   max-width: 70ch;
   margin: 2rem auto 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--sand-line);
+  border-radius: 14px;
+  background: var(--sand-soft);
   text-align: center;
   font-size: 0.92rem;
   line-height: 1.6;

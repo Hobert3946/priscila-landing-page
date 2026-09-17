@@ -82,3 +82,31 @@ test('Formulário exibe erro visual ao submeter vazio e exibe sucesso + botão f
   await page.close();
   await browser.close();
 });
+
+test('Barra de menu inferior (mobile-tabbar) tem 5 atalhos e fica permanentemente visível ao rolar para baixo', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.goto(PAGE_URL);
+
+  // 1. Verifica que há pelo menos 5 atalhos
+  const links = await page.$$('.mobile-tabbar .tab-link');
+  assert.ok(links.length >= 5, `Esperava pelo menos 5 atalhos na tabbar, encontrou ${links.length}`);
+
+  // 2. Verifica visibilidade inicial da barra
+  const tabbar = page.locator('.mobile-tabbar');
+  await assert.doesNotReject(tabbar.waitFor({ state: 'visible', timeout: 3000 }));
+
+  // 3. Rola bastante a página para baixo
+  await page.evaluate(() => window.scrollTo(0, 1500));
+  await page.waitForTimeout(500);
+
+  // 4. Verifica que a barra continua visível e sem classe is-hidden
+  const isHiddenClass = await tabbar.evaluate(el => el.classList.contains('is-hidden'));
+  assert.equal(isHiddenClass, false, 'A barra não deve receber a classe is-hidden ao rolar para baixo');
+
+  const isVisible = await tabbar.isVisible();
+  assert.ok(isVisible, 'A barra de navegação inferior deve permanecer visível após rolagem para baixo');
+
+  await page.close();
+  await browser.close();
+});

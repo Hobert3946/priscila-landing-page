@@ -10,16 +10,22 @@
   --surface-color-light: #323A54;
   --text-primary: #FFFBFF;
   --text-secondary: #A3ADC2;
-  
+
   /* Brand Accents */
   --accent-color: #FE633D; /* Coral Red */
   --accent-ink: #FFFBFF;   /* texto sobre o coral */
   --brand-glow: rgba(254, 99, 61, 0.06);
 
+  /* Tom intermediário (areia): fundos e citações que precisam de calor sem puxar o coral,
+     que já carrega botões, links e destaques. */
+  --sand-color: #E8DCCD;
+  --sand-soft: rgba(232, 220, 205, 0.09);
+  --sand-line: rgba(232, 220, 205, 0.22);
+
   /* Typography */
-  --font-sans: 'Helvetica Now Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-display: 'Helvetica Now Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-nav: 'Space Grotesk', var(--font-sans);
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-nav: var(--font-sans);
 
   /* Spacing */
   --space-sm: 0.5rem;
@@ -627,8 +633,10 @@ body {
 .contact-audience {
   max-width: 52ch;
   margin-top: 1rem;
-  padding-left: 1rem;
-  border-left: 2px solid var(--accent-color);
+  padding: 0.85rem 1rem;
+  border-left: 2px solid var(--sand-line);
+  border-radius: 0 10px 10px 0;
+  background: var(--sand-soft);
   font-size: 0.98rem;
   line-height: 1.6;
   color: var(--text-secondary);
@@ -1198,27 +1206,30 @@ body.menu-open {
 
 @media (max-width: 768px) {
   .mobile-tabbar {
-    display: flex;
-    position: fixed;
-    left: 0.75rem;
-    right: 0.75rem;
-    bottom: 0.75rem;
-    z-index: 90;
-    padding: 0.4rem;
-    padding-bottom: calc(0.4rem + env(safe-area-inset-bottom, 0px));
-    background: rgba(28, 35, 57, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    transition: transform 0.35s var(--ease-out-expo), opacity 0.35s ease;
+    display: flex !important;
+    position: fixed !important;
+    left: 0.6rem !important;
+    right: 0.6rem !important;
+    bottom: 0.6rem !important;
+    z-index: 99 !important;
+    padding: 0.4rem 0.2rem calc(0.4rem + env(safe-area-inset-bottom, 0px)) !important;
+    background: rgba(20, 25, 42, 0.94) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    justify-content: space-around !important;
   }
 
-  /* Some ao rolar pra baixo (dá espaço pra ler), volta ao rolar pra cima (js/ui.js initTabbarAutoHide) */
+  /* Barra sempre visível: impede qualquer estado de ocultação ao rolar */
   .mobile-tabbar.is-hidden {
-    transform: translateY(calc(100% + 1.5rem));
-    opacity: 0;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   /* Espaço pra barra não tampar o fim do conteúdo/rodapé */
@@ -1301,13 +1312,15 @@ body.menu-open {
   font-family: var(--font-display);
   font-size: 5rem;
   line-height: 1;
-  color: rgba(255,255,255,0.06);
+  color: var(--sand-soft);
 }
 
 .testimonial-quote {
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--sand-line);
   font-size: 1.05rem;
-  color: #d4d4d8;
-  font-weight: 300;
+  color: var(--sand-color);
+  font-weight: 400;
   line-height: 1.7;
 }
 
@@ -2072,56 +2085,7 @@ textarea:focus-visible {
   .cinema-viewfinder { display: none !important; }
   .corner-status-widget { display: none !important; }
 }
-/*
-   ---------------------------------
-   Mobile Tabbar (Bottom Navigation)
-   ---------------------------------
-*/
-.mobile-tabbar {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(28, 35, 57, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.8rem 1rem calc(0.8rem + env(safe-area-inset-bottom));
-  z-index: 98;
-  transition: transform 0.4s var(--ease-out-expo);
-}
-.mobile-tabbar.is-hidden {
-  transform: translateY(100%);
-}
-.tab-link {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-family: var(--font-nav);
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-}
-.tab-link svg {
-  width: 22px;
-  height: 22px;
-}
-.tab-link.is-active,
-.tab-link:hover {
-  color: var(--accent-color);
-}
-@media (max-width: 768px) {
-  .mobile-tabbar {
-    display: flex;
-    justify-content: space-around;
-  }
-}
+
 
 /* --- Refatoração de Estilos Inline --- */
 
