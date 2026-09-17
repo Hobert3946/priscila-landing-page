@@ -211,10 +211,13 @@ html.is-touch {
   }
 
   .nav-container {
-    background: rgba(24, 30, 50, 0.96);
+    background: rgba(20, 25, 42, 0.92);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   }
   .mobile-tabbar {
-    background: rgba(24, 30, 50, 0.97);
+    background: rgba(20, 25, 42, 0.94);
   }
 
   /* Sombra projetada numa imagem grande é recalculada a cada quadro; e sem

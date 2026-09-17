@@ -63,9 +63,9 @@
     update();
   }
 
-  /* Menu encolhe ao rolar (sempre). No desktop (>900px) também some assim que passa de um
-     limiar de rolagem e o rail lateral (.side-rail) assume — baseado só na posição, não na
-     direção, pra o rail continuar ativo mesmo rolando pra cima. Só volta perto do topo. */
+  /* Menu encolhe ao rolar. No desktop (>900px) some após limiar inicial para o rail lateral assumir.
+     No mobile (<=900px), permanece visível durante a seção hero e some suavemente ao sair dela,
+     deixando a tela limpa para a barra inferior fixa. */
   function initHeaderShrink() {
     const header = document.querySelector('.header');
     if (!header) return;
@@ -76,15 +76,38 @@
     function update() {
       const y = window.scrollY;
       header.classList.toggle('is-compact', y > 40);
-      header.classList.toggle('is-hidden', desktopQuery.matches && y > 120);
+
+      // Não oculta se o menu mobile estiver aberto
+      const isMenuOpen = document.body.classList.contains('menu-open') || 
+                         header.querySelector('.nav-toggle[aria-expanded="true"]');
+      if (isMenuOpen) {
+        header.classList.remove('is-hidden');
+        ticking = false;
+        return;
+      }
+
+      if (desktopQuery.matches) {
+        header.classList.toggle('is-hidden', y > 120);
+      } else {
+        // No mobile: visível no hero, some após passar da altura do hero
+        const hero = document.getElementById('hero');
+        const heroThreshold = hero ? (hero.offsetTop + hero.offsetHeight - 80) : 400;
+        header.classList.toggle('is-hidden', y > heroThreshold);
+      }
       ticking = false;
     }
+
     window.addEventListener('scroll', () => {
       if (!ticking) {
         requestAnimationFrame(update);
         ticking = true;
       }
     }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      update();
+    }, { passive: true });
+
     update();
   }
 

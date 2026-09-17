@@ -305,16 +305,15 @@ body {
   display: none;
 }
 
-/* No desktop, a barra some ao rolar pra baixo e um rail de pontos aparece na lateral
-   (mais discreto que a barra inteira); ao rolar pra cima, a barra volta e o rail some.
-   Não mexe no mobile: lá o header já é só logo + hambúrguer. */
-@media (min-width: 901px) {
-  .header.is-hidden {
-    transform: translateY(-130%);
-    opacity: 0;
-    pointer-events: none;
-  }
+/* A barra some com deslizamento suave para cima ao rolar. No desktop ao passar do topo,
+   e no mobile após sair da seção hero (js/ui.js initHeaderShrink) */
+.header.is-hidden {
+  transform: translateY(-130%);
+  opacity: 0;
+  pointer-events: none;
+}
 
+@media (min-width: 901px) {
   .side-rail {
     display: flex;
     flex-direction: column;
@@ -609,9 +608,10 @@ body {
 /* Typography Reveal using SplitType requires specific line-heights and hidden overflow */
 .hero-title {
   font-family: var(--font-display);
-  /* "Comunicação," mede ~11.6em em Syne 800: o tamanho precisa caber em (largura útil / 11.6),
-     senão o SplitType (palavras inline-block) quebra a palavra no meio. Ver tests/layout.test.mjs */
-  font-size: clamp(1.4rem, 7.4vw, 5.6rem);
+  /* "Comunicação," precisa caber numa linha: se não couber, o SplitType (palavras inline-block)
+     quebra a palavra no meio. Em Fraunces 800 ela mede ~6.4em, e o 7vw deixa ~15% de folga na
+     largura mais apertada (390px). Ver tests/layout.test.mjs */
+  font-size: clamp(1.4rem, 7vw, 5.6rem);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -1082,42 +1082,123 @@ body {
 }
 
 @media (max-width: 900px) {
+  .header {
+    padding: 0.65rem 0.85rem 0;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  }
+
+  .nav-container {
+    padding: 0.55rem 1rem !important;
+    border-radius: 18px;
+    background: rgba(20, 25, 42, 0.82) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    justify-content: space-between;
+  }
+
+  .header.is-compact {
+    padding: 0.45rem 0.85rem 0;
+  }
+
+  .header.is-compact .nav-container {
+    padding: 0.5rem 0.95rem !important;
+    background: rgba(18, 22, 38, 0.94) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .brand-logo {
+    gap: 0.65rem;
+  }
+
+  .logo-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FE633D, #ea4a22);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(254, 99, 61, 0.35);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .logo-name {
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+  }
+
   .nav-action {
     margin-left: auto;
   }
-}
 
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 50%;
-  cursor: pointer;
-}
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 11px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-.nav-toggle-bar {
-  display: block;
-  width: 18px;
-  height: 1.5px;
-  background-color: var(--accent-color);
-  transition: transform 0.3s var(--ease-out-expo), opacity 0.3s ease;
-}
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible {
+    background: rgba(254, 99, 61, 0.12);
+    border-color: rgba(254, 99, 61, 0.4);
+  }
 
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
-  transform: translateY(7.5px) rotate(45deg);
-}
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
-  opacity: 0;
-}
-.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
-  transform: translateY(-7.5px) rotate(-45deg);
+  .nav-toggle:active {
+    transform: scale(0.93);
+  }
+
+  .nav-toggle-bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, width 0.2s ease, background-color 0.2s ease;
+  }
+
+  .nav-toggle-bar:nth-child(2) {
+    width: 13px;
+    align-self: flex-end;
+    background-color: var(--accent-color);
+  }
+
+  .nav-toggle[aria-expanded="true"] {
+    background: rgba(254, 99, 61, 0.15);
+    border-color: rgba(254, 99, 61, 0.5);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar {
+    background-color: var(--accent-color);
+    width: 18px;
+    align-self: center;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
 }
 
 .mobile-menu {

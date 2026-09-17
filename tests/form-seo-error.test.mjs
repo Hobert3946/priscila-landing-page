@@ -110,3 +110,32 @@ test('Barra de menu inferior (mobile-tabbar) tem 5 atalhos e fica permanentement
   await page.close();
   await browser.close();
 });
+
+test('Barra de menu principal (header) é visível no hero e some ao rolar para fora dele no mobile', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.goto(PAGE_URL);
+
+  const header = page.locator('.header');
+  const toggle = page.locator('#nav-toggle');
+
+  // 1. No topo (dentro do hero), o header e o toggle estão visíveis
+  assert.equal(await header.evaluate(el => el.classList.contains('is-hidden')), false);
+  assert.ok(await toggle.isVisible(), 'Botão hambúrguer deve estar visível no topo');
+
+  // 2. Rola para fora do hero (ex: 1200px)
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await page.waitForFunction(() => document.querySelector('.header').classList.contains('is-hidden'), null, { timeout: 3000 });
+
+  const isHidden = await header.evaluate(el => el.classList.contains('is-hidden'));
+  assert.equal(isHidden, true, 'Header deve receber .is-hidden ao sair da área do hero');
+
+  // 3. Rola de volta para o topo (hero)
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForFunction(() => !document.querySelector('.header').classList.contains('is-hidden'), null, { timeout: 3000 });
+
+  assert.equal(await header.evaluate(el => el.classList.contains('is-hidden')), false, 'Header deve voltar a ficar visível no topo');
+
+  await page.close();
+  await browser.close();
+});
