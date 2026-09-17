@@ -90,37 +90,24 @@
     gsap.set('.header', { y: -16, opacity: 0 });
 
     /*
-      Entrada do retrato: pesada no desktop, leve no celular.
-
-      A versão do desktop anima `filter: blur(28px) -> 0` junto com escala por 2,2s. Blur
-      animado é dos efeitos mais caros que existem: o navegador não consegue tratá-lo só
-      na composição, precisa redesenhar a imagem inteira a cada quadro. Numa tela grande
-      com GPU dedicada passa liso; num celular de entrada é justo o momento da abertura
-      competindo com o resto da montagem do hero.
-
-      No celular fica só o fade (e um leve deslize), que roda na thread de composição e
-      praticamente não custa nada. O corte segue o mesmo limite do layout (900px), para a
-      animação combinar com o hero empilhado do celular.
+      Entrada do retrato da hero:
+      Padronizada igual à versão mobile (fade suave e leve deslocamento no eixo Y),
+      eliminando o efeito de foca/desfoca (blur) pesado no desktop/web.
     */
-    var heroLeve = window.matchMedia('(max-width: 900px)').matches || PS.env.lowEnd;
-
     if (portraitImg) {
-      if (heroLeve) {
-        gsap.set(portraitImg, { opacity: 0, y: 16 });
-      } else {
-        gsap.set(portraitImg, { opacity: 0, scale: 1.08, filter: 'blur(28px) saturate(0.7)' });
-      }
+      gsap.set(portraitImg, { opacity: 0, y: 16 });
     }
 
     const tl = gsap.timeline({ delay, defaults: { ease: 'power4.out' } });
     tl.to(giantSplit.chars, { yPercent: 0, opacity: 0.9, scale: 1, duration: 0.9, stagger: 0.1, ease: 'power3.out' }, 0);
     if (portraitImg) {
-      if (heroLeve) {
-        tl.to(portraitImg, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.1);
-      } else {
-        // Retrato: entra desfocado e assume foco devagar, como um retrato "revelando" a pessoa.
-        tl.to(portraitImg, { opacity: 1, scale: 1, filter: 'blur(0px) saturate(1)', duration: 2.2, ease: 'power4.out' }, 0.1);
-      }
+      tl.to(portraitImg, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity'
+      }, 0.1);
     }
     tl.to(split.chars, { yPercent: 0, opacity: 1, duration: 1, stagger: 0.02 }, 0.3)
       .to('.word-rotator-item', { yPercent: 0, opacity: 1, duration: 0.8 }, '-=0.8');

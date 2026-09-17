@@ -89,7 +89,7 @@ body.scroll-locked {
   user-select: none;
 }
 
-/* Retrato: carrega desfocado e assume foco junto com a entrada do resto do hero (ver text-effects.js) */
+/* Retrato: entrada suave com fade e deslocamento (ver text-effects.js) */
 .hero-portrait {
   position: relative;
   z-index: 1;
@@ -110,7 +110,7 @@ body.scroll-locked {
   object-fit: contain;
   object-position: bottom center;
   filter: drop-shadow(0 30px 50px rgba(0,0,0,0.5));
-  will-change: filter, transform;
+  will-change: transform, opacity;
   /* Suaviza o corte inferior da imagem fundindo-a com o escuro do fundo */
   -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
