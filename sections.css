@@ -51,16 +51,16 @@
   display: block;
   margin-bottom: 1rem;
   font-family: monospace;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--accent-color);
 }
 .overview-item h3 {
   margin-bottom: 0.5rem;
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
 }
 .overview-item p {
-  font-size: 0.95rem;
+  font-size: 1.08rem;
   color: var(--text-secondary);
 }
 
@@ -98,12 +98,13 @@
   margin-top: 0.5rem;
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-secondary);
 }
 .plan-desc {
+  font-size: 1.06rem;
   color: var(--text-secondary);
 }
 .plan-list {
@@ -118,7 +119,7 @@
 .plan-list li {
   position: relative;
   padding-left: 1.75rem;
-  font-size: 0.95rem;
+  font-size: 1.06rem;
   color: #d4d4d8;
 }
 .plan-list li::before {
@@ -133,7 +134,7 @@
   transform: rotate(-45deg);
 }
 .plan-fit {
-  font-size: 0.85rem;
+  font-size: 0.94rem;
   font-style: italic;
   color: #7b7e85;
 }
@@ -249,91 +250,6 @@
 }
 @media (max-width: 900px) {
   .overview-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 480px) {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-}
-.overview-item p {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-}
-
-/* ---------- Planos ---------- */
-.plans-section {
-  background-color: var(--bg-color);
-}
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-.plan-card {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 2.5rem 2rem;
-  border-radius: 20px;
-}
-.plan-name {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  line-height: 1.2;
-}
-.plan-price {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(1.4rem, 5vw, 1.9rem);
-  line-height: 1;
-  color: var(--accent-color);
-}
-.plan-price small {
-  display: block;
-  margin-top: 0.5rem;
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-secondary);
-}
-.plan-desc {
-  color: var(--text-secondary);
-}
-.plan-list {
-  flex: 1;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-.plan-list li {
-  position: relative;
-  padding-left: 1.75rem;
-  font-size: 0.95rem;
-  color: #d4d4d8;
-}
-.plan-list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.4em;
-  width: 0.8rem;
-  height: 0.42rem;
-  border-left: 2px solid var(--accent-color);
-  border-bottom: 2px solid var(--accent-color);
-  transform: rotate(-45deg);
-}
-.plan-fit {
-  font-size: 0.85rem;
-  font-style: italic;
-  color: #7b7e85;
-}
-.plan-card .btn-primary-nesh {
-  justify-content: center;
 }
 
 /* ---------- Logos de clientes ---------- */
@@ -646,8 +562,8 @@
 }
 
 .tech-panel-desc {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.18rem;
+  line-height: 1.65;
   color: var(--text-primary);
   margin-bottom: 2rem;
 }
@@ -663,7 +579,7 @@
 
 .tech-panel-list li {
   position: relative;
-  font-size: 0.95rem;
+  font-size: 1.08rem;
   color: var(--text-secondary);
 }
 
@@ -691,7 +607,7 @@
   padding-bottom: 0.85rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   color: var(--text-secondary);
 }
 .versus-col--me .versus-title {
@@ -707,7 +623,7 @@
 .versus-list li {
   position: relative;
   padding-left: 1.5rem;
-  font-size: 0.95rem;
+  font-size: 1.06rem;
   line-height: 1.55;
   color: var(--text-secondary);
 }
@@ -731,7 +647,7 @@
   border-radius: 14px;
   background: var(--sand-soft);
   text-align: center;
-  font-size: 0.92rem;
+  font-size: 1.04rem;
   line-height: 1.6;
   color: var(--text-secondary);
 }

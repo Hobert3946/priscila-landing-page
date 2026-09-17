@@ -526,7 +526,7 @@ body.scroll-locked {
   animation: scroll-cue-in 0.9s var(--ease-out-expo) 2.4s both;
 }
 .scroll-cue-label {
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;

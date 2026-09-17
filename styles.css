@@ -163,9 +163,10 @@ html.lenis, html.lenis body {
 
 body {
   font-family: var(--font-sans);
+  font-size: 1.0625rem;
   background-color: var(--bg-color);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.65;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -355,31 +356,40 @@ body {
   transform: scale(1.35);
 }
 
-/* Nome da seção sempre visível ao lado do ponto (não é mais tooltip de hover) */
+/* Nome da seção: só o da seção atual (e o do ponto sob o mouse) fica visível. Com os seis
+   nomes sempre à mostra, eles caíam por cima do conteúdo das seções largas e disputavam a
+   leitura — ver a seção "Eu ou uma agência?". A pastilha de fundo garante contraste sobre
+   qualquer coisa que passe por baixo. */
 .side-dot::after {
   content: attr(data-label);
   position: absolute;
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
+  padding: 0.3rem 0.65rem;
+  border-radius: 50px;
+  background: rgba(20, 25, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   white-space: nowrap;
   font-family: var(--font-nav);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-secondary);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-  opacity: 0.75;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity 0.25s ease, color 0.25s ease;
 }
 
-.side-dot:hover::after,
-.side-dot.is-active::after {
+.side-dot:hover::after {
   opacity: 1;
   color: var(--text-primary);
 }
 .side-dot.is-active::after {
+  opacity: 1;
   color: var(--accent-color);
 }
 
@@ -451,7 +461,7 @@ body {
   color: var(--text-secondary);
   text-decoration: none;
   font-family: var(--font-nav);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -464,7 +474,7 @@ body {
 /* Número gerado por CSS (counter), não hardcoded no HTML: adicionar/remover um link
    renumera os outros sozinho, sem precisar editar cada item à mão. */
 .nav-link-idx {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 500;
   color: var(--accent-color);
   opacity: 0.7;
@@ -519,7 +529,7 @@ body {
   padding: 0.7rem 1.25rem;
   border-radius: 50px;
   font-family: var(--font-nav);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 600;
   white-space: nowrap;
   text-transform: uppercase;
@@ -585,7 +595,7 @@ body {
   padding: 0.5rem 1rem;
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 50px;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -599,7 +609,7 @@ body {
   border-radius: 50px;
   background: var(--accent-color);
   color: var(--accent-ink);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -641,7 +651,7 @@ body {
   border-left: 2px solid var(--sand-line);
   border-radius: 0 10px 10px 0;
   background: var(--sand-soft);
-  font-size: 0.98rem;
+  font-size: 1.08rem;
   line-height: 1.6;
   color: var(--text-secondary);
 }
@@ -721,7 +731,7 @@ body {
 .strip-item {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.98rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--accent-ink);
@@ -748,7 +758,7 @@ body {
 
 .section-subtitle {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.98rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -841,7 +851,7 @@ body {
   background: rgba(255,255,255,0.05);
   padding: 0.4rem 0.8rem;
   border-radius: 50px;
-  font-size: 0.75rem;
+  font-size: 0.88rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -854,7 +864,7 @@ body {
 
 .work-desc {
   color: var(--text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.18rem;
 }
 
 /* 
@@ -886,7 +896,7 @@ body {
   background: var(--accent-color);
   color: var(--bg-color);
   padding: 0.4rem 1.5rem;
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -897,7 +907,7 @@ body {
   font-family: monospace;
   color: #666;
   margin-bottom: 2rem;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .service-title {
@@ -909,7 +919,7 @@ body {
 
 .service-desc {
   color: var(--text-secondary);
-  font-size: 1rem;
+  font-size: 1.12rem;
   margin-bottom: 2rem;
 }
 
@@ -918,7 +928,7 @@ body {
 }
 .service-list li {
   color: #ccc;
-  font-size: 0.9rem;
+  font-size: 1.02rem;
   margin-bottom: 0.75rem;
   padding-left: 1.5rem;
   position: relative;
@@ -999,7 +1009,7 @@ body {
 }
 
 .channel-type {
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -1008,8 +1018,10 @@ body {
 .channel-value {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.1rem;
-  overflow-wrap: anywhere;
+  font-size: 1.18rem;
+  /* break-word, não anywhere: o e-mail quebrava no meio de uma sílaba. Assim o navegador
+     respeita primeiro o <wbr> antes do @ (index.html) e só parte a palavra em último caso. */
+  overflow-wrap: break-word;
 }
 
 .channel-arrow {
@@ -1045,7 +1057,7 @@ body {
 }
 .footer-copy {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 /* 
@@ -1415,7 +1427,7 @@ body.menu-open {
 .testimonial-quote {
   padding-left: 1.1rem;
   border-left: 2px solid var(--sand-line);
-  font-size: 1.05rem;
+  font-size: 1.16rem;
   color: var(--sand-color);
   font-weight: 400;
   line-height: 1.7;
@@ -1439,7 +1451,7 @@ body.menu-open {
   justify-content: center;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
 }
 
@@ -1450,10 +1462,10 @@ body.menu-open {
 .author-name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.08rem;
 }
 .author-role {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -1527,8 +1539,9 @@ body.menu-open {
 }
 .faq-answer p {
   color: var(--text-secondary);
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 300;
+  line-height: 1.7;
 }
 
 /*
@@ -1542,7 +1555,7 @@ body.menu-open {
   gap: 1.5rem;
   margin: 3.5rem 0 2.5rem;
   color: #666;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
@@ -1581,7 +1594,7 @@ body.menu-open {
 }
 
 .form-field label {
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-secondary);
@@ -1597,7 +1610,7 @@ body.menu-open {
   padding: 1rem 1.25rem;
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: 1.05rem;
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 .form-field textarea {
@@ -1625,13 +1638,13 @@ body.menu-open {
 
 .field-hint {
   align-self: flex-end;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: #555;
   font-family: monospace;
 }
 
 .field-error {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #f87171;
   min-height: 1rem;
 }

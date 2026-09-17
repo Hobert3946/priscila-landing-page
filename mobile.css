@@ -140,6 +140,11 @@
     font-size: 16px;
   }
 
+  /* O e-mail é o texto mais longo dos cartões de contato: um corpo menor evita a quebra */
+  .channel-value {
+    font-size: 1rem;
+  }
+
   /* Rolagem horizontal dos carrosséis sem "puxar" a página junto */
   .carousel-track,
   .timeline-track {
