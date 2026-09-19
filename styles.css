@@ -783,6 +783,18 @@ body {
   color: var(--text-secondary);
 }
 
+/* Mesma caixa do parágrafo acima, com a borda em laranja: separa o recado
+   "aberta a oportunidades" do recado pra cliente sem virar outro bloco. */
+.contact-audience--work {
+  border-left-color: var(--accent-color);
+  background: rgba(254, 99, 61, 0.07);
+}
+
+.contact-audience--work strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 .hero-actions {
   display: flex;
   justify-content: center;
@@ -2106,9 +2118,127 @@ textarea:focus-visible {
 }
 
 /* Form Chips */
-.form-chip { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-.form-chip:hover { border-color: rgba(255,255,255,0.3); color: var(--text-primary); }
-.form-chip.active { background: rgba(254, 99, 61,0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; box-shadow: 0 0 15px rgba(254, 99, 61,0.2); }
+/* Caixas de seleção do formulário (js/form-select.js). Uma linha fechada por
+   pergunta; a lista abre por cima do conteúdo seguinte, sem empurrar o form. */
+.form-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.form-select { position: relative; }
+/* `display: flex` abaixo ganha do `display: none` que o atributo hidden aplica,
+   então a regra precisa ser explícita — sem ela a lista fica sempre aberta e
+   cobre os campos seguintes. */
+.form-select[hidden],
+.form-select-panel[hidden] { display: none; }
+.form-select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.form-select-trigger:hover { border-color: rgba(255,255,255,0.28); }
+.form-select-trigger:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+.form-select.is-open .form-select-trigger {
+  border-color: var(--accent-color);
+  background: rgba(254, 99, 61, 0.06);
+}
+.form-select-value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Sem nada escolhido, o texto é a própria pergunta — fica no tom secundário
+   pra não parecer uma resposta já dada. */
+.form-select-value.is-placeholder { color: var(--text-secondary); font-weight: 400; }
+.form-select-caret { flex-shrink: 0; color: var(--text-secondary); transition: transform 0.25s ease; }
+.form-select.is-open .form-select-caret { transform: rotate(180deg); color: var(--accent-color); }
+
+.form-select-panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  background: rgba(20, 25, 42, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+}
+.form-select-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.form-select-option:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+.form-select-option[aria-selected="true"] { color: var(--accent-color); font-weight: 600; }
+/* Marquinha da esquerda: vazia quando não escolhida, laranja com tique quando sim.
+   Reservar o espaço desde sempre impede o texto de pular ao marcar. */
+.form-select-option::before {
+  content: '';
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  border-radius: 5px;
+  background-size: 11px;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 0.2s ease;
+}
+.form-select-option[aria-selected="true"]::before {
+  border-color: var(--accent-color);
+  background-color: var(--accent-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231C2339' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+}
+/* Escolha única não é caixinha de marcar: vira bolinha. */
+.form-select[data-mode="single"] .form-select-option::before { border-radius: 50%; }
+
+.form-select-done {
+  margin-top: 0.3rem;
+  padding: 0.6rem;
+  background: rgba(254, 99, 61, 0.12);
+  border: 1px solid rgba(254, 99, 61, 0.3);
+  border-radius: 8px;
+  color: var(--accent-color);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.form-select-done:hover { background: rgba(254, 99, 61, 0.2); }
 
 
 /* Glassmorphism */
@@ -2392,6 +2522,8 @@ textarea:focus-visible {
 .contact-card {
   padding: 1.5rem !important;
   min-width: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 .contact-form-col {
   padding: 2.5rem !important;
@@ -2407,6 +2539,8 @@ textarea:focus-visible {
   display: flex !important;
   flex-direction: column !important;
   gap: 1rem !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 .form-field {
   margin-bottom: 0 !important;
@@ -2430,20 +2564,13 @@ textarea:focus-visible {
   justify-content: center !important;
   gap: 0.6rem !important;
 }
-.form-chips-section label {
-  display: block !important;
-  font-size: 0.85rem !important;
-  font-weight: 600 !important;
-  color: var(--text-secondary) !important;
-  margin-bottom: 0.75rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
+/* No celular a caixa precisa caber o texto longo sem cortar no meio da palavra. */
+.form-select-trigger {
+  padding: 0.95rem 1rem !important;
+  font-size: 0.95rem !important;
 }
-.form-chips-container {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 0.5rem !important;
-  margin-bottom: 1.5rem !important;
+.form-select-panel {
+  max-height: 14rem !important;
 }
 
 /* Footer */
@@ -2487,4 +2614,162 @@ textarea:focus-visible {
 }
 .footer-social a {
   color: var(--text-secondary) !important;
+}
+
+/* ============================================================================
+   Aviso de cookies (LGPD) — js/consent.js
+
+   Barra fixa no rodapé, discreta, sem escurecer a página atrás: a pessoa pode
+   ler o site antes de decidir. No celular sobe acima da tabbar pra não cobrir
+   os atalhos de navegação.
+   ========================================================================== */
+.cookie-banner {
+  position: fixed;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 200;
+  margin: 0 auto;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(20, 25, 42, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  animation: cookie-banner-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cookie-banner-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie-banner { animation: none; }
+}
+
+.cookie-banner-text {
+  flex: 1 1 260px;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.cookie-banner-text a {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cookie-banner-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.cookie-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.cookie-btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text-secondary);
+}
+
+.cookie-btn--ghost:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--text-primary);
+}
+
+.cookie-btn--accept {
+  background: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  color: #1C2339;
+}
+
+.cookie-btn--accept:hover {
+  filter: brightness(1.1);
+}
+
+@media (max-width: 768px) {
+  .cookie-banner {
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .cookie-banner-actions {
+    width: 100%;
+  }
+
+  .cookie-btn {
+    flex: 1;
+  }
+}
+
+/* ============================================================================
+   Hero — atalho de vaga
+
+   Fica ao lado do botão principal, num tom mais baixo: quem vem contratar
+   continua com um caminho óbvio, e quem veio recrutar não precisa procurar.
+   O `gap` da seta é o mesmo do botão primário pra os dois ficarem irmãos.
+   ========================================================================== */
+.hero-job-link {
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+}
+
+.hero-job-link:hover {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-color);
+}
+
+.hero-job-link .btn-arrow {
+  transition: transform 0.3s ease;
+}
+
+.hero-job-link:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+/* A pílula ficou com um texto mais longo ("projetos e oportunidades"): no
+   celular ela precisa poder quebrar em duas linhas sem estourar a largura. */
+@media (max-width: 480px) {
+  .availability-pill {
+    max-width: 100%;
+    white-space: normal;
+    text-align: left;
+    line-height: 1.35;
+  }
+}
+
+/* O selo de localização do "sobre" dizia só "Salvador · BA", e quem estava em
+   outro estado lia aquilo como limite de atendimento. A parte do alcance vem
+   num peso menor: a base continua sendo a informação principal. */
+.about-badge-reach {
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+@media (max-width: 480px) {
+  .about-badge {
+    white-space: normal;
+    line-height: 1.35;
+  }
 }

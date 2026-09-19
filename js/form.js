@@ -2,6 +2,14 @@
 (function () {
   const WHATSAPP_NUMBER = '5571988350272';
 
+  // Cada assunto decide quais grupos de chips aparecem e o que o campo livre pede.
+  const INTENTS = {
+    servico:  { services: true,  goals: true,  placeholder: 'Quer detalhar um pouco mais? (Opcional)' },
+    parceria: { services: true,  goals: false, placeholder: 'Conte a ideia da parceria: o que você propõe e quem participa. (Opcional)' },
+    vaga:     { services: false, goals: false, placeholder: 'Conte sobre a vaga: empresa, cargo e formato (presencial, híbrido ou remoto).' },
+    outro:    { services: false, goals: false, placeholder: 'Escreva sua mensagem.' }
+  };
+
   const FIELD_RULES = {
     'field-name': {
       validate: (v) => v.length >= 2,
@@ -33,12 +41,16 @@
     const name = document.getElementById('field-name').value.trim();
     const contact = document.getElementById('field-contact').value.trim();
     const msg = document.getElementById('field-message').value.trim();
+    const intent = document.getElementById('hidden-intent').value;
     const services = document.getElementById('hidden-services').value;
     const goals = document.getElementById('hidden-goals').value;
-    
+
     let text = `*Olá, Priscila!* Meu nome é *${name}*.\n\n`;
     text += `*Meu Contato:* ${contact}\n\n`;
-    
+    if (intent) {
+      text += `*Assunto:* ${intent}\n\n`;
+    }
+
     if (services) {
       text += `*Tenho interesse em:*\n- ${services.split(',').join('\n- ')}\n\n`;
     }
@@ -48,7 +60,12 @@
     if (msg) {
       text += `*Mais alguns detalhes:*\n_${msg}_\n`;
     }
-    
+
+    // Assinatura de origem: diz de qual anúncio/campanha essa pessoa veio.
+    if (window.PS && window.PS.campaignLine) {
+      text += window.PS.campaignLine();
+    }
+
     return text;
   }
 
@@ -79,6 +96,14 @@
 
     const messageText = buildMessage();
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
+
+    // Conversão: é aqui que o anúncio "deu certo".
+    if (window.PS && window.PS.track) {
+      window.PS.track('generate_lead', {
+        intent: document.getElementById('hidden-intent').value,
+        services: document.getElementById('hidden-services').value
+      });
+    }
 
     if (status) {
       status.innerHTML = `
@@ -118,31 +143,67 @@
     const form = document.getElementById('contact-form');
     if (!form) return;
 
-    // Configuração dos Chips
-    const setupChips = (containerId, hiddenId) => {
-      const container = document.getElementById(containerId);
-      const hiddenInput = document.getElementById(hiddenId);
-      if (!container || !hiddenInput) return;
-      
-      const chips = container.querySelectorAll('.form-chip');
-      chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-          chip.classList.toggle('active');
-          const activeValues = Array.from(container.querySelectorAll('.form-chip.active'))
-                                    .map(c => c.getAttribute('data-value'));
-          hiddenInput.value = activeValues.join(',');
-        });
-      });
+    // Caixas de seleção (js/form-select.js). Os dois últimos guardam o objeto
+    // retornado porque o assunto precisa poder limpá-los.
+    const selects = {
+      services: PS.createSelect(document.getElementById('block-services')),
+      goals: PS.createSelect(document.getElementById('block-goals'))
     };
 
-    setupChips('services-chips', 'hidden-services');
-    setupChips('goals-chips', 'hidden-goals');
+    // Assunto: escolha única. Ao trocar, esconde as caixas que não servem pro
+    // assunto e limpa o que estava marcado, pra não ir seleção antiga no WhatsApp.
+    const messageField = document.getElementById('field-message');
+
+    const applyIntent = (values, option) => {
+      if (!option) return;
+      const config = INTENTS[option.getAttribute('data-intent')] || INTENTS.servico;
+
+      [['services', config.services], ['goals', config.goals]].forEach(([key, visible]) => {
+        const select = selects[key];
+        if (!select) return;
+        select.root.hidden = !visible;
+        if (!visible) select.clear();
+      });
+
+      if (messageField) messageField.placeholder = config.placeholder;
+    };
+
+    const intentSelect = PS.createSelect(
+      document.querySelector('[data-select="intent"]'),
+      applyIntent
+    );
+
+    if (intentSelect) {
+      // Só aceita nomes que existem em INTENTS: o valor pode vir da URL, então
+      // nunca vai cru pra busca da opção.
+      const selectIntent = (name) => {
+        if (!Object.prototype.hasOwnProperty.call(INTENTS, name)) return;
+        intentSelect.chooseBy('intent', name);
+      };
+
+      // Atalhos fora do formulário, como o "Tem uma vaga?" do hero.
+      document.querySelectorAll('[data-form-intent]').forEach(el => {
+        el.addEventListener('click', () => selectIntent(el.getAttribute('data-form-intent')));
+      });
+
+      // Link direto pra divulgar em currículo/LinkedIn: /?assunto=vaga já chega
+      // com o formulário no modo certo.
+      try {
+        selectIntent(new URLSearchParams(window.location.search).get('assunto'));
+      } catch (e) { /* URL sem query: segue no padrão */ }
+    }
 
     const message = document.getElementById('field-message');
     const counter = document.getElementById('field-message-count');
     if (message && counter) {
       message.addEventListener('input', () => { counter.textContent = message.value.length; });
     }
+
+    // Quem começou a preencher mas não enviou também é informação útil no painel.
+    form.addEventListener('input', function onFirstInput() {
+      form.removeEventListener('input', onFirstInput);
+      if (window.PS && window.PS.track) window.PS.track('form_start', {});
+    });
 
     form.querySelectorAll('input, textarea').forEach(input => {
       input.addEventListener('blur', () => validateField(input));

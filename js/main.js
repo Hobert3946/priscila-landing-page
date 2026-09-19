@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
 
   PS.initUI();
+  PS.initConsent();
   PS.initLazyMedia();
   PS.initContactForm();
   PS.initRollHover();
@@ -46,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
       PS.initAmbientAnimations();
       PS.initMagnetic('.btn-primary-nesh, .btn-ghost-nesh', 0.15);
       PS.initMagnetic('.btn-pill, .nav-link, .form-submit', 0.1);
-      PS.initMagnetic('.form-chip', 0.12);
       PS.initTiltCards('.contact-card');
       PS.initMarquee();
       PS.initPageTransitions();

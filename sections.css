@@ -542,3 +542,141 @@
   line-height: 1.6;
   color: var(--text-secondary);
 }
+
+/* ============================================================================
+   Recomendação (#endorsement)
+
+   Tratamento de carta, não de depoimento: uma aspa grande, o texto corrido em
+   corpo maior que o normal e a assinatura na lateral. A diferença visual pro
+   carrossel de depoimentos é proposital — ali são clientes falando do serviço,
+   aqui é alguém de fora atestando a trajetória.
+   ========================================================================== */
+.endorsement-section {
+  padding-top: 2rem;
+}
+
+.endorsement {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 3.5rem;
+  align-items: start;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem;
+  border: 1px solid var(--sand-line);
+  border-radius: 20px;
+  background: var(--sand-soft);
+}
+
+.endorsement-author {
+  text-align: center;
+}
+
+.endorsement-photo {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* O arquivo vem com cantos brancos em volta do recorte circular; o anel
+     laranja cobre a emenda e amarra a foto à paleta do site. */
+  border: 2px solid var(--accent-color);
+  padding: 3px;
+  background: transparent;
+}
+
+.endorsement-name {
+  margin-top: 1rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.endorsement-role {
+  margin-top: 0.4rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.endorsement-credentials {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sand-line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  list-style: none;
+  text-align: left;
+}
+
+.endorsement-credentials li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.endorsement-credentials li::before {
+  content: "·";
+  position: absolute;
+  left: 0.2rem;
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.endorsement-quote {
+  position: relative;
+  margin: 0;
+}
+
+.endorsement-tag {
+  margin-bottom: 1.5rem;
+}
+
+.endorsement-quote p {
+  position: relative;
+  margin-bottom: 1.25rem;
+  font-size: 1.08rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.endorsement-punch {
+  margin-top: 1.75rem;
+  margin-bottom: 0 !important;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--accent-color);
+  font-family: var(--font-display);
+  font-size: 1.25rem !important;
+  font-weight: 700;
+  line-height: 1.4 !important;
+  color: var(--text-primary) !important;
+}
+
+@media (max-width: 900px) {
+  .endorsement {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  /* No celular a assinatura vem primeiro: saber quem está falando é o que dá
+     peso ao texto que vem embaixo. Foto e nome viram uma linha só. */
+  .endorsement-author {
+    text-align: left;
+  }
+
+  .endorsement-author-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .endorsement-photo { width: 76px; height: 76px; flex-shrink: 0; }
+  .endorsement-name { margin-top: 0; }
+  .endorsement-credentials { margin-top: 1.25rem; }
+
+  .endorsement-punch { font-size: 1.15rem !important; }
+}

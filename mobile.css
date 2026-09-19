@@ -127,7 +127,8 @@
   /* Alvos de toque: mínimo confortável recomendado */
   .nav-toggle,
   .carousel-btn,
-  .form-chip,
+  .form-select-trigger,
+  .form-select-option,
   .tab-link {
     min-height: 44px;
   }

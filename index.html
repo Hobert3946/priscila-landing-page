@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Priscila Santos — Jornalista &amp; Estrategista de Comunicação Digital</title>
-  <meta name="description" content="Comunicação que vai além do post. Estratégia, conteúdo e criatividade para transformar ideias em narrativas que conectam marcas e pessoas.">
+  <meta name="description" content="Comunicação que vai além do post. Estratégia, conteúdo e criatividade para marcas de todo o Brasil — atendimento remoto, com base em Salvador.">
   <meta name="author" content="Priscila Santos">
   <link rel="canonical" href="https://priscilasantos.com.br/">
 
@@ -14,13 +14,13 @@
   <meta property="og:site_name" content="Priscila Santos">
   <meta property="og:url" content="https://priscilasantos.com.br/">
   <meta property="og:title" content="Priscila Santos — Jornalista &amp; Estrategista de Comunicação Digital">
-  <meta property="og:description" content="Comunicação que vai além do post. Estratégia, conteúdo e criatividade para transformar ideias em comunicação que conecta.">
+  <meta property="og:description" content="Comunicação que vai além do post. Estratégia, conteúdo e criatividade para marcas de todo o Brasil.">
   <meta property="og:image" content="https://priscilasantos.com.br/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Priscila Santos — Jornalista &amp; Estrategista de Comunicação Digital">
-  <meta name="twitter:description" content="Comunicação que vai além do post. Estratégia, conteúdo e criatividade para transformar ideias em comunicação que conecta.">
+  <meta name="twitter:description" content="Comunicação que vai além do post. Estratégia, conteúdo e criatividade para marcas de todo o Brasil.">
   <meta name="twitter:image" content="https://priscilasantos.com.br/assets/og-image.jpg">
   <meta name="theme-color" content="#1C2339">
 
@@ -87,8 +87,11 @@
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "Priscila Santos — Jornalista & Estrategista de Comunicação Digital",
-    "description": "Estratégia de conteúdo, gestão de redes sociais, produção audiovisual, redação de releases e assessoria de imprensa.",
-    "areaServed": "BR",
+    "description": "Estratégia de conteúdo, gestão de redes sociais, produção audiovisual, redação de releases e assessoria de imprensa. Atendimento remoto para todo o Brasil, com base em Salvador (BA).",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Brasil"
+    },
     "url": "https://priscilasantos.com.br/",
     "telephone": "+5571988350272",
     "email": "prisantospinheiro.ssa@gmail.com",
@@ -253,7 +256,7 @@
             <div class="hero-tag-wrap">
               <a href="#contact" class="btn-pill availability-pill">
                 <span class="status-indicator" aria-hidden="true"></span>
-                <span>Disponível para projetos</span>
+                <span>Disponível para projetos e oportunidades</span>
               </a>
             </div>
             <h1 class="hero-title" id="hero-heading">
@@ -265,11 +268,17 @@
             </h1>
 
             <div class="hero-actions" id="hero-actions">
-              <a href="#contact" class="btn-primary-nesh">
+              <a href="#contact" class="btn-primary-nesh" data-form-intent="servico">
                 <span>Conversar sobre projeto</span>
                 <span class="btn-arrow">→</span>
               </a>
 
+              <!-- Atalho pra recrutador: leva pro mesmo formulário, já com o assunto
+                   "oportunidade profissional" marcado (ver js/form.js). -->
+              <a href="#contact" class="btn-ghost-nesh hero-job-link" data-form-intent="vaga">
+                <span>Tem uma vaga?</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
             </div>
 
             <div class="hero-gallery" id="hero-gallery">
@@ -314,7 +323,7 @@
         <div class="section-header">
           <span class="section-subtitle">O Que Você Recebe</span>
           <h2 class="section-title split-text">Comunicação Que Converte</h2>
-          <p class="section-lead">Perfil parado ou post que não converte? O que resolve é estratégia e consistência. Clique nas abas abaixo para ver o escopo de entregáveis e o formato de atuação em cada área.</p>
+          <p class="section-lead">Perfil parado ou post que não converte? O que resolve é estratégia e consistência — e isso funciona de qualquer lugar: atendo marcas em todo o Brasil. Clique nas abas abaixo para ver o escopo de entregáveis e o formato de atuação em cada área.</p>
         </div>
 
         <div class="tech-services-container">
@@ -693,7 +702,7 @@
             </figure>
             <span class="about-badge">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              Salvador · BA
+              Salvador · BA <span class="about-badge-reach">· atendo todo o Brasil</span>
             </span>
             <span class="about-stamp" aria-hidden="true">
               <svg viewBox="0 0 120 120"><defs><path id="about-stamp-path" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text><textPath href="#about-stamp-path" textLength="286" lengthAdjust="spacing">JORNALISMO · ESTRATÉGIA · CONTEÚDO ·</textPath></text></svg>
@@ -811,6 +820,59 @@
       </div>
     </section>
 
+    <!-- Recomendação (sections.css .endorsement)
+
+         Fica logo depois do "quem é Priscila" de propósito: a pessoa acabou de ler a
+         trajetória contada por ela, e aqui encontra a mesma trajetória confirmada por
+         quem a acompanhou de fora. Não é depoimento de cliente — por isso mora fora do
+         carrossel de depoimentos e tem tratamento de carta, não de card. -->
+    <section id="endorsement" class="section endorsement-section">
+      <div class="container">
+        <div class="endorsement gsap-reveal">
+
+          <aside class="endorsement-author">
+            <div class="endorsement-author-head">
+              <img class="endorsement-photo" src="assets/claudiocardoso.png"
+                   alt="Claudio Cardoso, professor titular aposentado da UFBA"
+                   width="233" height="226" loading="lazy" decoding="async">
+              <div>
+                <p class="endorsement-name">Claudio Cardoso</p>
+                <p class="endorsement-role">Professor Titular aposentado da UFBA<br>Consultor em comunicação estratégica</p>
+              </div>
+            </div>
+            <ul class="endorsement-credentials">
+              <li>Pós-doutor em Comunicação pela USP</li>
+              <li>Consultor de Bradesco, Neoenergia, Odebrecht, Sebrae e CNI</li>
+              <li>Personalidade do Ano — ABERJE, 2006</li>
+              <li>Bridge Builder — Departamento de Estado dos EUA, 2009</li>
+            </ul>
+          </aside>
+
+          <blockquote class="endorsement-quote">
+            <span class="pill-tag endorsement-tag">Quem acompanhou de perto</span>
+
+            <p>
+              Acompanhei a trajetória de Priscila Santos desde os tempos de faculdade, e o
+              que sempre me marcou foi a sinceridade do seu desejo de crescer: um motor
+              genuíno, que transformou dedicação em método e ambição em rigor profissional.
+              Essa base jornalística — apurar, checar, escrever com propósito — é hoje o que
+              diferencia seu trabalho de tantos outros no mercado de comunicação digital.
+            </p>
+            <p>
+              Como profissional, Priscila uniu esse rigor a uma criatividade rara e domínio
+              pleno das mídias sociais. Na Limpurb, à frente da comunicação institucional,
+              produziu resultados que a levaram ao reconhecimento nacional; com clientes de
+              pequenas empresas, repete essa mesma entrega — estratégica, sensível ao
+              contexto de cada marca e, acima de tudo, consistente.
+            </p>
+
+            <p class="endorsement-punch">Recomendo seu trabalho de olhos fechados.</p>
+          </blockquote>
+
+        </div>
+      </div>
+    </section>
+
     <!-- FAQ -->
     <!-- Comparação honesta com agência (sections.css .versus) -->
     <section id="why-me" class="section versus-section">
@@ -900,6 +962,16 @@
 
           <details class="faq-item gsap-reveal">
             <summary class="faq-question">
+              <span>Você atende fora de Salvador?</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>Atendo o Brasil inteiro. Estratégia, gestão de redes sociais, criação de conteúdo, releases e assessoria de imprensa funcionam 100% à distância — a gente conversa por WhatsApp, chamada de vídeo e e-mail, do mesmo jeito que funcionaria na sala ao lado. A única coisa que depende de deslocamento é cobertura presencial de evento, e isso a gente combina antes.</p>
+            </div>
+          </details>
+
+          <details class="faq-item gsap-reveal">
+            <summary class="faq-question">
               <span>Como é a cobertura de eventos?</span>
               <span class="faq-icon" aria-hidden="true"></span>
             </summary>
@@ -934,7 +1006,10 @@
                 Se você precisa de alguém para pensar, planejar, criar e executar a comunicação da sua marca, estou à disposição.
               </p>
               <p class="contact-audience">
-                Atendo empresas, profissionais e projetos de qualquer segmento — de salão de bairro a órgão público. Se a sua marca precisa se comunicar, é comigo.
+                Atendo empresas, profissionais e projetos de qualquer segmento e de qualquer lugar do Brasil — de salão de bairro a órgão público. Se a sua marca precisa se comunicar, é comigo.
+              </p>
+              <p class="contact-audience contact-audience--work">
+                <strong>Também estou aberta a novos desafios profissionais.</strong> Além de projetos pontuais, quero conversar sobre posições em equipes de comunicação onde eu possa somar experiência e criatividade. Se acha que meu perfil faz sentido pro seu time, é só marcar isso no formulário ao lado.
               </p>
             </div>
 
@@ -975,12 +1050,12 @@
           <!-- Coluna 2: Formulário -->
           <div class="contact-form-col glass" style="padding: 2.5rem; border-radius: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
-              <h3 style="font-size: 1.4rem; color: var(--text-primary); font-family: var(--font-display); margin: 0;">Ou envie um briefing rápido</h3>
+              <h3 style="font-size: 1.4rem; color: var(--text-primary); font-family: var(--font-display); margin: 0;">Ou me mande uma mensagem rápida</h3>
               <span style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: var(--accent-color); background: rgba(254, 99, 61, 0.12); padding: 0.3rem 0.6rem; border-radius: 50px; border: 1px solid rgba(254, 99, 61, 0.3);">
                 <span class="status-indicator" style="position: static; transform: none; width: 6px; height: 6px;"></span> Respondo em até 24h
               </span>
             </div>
-            <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">Responda em menos de um minuto. Ao enviar, abro o WhatsApp com o seu briefing já escrito — você só confere e manda. Nada é publicado nem enviado sem você ver.</p>
+            <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">Responda em menos de um minuto. Ao enviar, abro o WhatsApp com a sua mensagem já escrita — você só confere e manda. Nada é publicado nem enviado sem você ver.</p>
             
             <form class="contact-form contact-form-compact" id="contact-form" novalidate style="margin-top: 0; display: flex; flex-direction: column; gap: 1rem;">
               <div class="form-field" style="margin-bottom: 0;">
@@ -993,27 +1068,80 @@
                        required placeholder="WhatsApp ou E-mail">
                 <span class="field-error" data-error-for="field-contact" aria-live="polite"></span>
               </div>
-              <!-- Interactive Chips Section -->
-              <div class="form-chips-section">
-                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">O que você precisa?</label>
-                <div class="form-chips-container" id="services-chips" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;">
-                  <button type="button" class="form-chip" data-value="Cobertura de Eventos">Cobertura de Eventos (Storymaker)</button>
-                  <button type="button" class="form-chip" data-value="Gestão de Redes Sociais">Gestão de Redes Sociais</button>
-                  <button type="button" class="form-chip" data-value="Consultoria Estratégica">Consultoria Estratégica</button>
-                  <button type="button" class="form-chip" data-value="Criação de Conteúdo">Criação de Conteúdo</button>
-                  <button type="button" class="form-chip" data-value="Outro">Outro</button>
-                </div>
-                <input type="hidden" name="services" id="hidden-services" value="">
-              </div>
+              <!-- Caixas de seleção (js/form-select.js): cada pergunta ocupa uma linha
+                   fechada e abre a lista ao clicar. A primeira define o assunto — cliente,
+                   parceria ou oportunidade de trabalho. As duas seguintes só fazem sentido
+                   pra quem vem contratar, então o js/form.js as mostra ou esconde. -->
+              <div class="form-selects">
 
-              <div class="form-chips-section">
-                <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Qual o seu principal objetivo?</label>
-                <div class="form-chips-container" id="goals-chips" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;">
-                  <button type="button" class="form-chip" data-value="Lançar um novo negócio">Lançar um novo negócio</button>
-                  <button type="button" class="form-chip" data-value="Reposicionar minha marca">Reposicionar minha marca</button>
-                  <button type="button" class="form-chip" data-value="Aumentar vendas/engajamento">Aumentar vendas/engajamento</button>
+                <div class="form-select" data-select="intent" data-mode="single"
+                     data-placeholder="Como posso falar com você?">
+                  <button type="button" class="form-select-trigger" aria-haspopup="listbox"
+                          aria-expanded="false" aria-label="Como posso falar com você?">
+                    <span class="form-select-value">Quero contratar um serviço</span>
+                    <svg class="form-select-caret" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                         stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="form-select-panel" role="listbox" aria-label="Como posso falar com você?" hidden>
+                    <button type="button" class="form-select-option" role="option" aria-selected="true"
+                            data-intent="servico" data-value="Quero contratar um serviço">Quero contratar um serviço</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-intent="parceria" data-value="Quero propor uma parceria">Quero propor uma parceria</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-intent="vaga" data-value="Tenho uma oportunidade profissional">Tenho uma oportunidade profissional</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-intent="outro" data-value="Quero conversar sobre outro assunto">Quero conversar sobre outro assunto</button>
+                  </div>
+                  <input type="hidden" name="intent" id="hidden-intent" value="Quero contratar um serviço">
                 </div>
-                <input type="hidden" name="goals" id="hidden-goals" value="">
+
+                <div class="form-select" id="block-services" data-select="services" data-mode="multi"
+                     data-placeholder="O que você precisa?">
+                  <button type="button" class="form-select-trigger" aria-haspopup="listbox"
+                          aria-expanded="false" aria-label="O que você precisa?">
+                    <span class="form-select-value is-placeholder">O que você precisa?</span>
+                    <svg class="form-select-caret" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                         stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="form-select-panel" role="listbox" aria-multiselectable="true"
+                       aria-label="O que você precisa?" hidden>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Cobertura de Eventos">Cobertura de Eventos (Storymaker)</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Gestão de Redes Sociais">Gestão de Redes Sociais</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Consultoria Estratégica">Consultoria Estratégica</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Criação de Conteúdo">Criação de Conteúdo</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Outro">Outro</button>
+                  </div>
+                  <input type="hidden" name="services" id="hidden-services" value="">
+                </div>
+
+                <div class="form-select" id="block-goals" data-select="goals" data-mode="multi"
+                     data-placeholder="Qual o seu principal objetivo?">
+                  <button type="button" class="form-select-trigger" aria-haspopup="listbox"
+                          aria-expanded="false" aria-label="Qual o seu principal objetivo?">
+                    <span class="form-select-value is-placeholder">Qual o seu principal objetivo?</span>
+                    <svg class="form-select-caret" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                         stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                  <div class="form-select-panel" role="listbox" aria-multiselectable="true"
+                       aria-label="Qual o seu principal objetivo?" hidden>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Lançar um novo negócio">Lançar um novo negócio</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Reposicionar minha marca">Reposicionar minha marca</button>
+                    <button type="button" class="form-select-option" role="option" aria-selected="false"
+                            data-value="Aumentar vendas/engajamento">Aumentar vendas/engajamento</button>
+                  </div>
+                  <input type="hidden" name="goals" id="hidden-goals" value="">
+                </div>
+
               </div>
 
               <div class="form-field" style="margin-bottom: 0;">
@@ -1043,6 +1171,7 @@
           <span class="logo-name" style="font-size: 0.95rem;">Priscila Santos<span class="dot">.</span></span>
         </a>
         <span class="footer-copy" style="color: var(--text-secondary); font-size: 0.85rem;">© 2026 Priscila Santos. Todos os direitos reservados.</span>
+        <a href="/politica-de-privacidade.html" class="footer-legal-link" style="color: var(--text-secondary); font-size: 0.85rem; text-decoration: underline; text-underline-offset: 2px;">Política de privacidade</a>
       </div>
       <nav class="footer-social" aria-label="Redes sociais" style="display: flex; gap: 1.25rem;">
         <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="color: var(--text-secondary);"><svg class="social-icon icon-linkedin" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
@@ -1061,8 +1190,16 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
 
+  <!-- Medição de tráfego pago. A ordem importa: a configuração precisa existir antes
+       do analytics.js, e o consent.js é quem autoriza o carregamento dos pixels.
+       Com os códigos em branco no analytics-config.js, nada externo é baixado. -->
+  <script defer src="js/analytics-config.js"></script>
+  <script defer src="js/analytics.js"></script>
+  <script defer src="js/consent.js"></script>
+
   <script defer src="js/core.js"></script>
   <script defer src="js/ui.js"></script>
+  <script defer src="js/form-select.js"></script>
   <script defer src="js/form.js"></script>
   <script defer src="js/text-effects.js"></script>
   <script defer src="js/numbers.js"></script>

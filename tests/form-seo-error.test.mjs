@@ -60,9 +60,9 @@ test('Formulário exibe erro visual ao submeter vazio e exibe sucesso + botão f
   await page.fill('#field-name', 'Empresa Teste');
   await page.fill('#field-contact', '71999999999');
 
-  // Seleciona um chip
-  const firstChip = await page.$('#services-chips .form-chip');
-  if (firstChip) await firstChip.click();
+  // Escolhe um serviço na caixa de seleção
+  await page.click('#block-services .form-select-trigger');
+  await page.click('#block-services .form-select-option');
 
   // Submete preenchido
   await page.click('#contact-form button[type="submit"]');
@@ -205,5 +205,242 @@ test('No desktop web, nav-toggle e mobile-menu ficam ocultos (sem ponto branco) 
   assert.equal(isIndicatorVisible, true, 'O indicador de status deve estar visível dentro da caixinha');
 
   await page.close();
+  await browser.close();
+});
+
+test('Seletor de assunto adapta o formulário e leva o assunto para a mensagem do WhatsApp', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(PAGE_URL);
+
+  // Estado inicial: cliente. As duas caixas de cliente aparecem.
+  assert.equal(await page.$eval('#hidden-intent', el => el.value), 'Quero contratar um serviço');
+  assert.equal(await page.$eval('#block-services', el => el.hidden), false);
+  assert.equal(await page.$eval('#block-goals', el => el.hidden), false);
+
+  // Marca um serviço e um objetivo antes de trocar de assunto.
+  await page.click('#block-services .form-select-trigger');
+  await page.click('#block-services .form-select-option');
+  await page.click('#block-services .form-select-done');
+  await page.click('#block-goals .form-select-trigger');
+  await page.click('#block-goals .form-select-option');
+  await page.click('#block-goals .form-select-done');
+  assert.ok((await page.$eval('#hidden-services', el => el.value)).length > 0);
+
+  // Troca para oportunidade profissional: esconde e limpa os grupos de cliente.
+  await page.click('[data-select="intent"] .form-select-trigger');
+  await page.click('[data-select="intent"] .form-select-option[data-intent="vaga"]');
+  assert.equal(await page.$eval('#hidden-intent', el => el.value), 'Tenho uma oportunidade profissional');
+  assert.equal(await page.$eval('#block-services', el => el.hidden), true);
+  assert.equal(await page.$eval('#block-goals', el => el.hidden), true);
+  assert.equal(await page.$eval('#hidden-services', el => el.value), '');
+  assert.equal(await page.$eval('#hidden-goals', el => el.value), '');
+  assert.match(await page.$eval('#field-message', el => el.placeholder), /vaga/i);
+
+  // Escolha única: só uma opção de assunto fica marcada.
+  assert.equal(
+    await page.$$eval('[data-select="intent"] .form-select-option[aria-selected="true"]', els => els.length),
+    1
+  );
+
+  // O assunto viaja na mensagem do WhatsApp, sem as escolhas de cliente.
+  await page.fill('#field-name', 'Recrutadora Teste');
+  await page.fill('#field-contact', 'rh@empresa.com');
+  await page.click('#contact-form button[type="submit"]');
+  await page.waitForSelector('.form-feedback--success', { timeout: 3000 });
+
+  const href = await page.$eval('#fallback-whatsapp-link', el => el.getAttribute('href'));
+  const text = decodeURIComponent(href.split('?text=')[1]);
+  assert.match(text, /\*Assunto:\* Tenho uma oportunidade profissional/);
+  assert.ok(!text.includes('Tenho interesse em'), 'Não deve levar serviços de cliente numa mensagem de vaga');
+
+  await page.close();
+  await browser.close();
+});
+
+test('Hero sinaliza disponibilidade para vagas e o atalho já marca o assunto no formulário', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(PAGE_URL);
+
+  // A pílula do topo precisa falar dos dois públicos.
+  const pill = await page.textContent('.availability-pill');
+  assert.match(pill, /projetos e oportunidades/i);
+
+  // O atalho existe, aponta pro contato e não compete com o botão principal.
+  const jobLink = page.locator('.hero-job-link');
+  await jobLink.waitFor({ state: 'visible', timeout: 3000 });
+  assert.equal(await jobLink.getAttribute('href'), '#contact');
+
+  const [principal, vaga] = await page.$$eval(
+    '#hero-actions a',
+    els => els.map(el => parseFloat(getComputedStyle(el).fontSize))
+  );
+  assert.ok(vaga <= principal, 'O atalho de vaga não pode ser maior que o botão principal');
+
+  // Clicar nele deixa o formulário pronto pra recrutador.
+  await jobLink.click();
+  await page.waitForTimeout(400);
+  assert.equal(await page.$eval('#hidden-intent', el => el.value), 'Tenho uma oportunidade profissional');
+  assert.equal(await page.$eval('#block-services', el => el.hidden), true);
+
+  await page.close();
+  await browser.close();
+});
+
+test('Link direto /?assunto=vaga abre o formulário já no modo oportunidade', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+
+  await page.goto(`${PAGE_URL}?assunto=vaga`);
+  assert.equal(await page.$eval('#hidden-intent', el => el.value), 'Tenho uma oportunidade profissional');
+
+  // Valor inválido na URL não pode quebrar nada nem mudar o padrão.
+  const erros = [];
+  page.on('pageerror', (err) => erros.push(err.message));
+  await page.goto(`${PAGE_URL}?assunto=%22%5D,%5Bx`);
+  await page.waitForTimeout(500);
+  assert.equal(await page.$eval('#hidden-intent', el => el.value), 'Quero contratar um serviço');
+  assert.deepEqual(erros, [], 'Assunto inválido na URL não pode gerar erro de JavaScript');
+
+  await page.close();
+  await browser.close();
+});
+
+// Regressão: o `display: flex` do painel vencia o atributo `hidden`, e a lista
+// ficava aberta permanentemente, cobrindo os campos seguintes do formulário.
+test('As listas só ocupam espaço quando abertas e liberam os campos de baixo', async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(PAGE_URL);
+  await page.waitForTimeout(2800);
+
+  const intentPanel = page.locator('[data-select="intent"] .form-select-panel');
+  const servicesPanel = page.locator('#block-services .form-select-panel');
+
+  // Nasce tudo fechado: três linhas, não três listas abertas.
+  assert.equal(await intentPanel.isVisible(), false);
+  assert.equal(await servicesPanel.isVisible(), false);
+  assert.equal(await page.locator('#block-goals .form-select-panel').isVisible(), false);
+
+  // Escolha única fecha sozinha ao escolher.
+  await page.click('[data-select="intent"] .form-select-trigger');
+  assert.equal(await intentPanel.isVisible(), true);
+  await page.click('[data-select="intent"] .form-select-option[data-intent="parceria"]');
+  assert.equal(await intentPanel.isVisible(), false);
+
+  // Múltipla escolha continua aberta pra marcar mais de um...
+  await page.click('#block-services .form-select-trigger');
+  await page.click('#block-services .form-select-option[data-value="Gestão de Redes Sociais"]');
+  await page.click('#block-services .form-select-option[data-value="Criação de Conteúdo"]');
+  assert.equal(await servicesPanel.isVisible(), true);
+  assert.equal(
+    await page.$eval('#block-services .form-select-value', el => el.textContent.trim()),
+    'Gestão de Redes Sociais  +1',
+    'A caixa fechada deve resumir a escolha múltipla'
+  );
+
+  // ...e o "Pronto" libera o campo de baixo.
+  await page.click('#block-services .form-select-done');
+  assert.equal(await servicesPanel.isVisible(), false);
+
+  // Abrir uma lista fecha a outra. A ordem importa: a lista aberta cobre o que
+  // vem abaixo dela, então quem abre por último tem que ser a de cima.
+  await page.click('#block-services .form-select-trigger');
+  await page.click('[data-select="intent"] .form-select-trigger');
+  assert.equal(await servicesPanel.isVisible(), false, 'Duas listas não podem ficar abertas juntas');
+
+  // Esc fecha a que estiver aberta.
+  await page.keyboard.press('Escape');
+  assert.equal(await intentPanel.isVisible(), false, 'Esc deve fechar a lista aberta');
+
+  await page.close();
+  await browser.close();
+});
+
+test('O site deixa claro que o atendimento é para todo o Brasil', async () => {
+  const html = readFileSync(resolve('index.html'), 'utf-8');
+
+  // Buscador e preview do link precisam dizer isso antes do clique.
+  assert.match(html, /<meta name="description"[^>]*todo o Brasil/i);
+  assert.match(html, /og:description"[^>]*todo o Brasil/i);
+
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(PAGE_URL);
+
+  // A ficha estruturada precisa declarar o país, não só a cidade da base.
+  const dados = JSON.parse(await page.$eval('script[type="application/ld+json"]', el => el.textContent));
+  assert.equal(dados.areaServed.name, 'Brasil');
+
+  // E o texto visível, em pelo menos três momentos da página.
+  const texto = await page.textContent('body');
+  const mencoes = (texto.match(/todo o Brasil|Brasil inteiro|qualquer lugar do Brasil/gi) || []).length;
+  assert.ok(mencoes >= 3, `Esperava ao menos 3 menções ao alcance nacional, achei ${mencoes}`);
+
+  // O selo de localização não pode dar a entender que ela só atende Salvador.
+  const selo = await page.textContent('.about-badge');
+  assert.match(selo, /Brasil/);
+
+  await page.close();
+  await browser.close();
+});
+
+test('Campos de contato e canais no fim do site estão sempre visíveis sem precisar rolar até o fim da página', async () => {
+  const browser = await chromium.launch();
+
+  // 1. Desktop (1440x900)
+  const desktopPage = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await desktopPage.goto(PAGE_URL);
+  await desktopPage.waitForTimeout(1000);
+
+  // No topo da página, os elementos já não devem ter opacity: 0
+  const dFormOpacity = await desktopPage.$eval('#contact-form', el => window.getComputedStyle(el).opacity);
+  const dCardsOpacity = await desktopPage.$eval('.contact-card', el => window.getComputedStyle(el).opacity);
+  assert.equal(dFormOpacity, '1', 'Formulário de contato deve ter opacity 1 no desktop');
+  assert.equal(dCardsOpacity, '1', 'Cartões de contato devem ter opacity 1 no desktop');
+
+  // Ao rolar apenas até o início da seção de contato (#contact), os campos já devem estar visíveis
+  await desktopPage.evaluate(() => document.getElementById('contact').scrollIntoView());
+  await desktopPage.waitForTimeout(400);
+
+  const dNameVisible = await desktopPage.$eval('#field-name', el => {
+    const style = window.getComputedStyle(el);
+    return style.visibility !== 'hidden' && style.display !== 'none' && style.opacity === '1';
+  });
+  assert.ok(dNameVisible, 'Campo de nome deve estar visível ao chegar na seção de contato');
+
+  await desktopPage.close();
+
+  // 2. Mobile (390x844)
+  const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await mobilePage.goto(PAGE_URL);
+  await mobilePage.waitForTimeout(1000);
+
+  // Ao rolar para #contact no mobile (sem rolar até o fim absoluto da página)
+  await mobilePage.evaluate(() => document.getElementById('contact').scrollIntoView());
+  await mobilePage.waitForTimeout(400);
+
+  const mFormOpacity = await mobilePage.$eval('#contact-form', el => window.getComputedStyle(el).opacity);
+  const mCardOpacity = await mobilePage.$eval('.contact-card', el => window.getComputedStyle(el).opacity);
+  assert.equal(mFormOpacity, '1', 'Formulário de contato deve ter opacity 1 no mobile');
+  assert.equal(mCardOpacity, '1', 'Cartões de contato devem ter opacity 1 no mobile');
+
+  // Verifica que os campos principais estão visíveis
+  const fieldsCheck = await mobilePage.$$eval('#field-name, #field-contact, #btn-form-submit', els => {
+    return els.every(el => {
+      const style = window.getComputedStyle(el);
+      return style.visibility !== 'hidden' && style.display !== 'none' && style.opacity === '1';
+    });
+  });
+  assert.ok(fieldsCheck, 'Todos os campos de contato devem estar visíveis sem precisar rolar até o fim');
+
+  // Ao rolar para cima (reverse scroll), os campos não devem sumir
+  await mobilePage.evaluate(() => window.scrollTo(0, 0));
+  await mobilePage.waitForTimeout(400);
+  const mFormOpacityAfterScrollUp = await mobilePage.$eval('#contact-form', el => window.getComputedStyle(el).opacity);
+  assert.equal(mFormOpacityAfterScrollUp, '1', 'Campos de contato não devem sumir após rolagem reversa');
+
+  await mobilePage.close();
   await browser.close();
 });
