@@ -42,10 +42,9 @@
     });
   };
 
-  /* Contato: os 2 cartões de canal "materializam" com leve scale-in -- convidativo,
-     sem ser chamativo. O formulário em si recebe o mínimo de movimento de propósito
-     (fade + 10px, sem stagger por campo): é onde a pessoa vai digitar, não onde
-     queremos prender o olhar. */
+  /* Contato: os campos de contato e os cartões de canal devem sempre
+     aparecer e permanecer visíveis (sem opacity: 0 inicial e sem depender de
+     rolar até o fim da página). A mão decorativa mantém sua entrada sutil. */
   PS.initContactReveal = function () {
     // Mão apontando "chega" um instante antes do título, puxando o olhar pra frase final.
     const hand = document.querySelector('.tech-pointing-hand--contact');
@@ -55,15 +54,5 @@
         scrollTrigger: { trigger: '.contact-header', start: 'top 74%', toggleActions: 'play none none reverse' }
       });
     }
-
-    gsap.fromTo('.contact-channels .contact-card', { scale: 0.92, opacity: 0 }, {
-      scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', stagger: 0.12,
-      scrollTrigger: { trigger: '.contact-channels', start: 'top 76%', toggleActions: 'play none none reverse' }
-    });
-
-    gsap.fromTo('.contact-box .form-divider, .contact-box .contact-form', { y: 10, opacity: 0 }, {
-      y: 0, opacity: 1, duration: 0.5, ease: 'power1.out',
-      scrollTrigger: { trigger: '.contact-form', start: 'top 78%', toggleActions: 'play none none reverse' }
-    });
   };
 })();
