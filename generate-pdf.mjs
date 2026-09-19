@@ -548,76 +548,77 @@ const htmlContent = `<!DOCTYPE html>
     </footer>
   </section>
 
-  <!-- ==================== PÁGINA 3: CONVERSÃO, CONTEÚDO E SEO ==================== -->
+  <!-- ==================== PÁGINA 3: OPORTUNIDADES, ENDOSSO ACADÊMICO E CONVERSÃO ==================== -->
   <section class="page">
     <div>
       <div class="page-title-area">
-        <span class="page-section-kicker">Máquina de Resultados</span>
-        <h2 class="page-heading">Conversão no WhatsApp, SEO & Performance</h2>
+        <span class="page-section-kicker">Autoridade & Conversão Estratégica</span>
+        <h2 class="page-heading">Oportunidades, Endosso Acadêmico & WhatsApp</h2>
       </div>
 
       <div class="features-list">
         <!-- Feature 1 -->
         <div class="feature-card">
-          <div class="feature-icon-box">💬</div>
+          <div class="feature-icon-box">💼</div>
           <div class="feature-content">
-            <h4>Formulário com Conversão Direta & "Plano B"</h4>
+            <h4>Módulo Recrutador & Oportunidades de Emprego</h4>
             <p>
-              O formulário permite ao prospect selecionar o tipo de projeto, nome e contato. Ao enviar, uma mensagem personalizada é montada e enviada direto ao WhatsApp de Priscila. Caso o navegador ou bloqueador trave a abertura, um botão visual de fallback (Plano B) garante que o lead nunca seja perdido.
+              O site agora atende aos dois objetivos da cliente: atrair projetos comerciais e abrir portas para posições em equipes de comunicação. No Hero, o selo indica <em>"Disponível para projetos e oportunidades"</em> com o atalho <em>"Tem uma vaga?"</em>. O link <code>/?assunto=vaga</code> já abre o formulário pré-configurado para recrutadores, ideal para inclusão em currículos e LinkedIn.
             </p>
             <div class="feature-tags">
-              <span class="tag highlight">Lead WhatsApp</span>
-              <span class="tag">Validação Visual Instantânea</span>
-              <span class="tag">Fallback Anti-Bloqueador</span>
+              <span class="tag highlight">Modo Oportunidade</span>
+              <span class="tag">Link Direto /?assunto=vaga</span>
+              <span class="tag">Atalho Hero</span>
+              <span class="tag">Foco em Equipes</span>
             </div>
           </div>
         </div>
 
         <!-- Feature 2 -->
         <div class="feature-card">
-          <div class="feature-icon-box">🔍</div>
+          <div class="feature-icon-box">🎓</div>
           <div class="feature-content">
-            <h4>SEO Técnico & Indexação para o Google</h4>
+            <h4>Chancela Acadêmica: Carta do Prof. Cláudio Cardoso (UFBA)</h4>
             <p>
-              Inclusão de arquivo <strong>sitemap.xml</strong> e <strong>robots.txt</strong> devidamente formatados, dados estruturados <strong>JSON-LD</strong> (Schema de autoridade para pessoa e negócio) e metatags completas de OpenGraph para prévias atraentes ao compartilhar links no WhatsApp e Instagram.
+              Inserção de uma carta de recomendação de altíssimo peso institucional entre a seção Sobre e a comparação com agências. O Prof. Cláudio Cardoso (Pós-doutor pela USP, Consultor de Bradesco, Neoenergia e Sebrae, e Personalidade ABERJE) atesta o rigor jornalístico, a consistência estratégica e o sucesso nacional de Priscila na Limpurb, finalizando com: <em>"Recomendo seu trabalho de olhos fechados."</em>
             </p>
             <div class="feature-tags">
-              <span class="tag highlight">Sitemap.xml</span>
-              <span class="tag">Robots.txt</span>
-              <span class="tag">JSON-LD Schema</span>
-              <span class="tag">OpenGraph</span>
+              <span class="tag highlight">Prof. Titular UFBA</span>
+              <span class="tag">Endosso Institucional</span>
+              <span class="tag">Credibilidade Nacional</span>
+              <span class="tag">Formato Carta</span>
             </div>
           </div>
         </div>
 
         <!-- Feature 3 -->
         <div class="feature-card">
-          <div class="feature-icon-box">🏆</div>
+          <div class="feature-icon-box">💬</div>
           <div class="feature-content">
-            <h4>Cases Oficiais & Depoimentos Reais</h4>
+            <h4>Formulário Inteligente & Conversão no WhatsApp</h4>
             <p>
-              Destaque do case principal da <strong>Limpurb</strong> com imagens oficiais dos trabalhos, comparativo de crescimento (antes e depois), métricas de alcance (+2 milhões de visualizações) e depoimentos validados de clientes parceiros (Kasa dos Cachos, Óticas Calazans, etc.).
+              O formulário agora conta com a pergunta inicial <em>"Como posso falar com você?"</em>. Quando a opção é vaga ou parceria, os campos de contratação de serviços somem de forma inteligente, reduzindo o atrito. O assunto selecionado é repassado automaticamente para a mensagem do WhatsApp, e o botão de contingência (Plano B) garante que nenhum contato seja perdido.
             </p>
             <div class="feature-tags">
-              <span class="tag">Portfólio Limpurb</span>
-              <span class="tag">Prova Social Real</span>
-              <span class="tag">Carrossel Touch</span>
+              <span class="tag highlight">Formulário Condicional</span>
+              <span class="tag">Roteamento WhatsApp</span>
+              <span class="tag">Plano B Fallback</span>
             </div>
           </div>
         </div>
 
         <!-- Feature 4 -->
         <div class="feature-card">
-          <div class="feature-icon-box">⚡</div>
+          <div class="feature-icon-box">🔍</div>
           <div class="feature-content">
-            <h4>Otimização Extrema de Mídia (WebP) & Página 404</h4>
+            <h4>Alcance Nacional, SEO Técnico & Contato Permanente</h4>
             <p>
-              Todas as imagens foram convertidas para WebP ultraleve, arquivos pesados obsoletos foram expurgados e foi criada uma página de erro personalizada <strong>404.html</strong> que mantém a pessoa dentro do fluxo da marca mesmo se digitar um endereço incorreto.
+              Comunicação explícita de atendimento remoto para todo o Brasil (metatags, sitemap.xml, robots.txt, schema JSON-LD e FAQ atualizada). Além disso, os campos de contato foram calibrados para permanecer sempre visíveis no rodapé, sem depender de rolagem até o final absoluto da página.
             </p>
             <div class="feature-tags">
-              <span class="tag">Imagens WebP</span>
-              <span class="tag">Página 404 Estilizada</span>
-              <span class="tag">Alta Velocidade</span>
+              <span class="tag">Alcance Nacional</span>
+              <span class="tag">SEO Google JSON-LD</span>
+              <span class="tag">Campos Sempre Visíveis</span>
             </div>
           </div>
         </div>
@@ -629,7 +630,7 @@ const htmlContent = `<!DOCTYPE html>
         <div class="badge-dot"></div>
         <span>Priscila Santos — Comunicação Estratégica</span>
       </div>
-      <div>Página 3 de 4 • Conversão & SEO</div>
+      <div>Página 3 de 4 • Oportunidades & Endosso</div>
     </footer>
   </section>
 
@@ -647,8 +648,8 @@ const htmlContent = `<!DOCTYPE html>
           <ul>
             <li>Servidores em nuvem de alta velocidade (Edge Network).</li>
             <li>Certificado de segurança SSL (HTTPS) automático e gratuito.</li>
+            <li>Deploy contínuo automatizado a cada atualização no GitHub.</li>
             <li>Zero custo de mensalidade de servidor para este porte de site.</li>
-            <li>Deploy contínuo e atualizações instantâneas via Git.</li>
           </ul>
         </div>
         <div class="summary-card">
@@ -667,21 +668,23 @@ const htmlContent = `<!DOCTYPE html>
           <span>📋 Checklist de Validação Técnica e Qualidade (QA)</span>
         </div>
         <div class="checklist-grid">
-          <div class="check-item"><span class="check-icon">✓</span> Testado em Telas Mobile (360px a 430px)</div>
-          <div class="check-item"><span class="check-icon">✓</span> Testado em Telas Tablet e Desktop (1440px)</div>
-          <div class="check-item"><span class="check-icon">✓</span> Disparo de Mensagem WhatsApp Validado</div>
+          <div class="check-item"><span class="check-icon">✓</span> Módulo de Vagas e Oportunidades Integrado</div>
+          <div class="check-item"><span class="check-icon">✓</span> Carta de Recomendação do Prof. Cláudio Cardoso</div>
+          <div class="check-item"><span class="check-icon">✓</span> Formulário Dinâmico Condicional Ativo</div>
+          <div class="check-item"><span class="check-icon">✓</span> Campos de Contato Sempre Visíveis no Scroll</div>
+          <div class="check-item"><span class="check-icon">✓</span> Atendimento Nacional Declarado (Metatags/Schema)</div>
+          <div class="check-item"><span class="check-icon">✓</span> Disparo de Mensagem WhatsApp com Assunto</div>
           <div class="check-item"><span class="check-icon">✓</span> Plano B de Fallback em Funcionamento</div>
-          <div class="check-item"><span class="check-icon">✓</span> Zero Rolagem Horizontal Indesejada</div>
-          <div class="check-item"><span class="check-icon">✓</span> Todos os 9 Testes Automatizados Aprovados</div>
+          <div class="check-item"><span class="check-icon">✓</span> Testado em Mobile (360px a 430px) e Desktop</div>
+          <div class="check-item"><span class="check-icon">✓</span> Todos os 14 Testes Automatizados 100% Aprovados</div>
           <div class="check-item"><span class="check-icon">✓</span> Robots.txt e Sitemap.xml Ativos</div>
-          <div class="check-item"><span class="check-icon">✓</span> Página 404 Personalizada Integrada</div>
         </div>
       </div>
 
       <div class="overview-box" style="margin-bottom: 20px;">
         <h3>💎 Resumo do Valor Entregue</h3>
         <p>
-          Esta plataforma não é um gasto operacional, mas sim um ativo de vendas contínuo. Ela confere autoridade para negociação de contratos com valores mais altos, funciona 24 horas por dia qualificando interessados e entrega uma experiência digital comparável à das principais referências do setor criativo nacional.
+          Esta plataforma não é um gasto operacional, mas sim um ativo duplo: atrai contratos de maior valor para serviços de comunicação e serve como portfólio de alta chancela institucional para oportunidades executivas em grandes equipes, com a autoridade respaldada pela UFBA e pela experiência comprovada na Limpurb.
         </p>
       </div>
 
@@ -690,7 +693,7 @@ const htmlContent = `<!DOCTYPE html>
           <h5>Entrega Técnica Concluída</h5>
           <p>Pronto para publicação na Vercel e vinculação do domínio definitivo.</p>
         </div>
-        <div class="sign-badge">VERSÃO 2.0 • PRONTO PARA O AR</div>
+        <div class="sign-badge">VERSÃO 2.1 • PRONTO PARA O AR</div>
       </div>
     </div>
 
