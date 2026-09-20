@@ -107,8 +107,11 @@
 
 .about-badge {
   position: absolute;
-  top: 1.25rem;
+  /* Metade para fora da foto: o selo não cobre mais o rosto. `translate`, não transform:
+     a entrada do GSAP (timeline.js) escreve scale no transform inline. */
+  top: 0;
   right: 1.25rem;
+  translate: 0 -50%;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -507,6 +510,17 @@
   }
   .about-credentials {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  /* Numa linha só e menor: em duas linhas o selo cobria boa parte da foto. */
+  .about-badge {
+    right: 0.75rem;
+    white-space: nowrap;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+    padding: 0.45rem 0.85rem 0.45rem 0.7rem;
   }
 }
 
