@@ -2750,12 +2750,18 @@ textarea:focus-visible {
 
 /* A pílula ficou com um texto mais longo ("projetos e oportunidades"): no
    celular ela precisa poder quebrar em duas linhas sem estourar a largura. */
-@media (max-width: 480px) {
+@media (max-width: 520px) {
+  .hero-tag-wrap {
+    max-width: 100%;
+  }
   .availability-pill {
     max-width: 100%;
     white-space: normal;
     text-align: left;
     line-height: 1.35;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    padding: 0.6rem 1rem;
   }
 }
 
