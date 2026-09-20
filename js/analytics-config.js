@@ -25,5 +25,5 @@ window.PS_ANALYTICS = {
   googleAdsLeadLabel: '',
 
   // Domínio do site. Usado nos links da política de privacidade.
-  siteDomain: 'priscilasantos.com.br'
+  siteDomain: 'pscomunica.com.br'
 };

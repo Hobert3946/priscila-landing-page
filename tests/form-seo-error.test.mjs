@@ -12,11 +12,11 @@ test('Arquivos de SEO (robots.txt e sitemap.xml) existem e são válidos', () =>
   assert.ok(existsSync(resolve('robots.txt')), 'robots.txt deve existir');
   const robots = readFileSync(resolve('robots.txt'), 'utf-8');
   assert.match(robots, /User-agent:\s*\*/i);
-  assert.match(robots, /Sitemap:\s*https:\/\/priscilasantos\.com\.br\/sitemap\.xml/i);
+  assert.match(robots, /Sitemap:\s*https:\/\/pscomunica.com.br\/sitemap\.xml/i);
 
   assert.ok(existsSync(resolve('sitemap.xml')), 'sitemap.xml deve existir');
   const sitemap = readFileSync(resolve('sitemap.xml'), 'utf-8');
-  assert.match(sitemap, /<loc>https:\/\/priscilasantos\.com\.br\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/pscomunica.com.br\/<\/loc>/);
 });
 
 test('Página 404.html existe, contém noindex e botão para página inicial', async () => {

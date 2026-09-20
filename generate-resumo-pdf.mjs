@@ -380,7 +380,7 @@ const htmlContent = `<!DOCTYPE html>
             </div>
             <div class="item-point">
               <strong>Deep Link para Currículo e LinkedIn</strong>
-              O link <code>priscilasantos.com.br/?assunto=vaga</code> abre o site com o formulário já configurado para contratação de equipes.
+              O link <code>pscomunica.com.br/?assunto=vaga</code> abre o site com o formulário já configurado para contratação de equipes.
             </div>
           </div>
         </div>

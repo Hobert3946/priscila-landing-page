@@ -108,7 +108,7 @@ test('Imagem de preview do link existe e está declarada no tamanho certo', asyn
   assert.ok(existsSync(resolve('assets/og-image.jpg')), 'og-image.jpg deve existir de verdade');
 
   const html = readFileSync(resolve('index.html'), 'utf-8');
-  assert.match(html, /og:image" content="https:\/\/priscilasantos\.com\.br\/assets\/og-image\.jpg/);
+  assert.match(html, /og:image" content="https:\/\/pscomunica.com.br\/assets\/og-image\.jpg/);
   assert.match(html, /og:image:width" content="1200"/);
   assert.match(html, /og:image:height" content="630"/);
 

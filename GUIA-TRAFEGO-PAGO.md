@@ -27,8 +27,8 @@ sem pressa, e o site continua funcionando normalmente.
 
 1. Acesse [analytics.google.com](https://analytics.google.com) e entre com seu Gmail.
 2. Clique em **Começar a medir** → nome da conta: `Priscila Santos`.
-3. Crie uma **propriedade** com o nome `Site priscilasantos.com.br`, fuso **Brasília**, moeda **Real**.
-4. Escolha a plataforma **Web** e informe o endereço `priscilasantos.com.br`.
+3. Crie uma **propriedade** com o nome `Site pscomunica.com.br`, fuso **Brasília**, moeda **Real**.
+4. Escolha a plataforma **Web** e informe o endereço `pscomunica.com.br`.
 5. Na tela seguinte aparece o **ID da métrica**, no formato `G-ABC1234567`.
 6. Cole esse código no campo `ga4`.
 
@@ -82,7 +82,7 @@ Isto **já funciona, sem depender de conta nenhuma**. Quando você divulgar o si
 link com etiqueta em vez do link puro:
 
 ```
-https://priscilasantos.com.br/?utm_source=instagram&utm_medium=cpc&utm_campaign=eventos-outubro
+https://pscomunica.com.br/?utm_source=instagram&utm_medium=cpc&utm_campaign=eventos-outubro
 ```
 
 Aí, quando essa pessoa preencher o formulário, a mensagem que chega no seu WhatsApp
@@ -116,16 +116,16 @@ diferentes.
 
 ```
 Link da bio do Instagram:
-https://priscilasantos.com.br/?utm_source=instagram&utm_medium=bio&utm_campaign=perfil
+https://pscomunica.com.br/?utm_source=instagram&utm_medium=bio&utm_campaign=perfil
 
 Anúncio no Instagram/Facebook:
-https://priscilasantos.com.br/?utm_source=instagram&utm_medium=cpc&utm_campaign=NOME-DA-CAMPANHA
+https://pscomunica.com.br/?utm_source=instagram&utm_medium=cpc&utm_campaign=NOME-DA-CAMPANHA
 
 Vaga / recrutadores (LinkedIn) — já abre o formulário no modo "oportunidade":
-https://priscilasantos.com.br/?assunto=vaga&utm_source=linkedin&utm_medium=perfil&utm_campaign=oportunidades
+https://pscomunica.com.br/?assunto=vaga&utm_source=linkedin&utm_medium=perfil&utm_campaign=oportunidades
 
 Cartão de visita / QR Code:
-https://priscilasantos.com.br/?utm_source=offline&utm_medium=cartao&utm_campaign=networking
+https://pscomunica.com.br/?utm_source=offline&utm_medium=cartao&utm_campaign=networking
 ```
 
 ### O atalho `?assunto=vaga`
@@ -145,7 +145,7 @@ entende.
 - [ ] Abri o site, aceitei os cookies e vi a visita aparecer no Google Analytics (aba **Tempo real**)
 - [ ] Testei o formulário e o evento `Lead` apareceu no Gerenciador de Eventos da Meta
 - [ ] O domínio está verificado no Gerenciador de Negócios da Meta
-- [ ] A política de privacidade abre em `priscilasantos.com.br/politica-de-privacidade.html`
+- [ ] A política de privacidade abre em `pscomunica.com.br/politica-de-privacidade.html`
 - [ ] O link do LinkedIn no rodapé aponta pro meu perfil de verdade
 - [ ] Mandei o link do site pra mim mesma no WhatsApp e a imagem de preview apareceu
 
