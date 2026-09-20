@@ -515,8 +515,11 @@
 
 @media (max-width: 520px) {
   /* Numa linha só e menor: em duas linhas o selo cobria boa parte da foto. */
+  /* A colagem tem 16% de respiro à esquerda, então o centro da foto principal está em 58%. */
   .about-badge {
-    right: 0.75rem;
+    left: 58%;
+    right: auto;
+    translate: -50% -50%;
     white-space: nowrap;
     font-size: 0.68rem;
     letter-spacing: 0.5px;
