@@ -378,9 +378,6 @@ test('O site deixa claro que o atendimento é para todo o Brasil', async () => {
   const mencoes = (texto.match(/todo o Brasil|Brasil inteiro|qualquer lugar do Brasil/gi) || []).length;
   assert.ok(mencoes >= 3, `Esperava ao menos 3 menções ao alcance nacional, achei ${mencoes}`);
 
-  // O selo de localização não pode dar a entender que ela só atende Salvador.
-  const selo = await page.textContent('.about-badge');
-  assert.match(selo, /Brasil/);
 
   await page.close();
   await browser.close();

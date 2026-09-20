@@ -2765,17 +2765,3 @@ textarea:focus-visible {
   }
 }
 
-/* O selo de localização do "sobre" dizia só "Salvador · BA", e quem estava em
-   outro estado lia aquilo como limite de atendimento. A parte do alcance vem
-   num peso menor: a base continua sendo a informação principal. */
-.about-badge-reach {
-  font-weight: 400;
-  opacity: 0.75;
-}
-
-@media (max-width: 480px) {
-  .about-badge {
-    white-space: normal;
-    line-height: 1.35;
-  }
-}

@@ -105,31 +105,6 @@
   object-position: center 30%;
 }
 
-.about-badge {
-  position: absolute;
-  /* Metade para fora da foto: o selo não cobre mais o rosto. `translate`, não transform:
-     a entrada do GSAP (timeline.js) escreve scale no transform inline. */
-  top: 0;
-  right: 1.25rem;
-  translate: 0 -50%;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.55rem 1rem 0.55rem 0.8rem;
-  border-radius: 50px;
-  background: var(--accent-color);
-  color: var(--accent-ink);
-  font-size: 0.84rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 12px 30px -8px rgba(254,99,61,0.55);
-}
-.about-badge svg {
-  width: 14px;
-  height: 14px;
-}
-
 .about-stamp {
   position: absolute;
   right: 0;
@@ -510,20 +485,6 @@
   }
   .about-credentials {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 520px) {
-  /* Numa linha só e menor: em duas linhas o selo cobria boa parte da foto. */
-  /* A colagem tem 16% de respiro à esquerda, então o centro da foto principal está em 58%. */
-  .about-badge {
-    left: 58%;
-    right: auto;
-    translate: -50% -50%;
-    white-space: nowrap;
-    font-size: 0.68rem;
-    letter-spacing: 0.5px;
-    padding: 0.45rem 0.85rem 0.45rem 0.7rem;
   }
 }
 

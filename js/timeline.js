@@ -25,7 +25,7 @@
         .fromTo('.about-photo--main', { clipPath: 'inset(100% 0% 0% 0% round 20px)' },
           { clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.2, ease: 'power4.inOut' })
         .fromTo('.about-photo--float', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }, '-=0.55')
-        .fromTo('.about-badge, .about-stamp', { scale: 0.6, opacity: 0 },
+        .fromTo('.about-stamp', { scale: 0.6, opacity: 0 },
           { scale: 1, opacity: 1, duration: 0.7, ease: 'back.out(1.8)', stagger: 0.12 }, '-=0.5');
 
       // parallax dentro da foto principal (a imagem tem 116% de altura para isso)
